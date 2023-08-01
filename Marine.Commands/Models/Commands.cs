@@ -16,9 +16,16 @@ namespace Marine.Commands.Models
 
                 foreach (var property in GetType().GetProperties())
                 {
-                    if (property.DeclaringType.IsSubclassOf(typeof(CommandBase)) || property.DeclaringType.DeclaringType.IsSubclassOf(typeof(CommandBase)))
+                    if (property.DeclaringType == typeof(CommandBase) || property.DeclaringType.IsSubclassOf(typeof(CommandBase)))
                     {
-                        list.Add(property.GetValue(this) as CommandBase);
+                        var value = property.GetValue(this) as CommandBase;
+
+                        if (value == null)
+                        {
+                            continue;
+                        }
+
+                        list.Add(value);
                     }
                 }
 

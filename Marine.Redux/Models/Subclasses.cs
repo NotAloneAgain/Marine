@@ -16,9 +16,16 @@ namespace Marine.Redux.Models
 
                 foreach (var property in GetType().GetProperties())
                 {
-                    if (property.DeclaringType.IsSubclassOf(typeof(Subclass)) || property.DeclaringType.DeclaringType.IsSubclassOf(typeof(Subclass)))
+                    if (property.DeclaringType == typeof(Subclass) || property.DeclaringType.IsSubclassOf(typeof(Subclass)))
                     {
-                        list.Add(property.GetValue(this) as Subclass);
+                        var value = property.GetValue(this) as Subclass;
+
+                        if (value == null)
+                        {
+                            continue;
+                        }
+
+                        list.Add(value);
                     }
                 }
 

@@ -39,6 +39,8 @@ namespace Marine.Commands.Commands
 
         public override string Command { get; set; } = "steal";
 
+        public override string Description { get; set; } = "Команда для кражи предмета.";
+
         public override List<CommandType> Types { get; set; } = new List<CommandType>(1) { CommandType.PlayerConsole };
 
         public override List<int> Counts { get; set; } = new List<int>(1) { 0 };

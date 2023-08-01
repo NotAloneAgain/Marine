@@ -208,7 +208,7 @@ namespace Marine.Redux.API.Subclasses
 
         public bool Can(in Player player)
         {
-            if (player == null && Random.Range(0, 101) >= 100 - Chance && !HasAny(player))
+            if (player == null && Random.Range(0, 101) < 100 - Chance && HasAny(player))
             {
                 return false;
             }

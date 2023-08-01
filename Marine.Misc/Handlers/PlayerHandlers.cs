@@ -98,7 +98,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if (ev.NewRole.GetSide() != Side.ChaosInsurgency)
+            if (ev.NewRole.GetSide() != Side.ChaosInsurgency || ev.NewRole == RoleTypeId.ClassD)
             {
                 return;
             }
