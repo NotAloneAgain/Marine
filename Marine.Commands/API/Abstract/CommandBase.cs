@@ -9,7 +9,7 @@ using YamlDotNet.Serialization;
 
 namespace Marine.Commands.API.Abstract
 {
-    public abstract class CommandBase : ICommandBase
+    public abstract class CommandBase : ICommand
     {
         [YamlMember(Alias = "name")]
         public abstract string Command { get; set; }
@@ -102,7 +102,7 @@ namespace Marine.Commands.API.Abstract
             }
         }
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, CommandSystem.ICommandSender sender, out string response)
         {
             CommandUse use = new(DateTime.Now, CommandResultType.Error);
 

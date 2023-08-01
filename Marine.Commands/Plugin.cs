@@ -1,4 +1,4 @@
-﻿using Marine.Commands.API.Abstract;
+﻿using Marine.Commands.API.Interfaces;
 using Marine.Commands.Configs;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Marine.Commands
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private List<CommandBase> _commands;
+        private List<ICommand> _commands;
 
         public override string Name => "Marine.Commands";
 
