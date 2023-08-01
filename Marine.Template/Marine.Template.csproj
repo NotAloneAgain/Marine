@@ -53,6 +53,23 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Marine.Commands\Marine.Commands.csproj">
+      <Project>{cb9f5de6-840d-4b8b-951a-690a4496aed5}</Project>
+      <Name>Marine.Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Marine.Misc\Marine.Misc.csproj">
+      <Project>{27fdb0b3-9ee6-4be4-9cd0-7febe77798c5}</Project>
+      <Name>Marine.Misc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Marine.Redux\Marine.Redux.csproj">
+      <Project>{1e8b7521-0660-4beb-8f0b-99596c96490f}</Project>
+      <Name>Marine.Redux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Marine.ScpSwap\Marine.ScpSwap.csproj">
+      <Project>{3485efbd-aeb1-49bd-9ccb-06730e962678}</Project>
+      <Name>Marine.ScpSwap</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
