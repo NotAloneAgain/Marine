@@ -48,10 +48,29 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Enums\RevokeReason.cs" />
+    <Compile Include="API\Enums\SubclassType.cs" />
+    <Compile Include="API\Interfaces\IGroupPlayer.cs" />
+    <Compile Include="API\Interfaces\IHasName.cs" />
+    <Compile Include="API\Interfaces\IHasRandom.cs" />
+    <Compile Include="API\Interfaces\ISinglePlayer.cs" />
+    <Compile Include="API\Inventory\SubclassInventory.cs" />
+    <Compile Include="API\Inventory\ItemChances.cs" />
+    <Compile Include="API\Inventory\Slot.cs" />
+    <Compile Include="API\Message.cs" />
+    <Compile Include="API\SpawnInfo.cs" />
+    <Compile Include="API\Subclasses\GroupSubclass.cs" />
+    <Compile Include="API\Subclasses\SingleSubclass.cs" />
+    <Compile Include="API\Subclasses\Subclass.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Handlers\EventHandlers.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subclasses\Group\Killer.cs" />
+    <Compile Include="Subclasses\Group\Pickpocket.cs" />
+    <Compile Include="Subclasses\Group\Thief.cs" />
+    <Compile Include="Subclasses\Single\Scp181.cs" />
+    <Compile Include="Subclasses\Single\Scp343.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
