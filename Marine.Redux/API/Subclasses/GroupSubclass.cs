@@ -1,8 +1,9 @@
-﻿using Marine.Redux.API.Enums;
+﻿using Exiled.API.Features;
+using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
 using PlayerRoles;
-using Exiled.API.Features;
 using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API.Subclasses
 {
@@ -14,11 +15,14 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override SubclassType Type { get; } = SubclassType.Group;
 
-        public List<Player> Players { get; set; }
+        [YamlIgnore]
+        public HashSet<Player> Players { get; set; }
+
+        public abstract int Max { get; set; }
 
         public sealed override void Assign(Player player)
         {
-            if (player == null || Has(player))
+            if (player == null || Has(player) || Players.Count >= Max)
             {
                 return;
             }

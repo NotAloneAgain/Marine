@@ -5,6 +5,6 @@ namespace Marine.Redux.API.Interfaces
 {
     public interface IGroupPlayer
     {
-        public List<Player> Players { get; internal set; }
+        public HashSet<Player> Players { get; internal set; }
     }
 }

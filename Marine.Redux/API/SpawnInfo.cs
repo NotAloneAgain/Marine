@@ -12,21 +12,21 @@ namespace Marine.Redux.API
         }
 
         [YamlMember(Alias = "health")]
-        public float Health { get; } = 100;
+        public virtual float Health { get; set; } = 100;
 
         [YamlMember(Alias = "size")]
-        public Vector3 Size { get; } = Vector3.one;
+        public virtual Vector3 Size { get; set; } = Vector3.one;
 
         [YamlMember(Alias = "shield")]
-        public virtual (float Amount, float Limit, float Decay, float Efficacy, float sus, bool Persistent) Shield { get; } = (0, 75, 1.2f, 0.7f, 0, false);
+        public virtual Shield Shield { get; set; } = new (0, 75, 1.2f, 0.7f, 0, false);
 
         [YamlMember(Alias = "inventory")]
-        public SubclassInventory Inventory { get; } = new SubclassInventory();
+        public virtual SubclassInventory Inventory { get; set; } = new SubclassInventory();
 
         [YamlMember(Alias = "show_info")]
-        public bool ShowInfo { get; set; } = false;
+        public virtual bool ShowInfo { get; set; } = false;
 
         [YamlMember(Alias = "message")]
-        public Message Message { get; set; } = new Message();
+        public virtual Message Message { get; set; } = new Message();
     }
 }

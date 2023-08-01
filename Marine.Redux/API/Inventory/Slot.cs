@@ -9,9 +9,6 @@ namespace Marine.Redux.API.Inventory
         [YamlMember(Alias = "item")]
         private ItemType _item;
 
-        [YamlMember(Alias = "possible_items")]
-        private ItemChances _possibleItems;
-
         public Slot()
         {
             _item = ItemType.None;
@@ -19,7 +16,7 @@ namespace Marine.Redux.API.Inventory
 
         public Slot(ItemChances items, bool isRandomable) : this()
         {
-            _possibleItems = items;
+            Items = items;
             IsRandomable = isRandomable;
         }
 
@@ -28,16 +25,19 @@ namespace Marine.Redux.API.Inventory
 
         public bool IsRandomable { get; set; }
 
+        [YamlMember(Alias = "possible_items")]
+        public ItemChances Items { get; set; }
+
         public void Randomize()
         {
-            if (!IsRandomable)
+            if (!IsRandomable && _item != ItemType.None)
             {
                 return;
             }
 
             _item = ItemType.None;
 
-            foreach (var chances in _possibleItems)
+            foreach (var chances in Items)
             {
                 if (Random.Range(0, 101) <= chances.Value)
                 {

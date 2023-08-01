@@ -1,7 +1,8 @@
-﻿using Marine.Redux.API.Enums;
+﻿using Exiled.API.Features;
+using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
 using PlayerRoles;
-using Exiled.API.Features;
+using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API.Subclasses
 {
@@ -13,9 +14,10 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override SubclassType Type { get; } = SubclassType.Single;
 
+        [YamlIgnore]
         public Player Player { get; set; }
 
-        public sealed override void Assign(Player player)
+        public override void Assign(Player player)
         {
             if (Player != null)
             {
@@ -27,7 +29,7 @@ namespace Marine.Redux.API.Subclasses
             Player = player;
         }
 
-        public sealed override void Revoke(Player player, in RevokeReason reason)
+        public override void Revoke(Player player, in RevokeReason reason)
         {
             if (player == null || !Has(player) || reason == RevokeReason.Died && player.IsAlive)
             {

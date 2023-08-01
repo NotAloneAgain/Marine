@@ -1,17 +1,9 @@
-﻿using HarmonyLib;
-using Marine.Redux.Configs;
-using Marine.Redux.Handlers;
-using System;
+﻿using System;
 
 namespace Marine.Redux
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private const string HarmonyId = "Ray-Grey.Marine.Redux";
-
-        private EventHandlers _handlers;
-        private Harmony _harmony;
-
         public override string Name => "Marine.Redux";
 
         public override string Prefix => "Marine.Redux";
@@ -22,20 +14,20 @@ namespace Marine.Redux
 
         public override void OnEnabled()
         {
-            _harmony = new(HarmonyId);
-            _handlers = new();
-
-            _harmony.PatchAll(GetType().Assembly);
+            foreach (var subclass in Config.Subclasses)
+            {
+                subclass.Subscribe();
+            }
 
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            _harmony.UnpatchAll(HarmonyId);
-
-            _handlers = null;
-            _harmony = null;
+            foreach (var subclass in Config.Subclasses)
+            {
+                subclass.Unsubscribe();
+            }
 
             base.OnDisabled();
         }

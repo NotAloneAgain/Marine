@@ -1,15 +1,13 @@
-﻿using Marine.Redux.API.Enums;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
 using MEC;
 using PlayerRoles;
-using Exiled.API.Features;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using YamlDotNet.Serialization;
-using Exiled.Events.Commands.Show;
 using UnityEngine;
-using Exiled.Events.EventArgs.Player;
+using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API.Subclasses
 {
@@ -38,7 +36,10 @@ namespace Marine.Redux.API.Subclasses
 
         public abstract SubclassType Type { get; }
 
-        public virtual string Name { get; set; } = "(null)";
+        public abstract string Name { get; set; }
+
+        [YamlMember(Alias = "chance")]
+        public abstract int Chance { get; set; }
 
         [YamlMember(Alias = "start_role")]
         public abstract RoleTypeId Role { get; set; }
@@ -54,6 +55,19 @@ namespace Marine.Redux.API.Subclasses
             foreach (var subclass in _list)
             {
                 if (subclass.Has(player))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Has<TSubclass>(in Player player) where TSubclass : Subclass
+        {
+            foreach (var subclass in _list)
+            {
+                if (subclass.GetType() == typeof(TSubclass) && subclass.Has(player))
                 {
                     return true;
                 }
@@ -81,7 +95,7 @@ namespace Marine.Redux.API.Subclasses
 
         public static bool operator ==(in Subclass first, in Subclass second)
         {
-            return first.Name == second.Name && first.Role == second.Role && first.SpawnInfo.Inventory.GetHashCode() == second.SpawnInfo.Inventory.GetHashCode() && first.Is(second);
+            return first.Name == second.Name && first.Role == second.Role && first.GetHashCode() == second.GetHashCode();
         }
 
         public static bool operator !=(in Subclass first, in Subclass second)
@@ -139,7 +153,7 @@ namespace Marine.Redux.API.Subclasses
 
             Timing.CallDelayed(0.00001f, delegate ()
             {
-                player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.sus, SpawnInfo.Shield.Persistent);
+                player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 
                 player.MaxHealth = SpawnInfo.Health;
                 player.Health = SpawnInfo.Health;
@@ -158,6 +172,16 @@ namespace Marine.Redux.API.Subclasses
                 {
                     player.RoleManager.ServerSetRole(GameRole, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
                 }
+
+                player.ClearInventory(true);
+                SpawnInfo.Inventory.Randomize();
+
+                foreach (var item in SpawnInfo.Inventory.Items)
+                {
+                    player.AddItem(item);
+                }
+
+                OnAssigned(player);
             });
         }
 
@@ -174,9 +198,21 @@ namespace Marine.Redux.API.Subclasses
             {
                 player.Scale = Vector3.one;
             }
+
+            OnRevoked(player, reason);
         }
 
         public abstract bool Has(in Player player);
+
+        public bool Can(in Player player)
+        {
+            if (player == null && Random.Range(0, 101) >= 100 - Chance && !HasAny(player))
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public sealed override string ToString() => $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
 
@@ -192,6 +228,10 @@ namespace Marine.Redux.API.Subclasses
 
             return hashCode;
         }
+
+        protected virtual void OnAssigned(Player player) { }
+
+        protected virtual void OnRevoked(Player player, in RevokeReason reason) { }
 
         protected void OnDestroying(DestroyingEventArgs ev)
         {
@@ -215,6 +255,18 @@ namespace Marine.Redux.API.Subclasses
 
         protected void OnChangingRole(ChangingRoleEventArgs ev)
         {
+            if (ev.Reason == SpawnReason.ForceClass)
+            {
+                return;
+            }
+
+            if (ev.NewRole == Role && Can(ev.Player))
+            {
+                Assign(ev.Player);
+
+                return;
+            }
+
             if (!Has(ev.Player))
             {
                 return;
