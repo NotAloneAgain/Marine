@@ -15,7 +15,7 @@ namespace Marine.Commands.API.Abstract
         public abstract string Command { get; set; }
 
         [YamlMember(Alias = "aliases")]
-        public virtual string[] Aliases { get; set; } = Array.Empty<string>();
+        public virtual string[] Aliases { get; set; } = new string[0];
 
         [YamlMember(Alias = "desc")]
         public virtual string Description { get; set; } = string.Empty;
@@ -24,7 +24,7 @@ namespace Marine.Commands.API.Abstract
         public virtual List<int> Counts { get; set; } = new List<int> { 0 };
 
         [YamlMember(Alias = "syntaxes")]
-        public Dictionary<int, string> Syntax { get; set; }
+        public virtual Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>();
 
         [YamlMember(Alias = "types")]
         public abstract List<CommandType> Types { get; }

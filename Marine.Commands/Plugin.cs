@@ -3,6 +3,7 @@ using Marine.Commands.Configs;
 using Marine.ScpSwap.Commands;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Marine.Commands
 {
@@ -12,7 +13,7 @@ namespace Marine.Commands
 
         public override string Name => "Marine.Commands";
 
-        public override string Prefix => "Marine.Commands";
+        public override string Prefix => "marine.commands";
 
         public override string Author => "i.your";
 
@@ -20,10 +21,7 @@ namespace Marine.Commands
 
         public override void OnRegisteringCommands()
         {
-            _commands = new(1)
-            {
-                new Force()
-            };
+            _commands = Config.Commands;
 
             foreach (var command in _commands)
             {
@@ -33,7 +31,7 @@ namespace Marine.Commands
 
         public override void OnUnregisteringCommands()
         {
-            if (_commands == null)
+            if (_commands == null || !_commands.Any())
             {
                 return;
             }

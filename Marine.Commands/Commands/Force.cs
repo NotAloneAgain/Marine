@@ -18,10 +18,16 @@ namespace Marine.ScpSwap.Commands
 
         public override List<int> Counts { get; set; } = new List<int>(1) { 1 };
 
+        public override Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>()
+        {
+            { 1, "[Номер]" }
+        };
+
         public override List<CommandType> Types { get; } = new List<CommandType>(1) { CommandType.PlayerConsole };
 
         public override CommandPermission Permission { get; set; } = new()
         {
+            IsLimited = true,
             Custom = (Player ply) => ply.IsScp && Swap.AllowedScps.Contains(ply.Role)
         };
 
@@ -59,6 +65,12 @@ namespace Marine.ScpSwap.Commands
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
+            if (arguments == null || !arguments.Any())
+            {
+                response = string.Empty;
+                return CommandResultType.Fail;
+            }
+
             RoleTypeId role = (RoleTypeId)arguments[0];
 
             if (role == player.Role.Type)
