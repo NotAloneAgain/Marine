@@ -48,13 +48,21 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Abstract\CommandBase.cs" />
+    <Compile Include="API\CommandPermission.cs" />
+    <Compile Include="API\Enums\CommandResultType.cs" />
+    <Compile Include="API\Enums\CommandType.cs" />
+    <Compile Include="Commands\Force.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="API\" />
-    <Folder Include="Commands\" />
+    <ProjectReference Include="..\Marine.ScpSwap\Marine.ScpSwap.csproj">
+      <Project>{3485efbd-aeb1-49bd-9ccb-06730e962678}</Project>
+      <Name>Marine.ScpSwap</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

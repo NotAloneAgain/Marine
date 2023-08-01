@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Exiled.Events.Handlers;
+using Marine.ScpSwap.API;
 using Marine.ScpSwap.Configs;
 using Marine.ScpSwap.Handlers;
 using System;
@@ -7,14 +8,11 @@ namespace Marine.ScpSwap
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private const string HarmonyId = "Ray-Grey.Marine.ScpSwap";
-
-        private EventHandlers _handlers;
-        private Harmony _harmony;
+        private PlayerHandlers _player;
 
         public override string Name => "Marine.ScpSwap";
 
-        public override string Prefix => "Marine.ScpSwap";
+        public override string Prefix => "marine.scp_swap";
 
         public override string Author => "i.your";
 
@@ -22,20 +20,23 @@ namespace Marine.ScpSwap
 
         public override void OnEnabled()
         {
-            _harmony = new(HarmonyId);
-            _handlers = new();
+            _player = new(Config.InfoText, Config.InfoDuration);
 
-            _harmony.PatchAll(GetType().Assembly);
+            Swap.Slots = Config.Slots;
+            Swap.Prevent = Config.PreventMultipleSwaps;
+            Swap.AllowedScps = Config.AllowedScps;
+            Swap.SwapDuration = Config.SwapDuration;
+
+            Player.ChangingRole += _player.OnChangingRole;
 
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            _harmony.UnpatchAll(HarmonyId);
+            Player.ChangingRole -= _player.OnChangingRole;
 
-            _handlers = null;
-            _harmony = null;
+            _player = null;
 
             base.OnDisabled();
         }

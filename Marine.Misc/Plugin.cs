@@ -17,7 +17,7 @@ namespace Marine.Misc
 
         public override string Name => "Marine.Misc";
 
-        public override string Prefix => "Marine.Misc";
+        public override string Prefix => "marine.misc";
 
         public override string Author => "i.your";
 
