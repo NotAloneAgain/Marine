@@ -89,7 +89,7 @@ namespace Marine.Redux.Subclasses.Group
             RoomType.LczCafe => "комнате с компьютерами",
             RoomType.Lcz173 => "оружейке К.С. SCP-173.",
             RoomType.LczToilets => "туалетах",
-            RoomType.LczGlassBox => "стеклянном контейнере К.С. SCP-372",
+            RoomType.LczGlassBox => "К.С. SCP-372",
             _ => "неизвестно..."
         };
     }

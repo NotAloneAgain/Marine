@@ -5,9 +5,9 @@ namespace Marine.Commands.API
 {
     internal static class Extensions
     {
-        public static Player GetFromView(this Player owner)
+        public static Player GetFromView(this Player owner, float distance)
         {
-            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out var hit, 5))
+            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out var hit, distance))
             {
                 return null;
             }

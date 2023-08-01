@@ -21,7 +21,7 @@ namespace Marine.Commands.API
             Uses[player].Add(use);
         }
 
-        public bool IsUsedBy(Player player) => Uses.ContainsKey(player);
+        public bool IsUsedBy(Player player) => Uses != null && Uses.ContainsKey(player);
 
         public bool HasSuccessfulUse(Player player) => GetLastSuccessfulUse(player) != null;
 

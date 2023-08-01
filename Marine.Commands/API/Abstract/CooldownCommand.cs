@@ -11,9 +11,16 @@ namespace Marine.Commands.API.Abstract
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
-            var time = (DateTime.Now - History.GetLastSuccessfulUse(player).Time);
-
             response = string.Empty;
+
+            var use = History.GetLastSuccessfulUse(player);
+
+            if (use == null)
+            {
+                return CommandResultType.Success;
+            }
+
+            var time = DateTime.Now - use.Time;
 
             if (time.TotalSeconds <= Cooldown)
             {

@@ -9,11 +9,8 @@ namespace Marine.Commands.API
     {
         public bool IsLimited { get; set; } = false;
 
-        public List<string> Groups { get; set; } = new List<string>();
+        public HashSet<string> Groups { get; set; } = new HashSet<string>();
 
-        public List<string> Users { get; set; } = new List<string>();
-
-        [YamlIgnore]
-        public Func<Player, bool> Custom { get; set; }
+        public HashSet<string> Users { get; set; } = new HashSet<string>();
     }
 }

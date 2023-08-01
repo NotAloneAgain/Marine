@@ -12,22 +12,11 @@ namespace Marine.Commands.Models
         {
             get
             {
-                var list = new List<CommandBase>();
-
-                foreach (var property in GetType().GetProperties())
+                var list = new List<CommandBase>()
                 {
-                    if (property.DeclaringType == typeof(CommandBase) || property.DeclaringType.IsSubclassOf(typeof(CommandBase)))
-                    {
-                        var value = property.GetValue(this) as CommandBase;
-
-                        if (value == null)
-                        {
-                            continue;
-                        }
-
-                        list.Add(value);
-                    }
-                }
+                    Force,
+                    Steal
+                };
 
                 return list;
             }

@@ -14,7 +14,7 @@ namespace Marine.Misc.Handlers
             var door = Door.Get(DoorType.NukeSurface);
 
             door.RequiredPermissions.RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.AlphaWarhead;
-            door.IgnoredDamageTypes &= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
 
             door = Door.Get(DoorType.Scp079First);
 
@@ -30,7 +30,7 @@ namespace Marine.Misc.Handlers
 
             door = Door.Get(DoorType.HID);
 
-            door.IgnoredDamageTypes &= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
         }
 
         public void OnGeneratorActivated(GeneratorActivatedEventArgs ev)

@@ -1,9 +1,12 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Marine.Misc.API;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Marine.Misc.Handlers
 {
@@ -38,7 +41,24 @@ namespace Marine.Misc.Handlers
             {
                 foreach (var item in Pickup.List)
                 {
-                    if (!item.IsSpawned || Map.Lockers.Any(locker => locker.gameObject.FindBounds().Contains(item.Position)))
+                    if (!item.IsSpawned || item.Room == null)
+                    {
+                        continue;
+                    }
+
+                    if (item.InClosedLcz() || item.InDetonatedComplex())
+                    {
+                        if (toClear.Contains(item))
+                        {
+                            toClear.Remove(item);
+                        }
+
+                        item.Destroy();
+
+                        continue;
+                    }
+
+                    if (item.Position.IsCloseToChambers() || item.Type.GetCategory() is ItemCategory.MicroHID or ItemCategory.SCPItem || item.Type == ItemType.KeycardO5)
                     {
                         continue;
                     }
@@ -49,6 +69,8 @@ namespace Marine.Misc.Handlers
 
                         continue;
                     }
+
+                    toClear.Remove(item);
 
                     item.Destroy();
                 }

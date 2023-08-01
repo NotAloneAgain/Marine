@@ -11,6 +11,8 @@ namespace Marine.Redux.API.Inventory
 
         public SubclassInventory()
         {
+            _items = new(8);
+
             Slots = new(8);
         }
 
@@ -21,8 +23,6 @@ namespace Marine.Redux.API.Inventory
 
         public SubclassInventory(IEnumerable<Slot> slots, IEnumerable<ItemType> items, bool isRandomable) : this(slots)
         {
-            _items = new(8);
-
             _items.AddRange(items);
 
             IsRandomable = isRandomable;

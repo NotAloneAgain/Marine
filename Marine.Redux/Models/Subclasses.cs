@@ -12,22 +12,12 @@ namespace Marine.Redux.Models
         {
             get
             {
-                var list = new List<Subclass>();
-
-                foreach (var property in GetType().GetProperties())
+                var list = new List<Subclass>()
                 {
-                    if (property.DeclaringType == typeof(Subclass) || property.DeclaringType.IsSubclassOf(typeof(Subclass)))
-                    {
-                        var value = property.GetValue(this) as Subclass;
-
-                        if (value == null)
-                        {
-                            continue;
-                        }
-
-                        list.Add(value);
-                    }
-                }
+                    Killer,
+                    Pickpocket,
+                    Thief
+                };
 
                 return list;
             }

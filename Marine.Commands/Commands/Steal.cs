@@ -53,8 +53,9 @@ namespace Marine.Commands.Commands
         public override CommandPermission Permission { get; set; } = new()
         {
             IsLimited = true,
-            Custom = (Player ply) => Subclass.Has<Pickpocket>(ply) || Subclass.Has<Thief>(ply)
         };
+
+        public override System.Func<Player, bool> CustomPermission { get; set; } = ply => Subclass.Has<Pickpocket>(ply) || Subclass.Has<Thief>(ply);
 
         public override int Cooldown { get; set; } = 30;
 
@@ -72,7 +73,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            Player target = player.GetFromView();
+            Player target = player.GetFromView(5);
 
             if (target == null || target == player || !target.IsAlive)
             {

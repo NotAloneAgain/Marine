@@ -1,5 +1,6 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Features;
+using Exiled.API.Features.Pickups;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Keycards;
 using System.Linq;
@@ -70,5 +71,11 @@ namespace Marine.Misc.API
         public static bool HasEffect<TEffect>(this Player player) where TEffect : StatusEffectBase => player.TryGetEffect<TEffect>(out var effect) && effect.IsEnabled;
 
         public static bool HasFlagFast(this KeycardPermissions perm, KeycardPermissions perm2) => (perm & perm2) == perm2;
+
+        public static bool IsCloseToChambers(this Vector3 pos) => Map.Lockers.Select(locker => locker.Chambers).Any(chambers => chambers.Any(chamber => chamber.gameObject.FindBounds().Contains(pos)));
+
+        public static bool InClosedLcz(this Pickup pickup) => pickup.Room.Zone == Exiled.API.Enums.ZoneType.LightContainment && Map.IsLczDecontaminated;
+
+        public static bool InDetonatedComplex(this Pickup pickup) => pickup.Room.Zone != Exiled.API.Enums.ZoneType.Surface && Warhead.IsDetonated;
     }
 }

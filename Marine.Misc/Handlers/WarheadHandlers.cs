@@ -2,6 +2,8 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Mirror;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Marine.Misc.Handlers
@@ -74,11 +76,43 @@ namespace Marine.Misc.Handlers
         #region Optimization
         private static void OptimizeEverything()
         {
-            foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>())
+            List<GameObject> handled = new();
+
+            foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>().Distinct())
             {
-                if (IsGameObjectCanBeInactive(gameObject))
+                if (gameObject == null || !gameObject.activeSelf || handled.Contains(gameObject))
+                {
+                    continue;
+                }
+
+                handled.Add(gameObject);
+
+                if (Player.Get(gameObject) != null)
+                {
+                    continue;
+                }
+
+                if (IsGameObjectCanBeDestroyed(gameObject))
                 {
                     NetworkServer.Destroy(gameObject);
+
+                    continue;
+                }
+
+                if (IsGameObjectCanBeInactive(gameObject))
+                {
+                    gameObject.SetActive(false);
+
+                    var identity = gameObject.GetComponent<NetworkIdentity>();
+
+                    if (identity == null)
+                    {
+                        continue;
+                    }
+
+                    identity.enabled = false;
+
+                    Object.Destroy(identity);
 
                     continue;
                 }
@@ -90,7 +124,16 @@ namespace Marine.Misc.Handlers
                 {
                     gameObject.SetActive(false);
 
-                    gameObject.GetComponent<NetworkIdentity>().enabled = false;
+                    var identity = gameObject.GetComponent<NetworkIdentity>();
+
+                    if (identity == null)
+                    {
+                        continue;
+                    }
+
+                    identity.enabled = false;
+
+                    Object.Destroy(identity);
                 }
             }
         }
@@ -103,6 +146,13 @@ namespace Marine.Misc.Handlers
             }
 
             return _optionalObjects.Contains(gameObject.name) || gameObject.name.Contains("Button") || gameObject.name.Contains("Door") || gameObject.name.Contains("Intercom");
+        }
+
+        private static bool IsGameObjectCanBeDestroyed(GameObject gameObject)
+        {
+            var position = gameObject.transform.position;
+
+            return position.y is > 1050 or < -50 && (position.y is > 2 or < -2 || position.x is > 10 or < -10 || position.z is > 10 or < -10);
         }
         #endregion
     }

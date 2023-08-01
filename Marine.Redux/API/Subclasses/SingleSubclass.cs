@@ -10,8 +10,6 @@ namespace Marine.Redux.API.Subclasses
     {
         public SingleSubclass() { }
 
-        public SingleSubclass(string name, RoleTypeId role, SpawnInfo spawnInfo) : base(name, role, spawnInfo) { }
-
         public sealed override SubclassType Type { get; } = SubclassType.Single;
 
         [YamlIgnore]
@@ -24,9 +22,9 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
-            base.Assign(player);
-
             Player = player;
+
+            base.Assign(player);
         }
 
         public override void Revoke(Player player, in RevokeReason reason)
@@ -36,9 +34,9 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
-            base.Revoke(player, reason);
-
             Player = null;
+
+            base.Revoke(player, reason);
         }
 
         public sealed override bool Has(in Player player)

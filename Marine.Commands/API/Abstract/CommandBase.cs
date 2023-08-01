@@ -44,6 +44,9 @@ namespace Marine.Commands.API.Abstract
         public abstract CommandPermission Permission { get; set; }
 
         [YamlIgnore]
+        public virtual Func<Player, bool> CustomPermission { get; set; }
+
+        [YamlIgnore]
         public CommandHistory History { get; set; } = new ();
 
         public void Subscribe()
@@ -102,13 +105,13 @@ namespace Marine.Commands.API.Abstract
             }
         }
 
-        public bool Execute(ArraySegment<string> arguments, CommandSystem.ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             CommandUse use = new(DateTime.Now, CommandResultType.Error);
 
             if (!Counts.Contains(arguments.Count))
             {
-                response = string.Format(Messages[CommandResultType.Syntax], Command, Syntax[0]);
+                response = string.Format(Messages[CommandResultType.Syntax], Command, Syntax.First().Value);
 
                 return false;
             }
@@ -126,8 +129,6 @@ namespace Marine.Commands.API.Abstract
             {
                 Player player = Player.Get(sender);
 
-                History.Add(player, use);
-
                 if (player == null)
                 {
                     use.Result = CommandResultType.PlayerError;
@@ -137,9 +138,15 @@ namespace Marine.Commands.API.Abstract
                     return false;
                 }
 
+                History.Add(player, use);
+
                 if (Permission != null && Permission.IsLimited)
                 {
-                    if (Permission.Custom(player) || Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
+                    Log.Info("Permissions 1");
+
+                    if (CustomPermission != null && CustomPermission(player)
+                        || Permission.Users.Any() && Permission.Users.Contains(player.UserId)
+                        || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
                     {
                         goto FINAL;
                     }

@@ -25,13 +25,6 @@ namespace Marine.Redux.API.Subclasses
             _list.Add(this);
         }
 
-        public Subclass(string name, RoleTypeId role, SpawnInfo spawnInfo) : this()
-        {
-            Name = name;
-            Role = role;
-            SpawnInfo = spawnInfo;
-        }
-
         [YamlIgnore]
         public static IReadOnlyCollection<Subclass> ReadOnlyCollection => _list.AsReadOnly();
 
@@ -55,10 +48,14 @@ namespace Marine.Redux.API.Subclasses
         {
             foreach (var subclass in _list)
             {
-                if (subclass.Has(player))
+                if (!subclass.Has(player))
                 {
-                    return true;
+                    continue;
                 }
+
+                Log.Info(subclass.Name);
+
+                return true;
             }
 
             return false;
@@ -66,10 +63,17 @@ namespace Marine.Redux.API.Subclasses
 
         public static bool Has<TSubclass>(in Player player) where TSubclass : Subclass
         {
+            if (player == null || player.IsHost)
+            {
+                return false;
+            }
+
             foreach (var subclass in _list)
             {
-                if (subclass.GetType() == typeof(TSubclass) && subclass.Has(player))
+                if (subclass.Is<TSubclass>())
                 {
+                    Log.Info(subclass.Name);
+
                     return true;
                 }
             }
@@ -77,62 +81,9 @@ namespace Marine.Redux.API.Subclasses
             return false;
         }
 
-        public static List<Subclass> operator +(in Subclass first, in Subclass second)
-        {
-            return new(2) { first, second };
-        }
+        public bool Is<TSubclass>() where TSubclass : Subclass => As<TSubclass>() != null;
 
-        public static List<Subclass> operator -(in List<Subclass> subclasses, in Subclass subclass)
-        {
-            if (!subclasses.Contains(subclass))
-            {
-                return subclasses;
-            }
-
-            subclasses.Remove(subclass);
-
-            return subclasses;
-        }
-
-        public static bool operator ==(in Subclass first, in Subclass second)
-        {
-            return first.Name == second.Name && first.Role == second.Role && first.GetHashCode() == second.GetHashCode();
-        }
-
-        public static bool operator !=(in Subclass first, in Subclass second)
-        {
-            return !(first == second);
-        }
-
-        public static bool operator true(in Subclass subclass)
-        {
-            return subclass != null;
-        }
-
-        public static bool operator !(in Subclass subclass)
-        {
-            return subclass == null;
-        }
-
-        public static bool operator false(in Subclass subclass)
-        {
-            return !subclass;
-        }
-
-        public bool Is<TSubclass>(TSubclass other) where TSubclass : Subclass
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return As<TSubclass>() == other;
-        }
-
-        public TSubclass As<TSubclass>() where TSubclass : Subclass
-        {
-            return this as TSubclass;
-        }
+        public TSubclass As<TSubclass>() where TSubclass : Subclass => this as TSubclass;
 
         public virtual void Subscribe()
         {
@@ -150,10 +101,12 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Assign(Player player)
         {
-            SpawnInfo.Message.Send(player);
+            Log.Info("Assign");
 
             Timing.CallDelayed(0.00001f, delegate ()
             {
+                SpawnInfo.Message.Send(player);
+
                 player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 
                 player.MaxHealth = SpawnInfo.Health;
@@ -174,7 +127,7 @@ namespace Marine.Redux.API.Subclasses
                     player.RoleManager.ServerSetRole(GameRole, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
                 }
 
-                player.ClearInventory(true);
+                player.ClearInventory();
 
                 SpawnInfo.Inventory.Randomize();
 
@@ -206,30 +159,17 @@ namespace Marine.Redux.API.Subclasses
 
         public abstract bool Has(in Player player);
 
-        public bool Can(in Player player)
+        public virtual bool Can(in Player player)
         {
-            if (player == null && Random.Range(0, 101) < 100 - Chance && HasAny(player))
+            if (player == null || HasAny(player))
             {
                 return false;
             }
 
-            return true;
+            return Random.Range(0, 101) >= 100 - Chance;
         }
 
         public sealed override string ToString() => $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
-
-        public sealed override bool Equals(object obj) => obj is Subclass subclass && this == subclass;
-
-        public sealed override int GetHashCode()
-        {
-            var hashCode = 1852696779;
-
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + Role.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<SpawnInfo>.Default.GetHashCode(SpawnInfo);
-
-            return hashCode;
-        }
 
         protected virtual void OnAssigned(Player player) { }
 

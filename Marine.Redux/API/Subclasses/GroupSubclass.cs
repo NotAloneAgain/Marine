@@ -14,8 +14,6 @@ namespace Marine.Redux.API.Subclasses
             Players = new(Max);
         }
 
-        public GroupSubclass(string name, RoleTypeId role, SpawnInfo spawnInfo) : base(name, role, spawnInfo) { }
-
         public sealed override SubclassType Type { get; } = SubclassType.Group;
 
         [YamlIgnore]
@@ -25,14 +23,14 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Assign(Player player)
         {
-            if (player == null || Has(player) || Players.Count >= Max)
+            if (player == null || Has(player))
             {
                 return;
             }
 
-            base.Assign(player);
-
             Players.Add(player);
+
+            base.Assign(player);
         }
 
         public sealed override void Revoke(Player player, in RevokeReason reason)
@@ -56,5 +54,7 @@ namespace Marine.Redux.API.Subclasses
 
             return Players.Contains(player);
         }
+
+        public override bool Can(in Player player) => base.Can(player) && Players.Count + 1 <= Max;
     }
 }
