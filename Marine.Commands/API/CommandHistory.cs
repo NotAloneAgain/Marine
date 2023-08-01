@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Marine.Commands.API.Enums;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +23,10 @@ namespace Marine.Commands.API
 
         public bool IsUsedBy(Player player) => Uses.ContainsKey(player);
 
-        public CommandUse GetLastUsing(Player player) => IsUsedBy(player) ? Uses[player].Last() : null;
+        public bool HasSuccessfulUse(Player player) => GetLastSuccessfulUse(player) != null;
+
+        public CommandUse GetLastUse(Player player) => IsUsedBy(player) ? Uses[player].Last() : null;
+
+        public CommandUse GetLastSuccessfulUse(Player player) => IsUsedBy(player) && Uses[player].Any(use => use.Result == CommandResultType.Success) ? Uses[player].Last(use => use.Result == CommandResultType.Success) : null;
     }
 }

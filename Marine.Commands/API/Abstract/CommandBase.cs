@@ -27,7 +27,7 @@ namespace Marine.Commands.API.Abstract
         public virtual Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>();
 
         [YamlMember(Alias = "types")]
-        public abstract List<CommandType> Types { get; }
+        public virtual List<CommandType> Types { get; set; } = new List<CommandType>();
 
         [YamlMember(Alias = "messages")]
         public virtual Dictionary<CommandResultType, string> Messages { get; set; } = new Dictionary<CommandResultType, string>(3)
@@ -104,6 +104,8 @@ namespace Marine.Commands.API.Abstract
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            CommandUse use = new(DateTime.Now, CommandResultType.Error);
+
             if (!Counts.Contains(arguments.Count))
             {
                 response = string.Format(Messages[CommandResultType.Syntax], Command, Syntax[0]);
@@ -124,8 +126,12 @@ namespace Marine.Commands.API.Abstract
             {
                 Player player = Player.Get(sender);
 
+                History.Add(player, use);
+
                 if (player == null)
                 {
+                    use.Result = CommandResultType.PlayerError;
+
                     response = Messages[CommandResultType.PlayerError];
 
                     return false;
@@ -138,6 +144,8 @@ namespace Marine.Commands.API.Abstract
                         goto FINAL;
                     }
 
+                    use.Result = CommandResultType.PermissionError;
+
                     response = Messages[CommandResultType.PermissionError];
 
                     return false;
@@ -146,18 +154,14 @@ namespace Marine.Commands.API.Abstract
                 goto FINAL;
 
             FINAL:
-                var result = Handle(args, player, out response);
+                use.Result = Handle(args, player, out response);
 
                 if (string.IsNullOrEmpty(response))
                 {
-                    response = Messages[result];
+                    response = Messages[use.Result];
                 }
 
-                CommandUse use = new (DateTime.Now, result);
-
-                History.Add(player, use);
-
-                return result == CommandResultType.Success;
+                return use.Result == CommandResultType.Success;
             }
             catch (Exception ex)
             {
