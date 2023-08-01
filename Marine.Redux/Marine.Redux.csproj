@@ -43,6 +43,7 @@
     <Compile Include="API\Interfaces\IHasName.cs" />
     <Compile Include="API\Interfaces\IHasRandom.cs" />
     <Compile Include="API\Interfaces\ISinglePlayer.cs" />
+    <Compile Include="API\Interfaces\ISubclass.cs" />
     <Compile Include="API\Inventory\SubclassInventory.cs" />
     <Compile Include="API\Inventory\ItemChances.cs" />
     <Compile Include="API\Inventory\Slot.cs" />

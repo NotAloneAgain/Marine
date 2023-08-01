@@ -11,7 +11,7 @@ using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API.Subclasses
 {
-    public abstract class Subclass : IHasName
+    public abstract class Subclass : ISubclass
     {
         private static List<Subclass> _list;
 
@@ -32,6 +32,7 @@ namespace Marine.Redux.API.Subclasses
             SpawnInfo = spawnInfo;
         }
 
+        [YamlIgnore]
         public static IReadOnlyCollection<Subclass> ReadOnlyCollection => _list.AsReadOnly();
 
         public abstract SubclassType Type { get; }

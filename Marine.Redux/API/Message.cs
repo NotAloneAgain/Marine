@@ -19,10 +19,10 @@ namespace Marine.Redux.API
         }
 
         [YamlMember(Alias = "text")]
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         [YamlMember(Alias = "color")]
-        public string Color { get; set; }
+        public string Color { get; set; } = string.Empty;
 
         [YamlMember(Alias = "duration")]
         public ushort Duration { get; set; } = 8;
@@ -32,12 +32,12 @@ namespace Marine.Redux.API
 
         public void Send(in Player player)
         {
-            if (!Show || Duration == 0)
+            if (!Show || Duration == 0 || string.IsNullOrEmpty(Text))
             {
                 return;
             }
 
-            string color = string.IsNullOrEmpty(Color) ? player.Role.Type.GetColor().ToHex() : Color;
+            string color = string.IsNullOrEmpty(Color) || Color == default ? player.Role.Type.GetColor().ToHex() : Color;
             string text = $"<line-height=95%><size=95%><voffset=-18em><color={color}>{Text}</color></size></voffset>";
 
             player.ShowHint(text, Duration);
