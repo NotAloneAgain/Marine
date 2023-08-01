@@ -1,24 +1,22 @@
 ﻿using HarmonyLib;
-using Marine.Configs;
-using Marine.Handlers;
-using PluginAPI.Core.Attributes;
-using PluginAPI.Events;
+using Marine.Redux.Configs;
+using Marine.Redux.Handlers;
 using System;
 
-namespace Marine
+namespace Marine.Redux
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private const string HarmonyId = "Ray-Grey.Marine";
+        private const string HarmonyId = "Ray-Grey.Marine.Redux";
 
         private EventHandlers _handlers;
         private Harmony _harmony;
 
-        public override string Name => "Marine";
+        public override string Name => "Marine.Redux";
 
-        public override string Prefix => "Marine";
+        public override string Prefix => "Marine.Redux";
 
-        public override string Author => ".grey#9120";
+        public override string Author => "i.your";
 
         public override Version Version { get; } = new(1, 0, 0);
 
