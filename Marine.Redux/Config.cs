@@ -1,8 +1,4 @@
 ﻿using Exiled.API.Interfaces;
-using Marine.Redux.API.Interfaces;
-using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Group;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Marine.Redux
@@ -15,11 +11,6 @@ namespace Marine.Redux
         [Description("Debug enabled or not.")]
         public bool Debug { get; set; } = false;
 
-        public List<ISubclass> Subclasses { get; set; } = new List<ISubclass>()
-        {
-            new Killer(),
-            new Pickpocket(),
-            new Thief(),
-        };
+        public Models.Subclasses Subclasses { get; set; } = new ();
     }
 }

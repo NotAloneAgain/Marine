@@ -11,7 +11,7 @@ using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API.Subclasses
 {
-    public abstract class Subclass : ISubclass
+    public abstract class Subclass : IHasName
     {
         private static List<Subclass> _list;
 

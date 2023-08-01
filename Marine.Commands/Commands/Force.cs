@@ -8,9 +8,9 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Marine.ScpSwap.Commands
+namespace Marine.Commands.Commands
 {
-    internal sealed class Force : CommandBase
+    public sealed class Force : CommandBase
     {
         public override string Command { get; set; } = "force";
 

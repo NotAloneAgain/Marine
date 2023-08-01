@@ -43,7 +43,6 @@
     <Compile Include="API\Interfaces\IHasName.cs" />
     <Compile Include="API\Interfaces\IHasRandom.cs" />
     <Compile Include="API\Interfaces\ISinglePlayer.cs" />
-    <Compile Include="API\Interfaces\ISubclass.cs" />
     <Compile Include="API\Inventory\SubclassInventory.cs" />
     <Compile Include="API\Inventory\ItemChances.cs" />
     <Compile Include="API\Inventory\Slot.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="API\Subclasses\SingleSubclass.cs" />
     <Compile Include="API\Subclasses\Subclass.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Models\Subclasses.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subclasses\Group\Killer.cs" />
