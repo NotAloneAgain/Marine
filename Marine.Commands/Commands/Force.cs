@@ -23,7 +23,7 @@ namespace Marine.ScpSwap.Commands
             { 1, "[Номер]" }
         };
 
-        public override List<CommandType> Types { get; } = new List<CommandType>(1) { CommandType.PlayerConsole };
+        public override List<CommandType> Types { get; set; } = new List<CommandType>(1) { CommandType.PlayerConsole };
 
         public override CommandPermission Permission { get; set; } = new()
         {
@@ -65,9 +65,10 @@ namespace Marine.ScpSwap.Commands
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
+            response = string.Empty;
+
             if (arguments == null || !arguments.Any())
             {
-                response = string.Empty;
                 return CommandResultType.Fail;
             }
 
@@ -80,7 +81,7 @@ namespace Marine.ScpSwap.Commands
                 return CommandResultType.Fail;
             }
 
-            if (Swap.Prevent && History.IsUsedBy(player))
+            if (Swap.Prevent && History.HasSuccessfulUse(player))
             {
                 response = "Сменить роль можно лишь один раз.";
 
@@ -100,8 +101,6 @@ namespace Marine.ScpSwap.Commands
 
                 return CommandResultType.Fail;
             }
-
-            response = string.Empty;
 
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);
 

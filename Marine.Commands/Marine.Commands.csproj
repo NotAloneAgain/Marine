@@ -43,18 +43,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Abstract\CommandBase.cs" />
+    <Compile Include="API\Abstract\CooldownCommand.cs" />
     <Compile Include="API\CommandHistory.cs" />
     <Compile Include="API\CommandPermission.cs" />
     <Compile Include="API\CommandUse.cs" />
     <Compile Include="API\Enums\CommandResultType.cs" />
     <Compile Include="API\Enums\CommandType.cs" />
+    <Compile Include="API\Extensions.cs" />
     <Compile Include="Commands\Force.cs" />
+    <Compile Include="Commands\Steal.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Marine.Redux\Marine.Redux.csproj">
+      <Project>{1e8b7521-0660-4beb-8f0b-99596c96490f}</Project>
+      <Name>Marine.Redux</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Marine.ScpSwap\Marine.ScpSwap.csproj">
       <Project>{3485efbd-aeb1-49bd-9ccb-06730e962678}</Project>
       <Name>Marine.ScpSwap</Name>
