@@ -14,7 +14,7 @@ namespace Marine.Redux
 
         public override void OnEnabled()
         {
-            foreach (var subclass in Config.Subclasses)
+            foreach (var subclass in Config.Subclasses.All)
             {
                 subclass.Subscribe();
             }
@@ -24,7 +24,7 @@ namespace Marine.Redux
 
         public override void OnDisabled()
         {
-            foreach (var subclass in Config.Subclasses)
+            foreach (var subclass in Config.Subclasses.All)
             {
                 subclass.Unsubscribe();
             }

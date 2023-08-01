@@ -8,8 +8,6 @@ namespace Marine.Commands
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private List<CommandBase> _commands;
-
         public override string Name => "Marine.Commands";
 
         public override string Prefix => "marine.commands";
@@ -20,9 +18,7 @@ namespace Marine.Commands
 
         public override void OnRegisteringCommands()
         {
-            _commands = Config.Commands.All;
-
-            foreach (var command in _commands)
+            foreach (var command in Config.Commands.All)
             {
                 command.Subscribe();
             }
@@ -30,17 +26,10 @@ namespace Marine.Commands
 
         public override void OnUnregisteringCommands()
         {
-            if (_commands == null || !_commands.Any())
-            {
-                return;
-            }
-
-            foreach (var command in _commands)
+            foreach (var command in Config.Commands.All)
             {
                 command.Unsubscribe();
             }
-
-            _commands = null;
         }
 
         public override void OnReloaded() { }
