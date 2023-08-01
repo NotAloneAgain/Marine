@@ -1,6 +1,6 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Marine.Commands.API.Enums;
+using Marine.Commands.API.Interfaces;
 using RemoteAdmin;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using YamlDotNet.Serialization;
 
 namespace Marine.Commands.API.Abstract
 {
-    public abstract class CommandBase : ICommand
+    public abstract class CommandBase : ICommandBase
     {
         [YamlMember(Alias = "name")]
         public abstract string Command { get; set; }

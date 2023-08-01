@@ -50,6 +50,7 @@
     <Compile Include="API\Enums\CommandResultType.cs" />
     <Compile Include="API\Enums\CommandType.cs" />
     <Compile Include="API\Extensions.cs" />
+    <Compile Include="API\Interfaces\ICommand.cs" />
     <Compile Include="Commands\Force.cs" />
     <Compile Include="Commands\Steal.cs" />
     <Compile Include="Configs\Config.cs" />

@@ -9,7 +9,10 @@ namespace Marine.Redux.API.Subclasses
 {
     public abstract class GroupSubclass : Subclass, IGroupPlayer
     {
-        public GroupSubclass() { }
+        public GroupSubclass()
+        {
+            Players = new(Max);
+        }
 
         public GroupSubclass(string name, RoleTypeId role, SpawnInfo spawnInfo) : base(name, role, spawnInfo) { }
 

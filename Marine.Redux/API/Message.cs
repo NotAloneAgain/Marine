@@ -19,10 +19,10 @@ namespace Marine.Redux.API
         }
 
         [YamlMember(Alias = "text")]
-        public string Text { get; set; } = "Hi";
+        public string Text { get; set; }
 
         [YamlMember(Alias = "color")]
-        public string Color { get; set; } = "#FF0000";
+        public string Color { get; set; }
 
         [YamlMember(Alias = "duration")]
         public ushort Duration { get; set; } = 8;

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Marine.Commands.Commands
+namespace Marine.Commands
 {
     internal sealed class Steal : CooldownCommand
     {

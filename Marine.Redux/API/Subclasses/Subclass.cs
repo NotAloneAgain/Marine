@@ -174,6 +174,7 @@ namespace Marine.Redux.API.Subclasses
                 }
 
                 player.ClearInventory(true);
+
                 SpawnInfo.Inventory.Randomize();
 
                 foreach (var item in SpawnInfo.Inventory.Items)

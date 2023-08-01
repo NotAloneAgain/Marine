@@ -39,7 +39,7 @@ namespace Marine.Redux.API.Inventory
 
             foreach (var chances in Items)
             {
-                if (Random.Range(0, 101) <= chances.Value)
+                if (Random.Range(0, 101) >= 100 - chances.Value)
                 {
                     _item = chances.Key;
 
