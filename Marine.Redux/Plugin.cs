@@ -6,7 +6,7 @@ namespace Marine.Redux
     {
         public override string Name => "Marine.Redux";
 
-        public override string Prefix => "Marine.Redux";
+        public override string Prefix => "marine.redux";
 
         public override string Author => "i.your";
 
