@@ -3,7 +3,6 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
 using Marine.Misc.Models;
@@ -11,7 +10,6 @@ using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Marine.Misc.Handlers
@@ -151,7 +149,7 @@ namespace Marine.Misc.Handlers
         public void OnHurting(HurtingEventArgs ev)
         {
             if (_realisticEffects.IsEnabled
-                || !ev.IsAllowed || ev.Player == ev.Attacker || ev.Attacker == null || !ev.Player.IsHuman || ev.Player.HasItem(ItemType.ArmorHeavy))
+                || !ev.IsAllowed || ev.Player == ev.Attacker || ev.Attacker == null || !ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy)
             {
                 return;
             }

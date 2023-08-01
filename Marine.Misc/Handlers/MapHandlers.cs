@@ -1,10 +1,9 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
-using PlayerRoles.PlayableScps.Scp079;
 using PlayerRoles;
+using PlayerRoles.PlayableScps.Scp079;
 using System.Linq;
-using UnityEngine;
 
 namespace Marine.Misc.Handlers
 {
