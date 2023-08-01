@@ -3,6 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
 using Marine.Misc.Models;
@@ -218,39 +219,6 @@ namespace Marine.Misc.Handlers
             if (ev.Item.Type == ItemType.Painkillers)
             {
                 ev.Player.GetEffect(EffectType.DamageReduction).ServerSetState(20, 180, true);
-            }
-        }
-
-        public void OnActivatingGenerator(ActivatingGeneratorEventArgs ev)
-        {
-            var computers = Player.Get(RoleTypeId.Scp079);
-
-            if (ev.Player.LeadingTeam == LeadingTeam.Anomalies)
-            {
-                ev.IsAllowed = false;
-                ev.Generator.IsActivating = false;
-
-                return;
-            }
-
-            if (!ev.IsAllowed || computers.Count() == 0)
-            {
-                return;
-            }
-
-            foreach (var ply in computers)
-            {
-                var scp = ply.Role.Base as Scp079Role;
-
-                if (scp == null
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079TierManager>(out var tier)
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079LostSignalHandler>(out var lost))
-                {
-                    continue;
-                }
-
-                tier.ServerGrantExperience(50, Scp079HudTranslation.ExpGainAdminCommand);
-                lost.ServerLoseSignal(5);
             }
         }
 

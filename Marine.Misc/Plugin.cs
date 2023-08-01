@@ -37,7 +37,6 @@ namespace Marine.Misc
             Server.RoundStarted += _server.OnRoundStarted;
             Server.RestartingRound += _server.OnRestartingRound;
 
-            Player.ActivatingGenerator += _player.OnActivatingGenerator;
             Player.UnlockingGenerator += _player.OnUnlockingGenerator;
             Player.InteractingLocker += _player.OnInteractingLocker;
             Player.TriggeringTesla += _player.OnTriggeringTesla;
@@ -49,7 +48,7 @@ namespace Marine.Misc
             Player.Dying += _player.OnDying;
             Player.Shot += _player.OnShot;
 
-
+            Map.GeneratorActivated += _map.OnGeneratorActivated;
             Map.Generated += _map.OnGenerated;
 
             _harmony.PatchAll(GetType().Assembly);
@@ -62,6 +61,7 @@ namespace Marine.Misc
             _harmony.UnpatchAll(HarmonyId);
 
             Map.Generated -= _map.OnGenerated;
+            Map.GeneratorActivated -= _map.OnGeneratorActivated;
 
             Player.Shot -= _player.OnShot;
             Player.Dying -= _player.OnDying;
@@ -73,7 +73,6 @@ namespace Marine.Misc
             Player.InteractingDoor -= _player.OnInteractingDoor;
             Player.InteractingLocker -= _player.OnInteractingLocker;
             Player.UnlockingGenerator -= _player.OnUnlockingGenerator;
-            Player.ActivatingGenerator -= _player.OnActivatingGenerator;
 
             Server.RestartingRound -= _server.OnRestartingRound;
             Server.RoundStarted -= _server.OnRoundStarted;
