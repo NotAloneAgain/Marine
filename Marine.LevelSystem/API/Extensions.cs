@@ -7,13 +7,13 @@ namespace Marine.LevelSystem.API
 {
     public static class Extensions
     {
-        private static readonly Dictionary<Player, Statistics> _stats;
+        private static readonly Dictionary<string, Statistics> _stats;
 
-        static Extensions() => _stats = new Dictionary<Player, Statistics>(100);
+        static Extensions() => _stats = new Dictionary<string, Statistics>(100);
 
         public static void Track(this Player player)
         {
-            if (player == null || _stats.ContainsKey(player))
+            if (player == null || _stats.ContainsKey(player.UserId))
             {
                 return;
             }
@@ -27,26 +27,26 @@ namespace Marine.LevelSystem.API
                 MySqlManager.Levels.Insert(stats);
             }
 
-            _stats.Add(player, stats);
+            _stats.Add(player.UserId, stats);
 
             player.CustomInfo = $"Уровень {stats.Level}";
         }
 
         public static void Remove(this Player player)
         {
-            if (player == null || !_stats.ContainsKey(player))
+            if (player == null || !_stats.ContainsKey(player.UserId))
             {
                 return;
             }
 
-            MySqlManager.Levels.Update(_stats[player]);
+            MySqlManager.Levels.Update(_stats[player.UserId]);
 
-            _stats.Remove(player);
+            _stats.Remove(player.UserId);
         }
 
         public static void Reward(this Player player, int amount, string action)
         {
-            var stats = _stats[player];
+            var stats = _stats[player.UserId];
 
             stats.ApplyModifiers(ref amount);
 

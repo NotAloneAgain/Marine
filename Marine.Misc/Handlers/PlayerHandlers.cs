@@ -250,14 +250,16 @@ namespace Marine.Misc.Handlers
             }
         }
 
-        public void OnJoined(JoinedEventArgs ev)
+        public void OnVerified(VerifiedEventArgs ev)
         {
             if (ev.Player == null || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
             {
                 return;
             }
 
-            if (MySqlManager.Sync.Select(ev.Player.UserId) is Sync sync)
+            var sync = MySqlManager.Sync.Select(ev.Player.UserId);
+
+            if (sync != null)
             {
                 sync.InGame = true;
 
@@ -272,12 +274,14 @@ namespace Marine.Misc.Handlers
 
         public void OnDestroying(DestroyingEventArgs ev)
         {
-            if (ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
+            if (ev.Player == null || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
             {
                 return;
             }
 
-            if (MySqlManager.Sync.Select(ev.Player.UserId) is Sync sync)
+            var sync = MySqlManager.Sync.Select(ev.Player.UserId);
+
+            if (sync != null)
             {
                 sync.InGame = false;
 
