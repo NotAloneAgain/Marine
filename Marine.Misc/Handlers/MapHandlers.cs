@@ -42,7 +42,8 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            int xp = 50 * (Generator.List.Count(x => x.IsEngaged) + 1);
+            int generators = (Generator.List.Count(x => x.IsEngaged) + 1);
+            int xp = 50 * generators;
 
             foreach (var ply in computers)
             {
@@ -56,7 +57,15 @@ namespace Marine.Misc.Handlers
                 }
 
                 tier.ServerGrantExperience(xp, Scp079HudTranslation.ExpGainAdminCommand);
-                lost.ServerLoseSignal(5);
+
+                lost.ServerLoseSignal(tier.AccessTierLevel switch
+                {
+                    5 => 10,
+                    4 => 8,
+                    3 => 6,
+                    2 => 5,
+                    _ => 3
+                });
             }
         }
     }

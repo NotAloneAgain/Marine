@@ -5,6 +5,7 @@ using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.ScpSwap.API;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,8 +13,6 @@ namespace Marine.Commands.Commands
 {
     public sealed class Force : CommandBase
     {
-        public Force() => Permission.Custom = ply => ply.IsScp && Swap.AllowedScps.Contains(ply.Role);
-
         public override string Command { get; set; } = "force";
 
         public override string Description { get; set; } = "Команда для смены своего SCP-Объекта.";
@@ -30,8 +29,9 @@ namespace Marine.Commands.Commands
         public override CommandPermission Permission { get; set; } = new()
         {
             IsLimited = true,
-            Custom = ply => ply.IsScp && Swap.AllowedScps.Contains(ply.Role)
         };
+
+        public override Func<Player, bool> CustomPermission { get; set; } = ply => ply.IsScp && Swap.AllowedScps.Contains(ply.Role);
 
         public override bool ParseSyntax(List<string> input, int count, out List<object> output)
         {

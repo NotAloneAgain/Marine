@@ -6,6 +6,8 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
 using Marine.Misc.Models;
+using Marine.MySQL.API;
+using Marine.MySQL.API.Models;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079;
@@ -23,6 +25,7 @@ namespace Marine.Misc.Handlers
         private readonly BetterRolesConfig _betterRoles;
         private readonly DefaultConfig _zombieInfection;
         private readonly DefaultConfig _infinityAmmo;
+        private readonly UserGroup _discordGroup;
 
         public PlayerHandlers(Config config)
         {
@@ -33,6 +36,18 @@ namespace Marine.Misc.Handlers
 
             _zombieInfection = config.ZombieInfection;
             _infinityAmmo = config.InfinityAmmo;
+
+            _discordGroup = new()
+            {
+                BadgeText = "Участник Discord",
+                BadgeColor = "cyan",
+                HiddenByDefault = false,
+                Cover = false,
+                KickPower = 0,
+                Permissions = 0,
+                RequiredKickPower = 0,
+                Shared = false
+            };
         }
         #endregion
         #region InfinityAmmo
@@ -49,9 +64,18 @@ namespace Marine.Misc.Handlers
         #region RemoteKeycard
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>()
-                || ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked || ev.Door.IsBroken|| ev.Door.IsCheckpoint && ev.Door.IsOpen)
+            if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
             {
+                return;
+            }
+
+            if (ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked || ev.Door.IsBroken)
+            {
+                if (ev.IsAllowed && ev.Door.IsLocked)
+                {
+                    ev.IsAllowed = ev.Door.DoorLockType is DoorLockType.Regular079 or DoorLockType.Lockdown079;
+                }
+
                 return;
             }
 
@@ -148,8 +172,14 @@ namespace Marine.Misc.Handlers
         #region RealisticEffects
         public void OnHurting(HurtingEventArgs ev)
         {
-            if (_realisticEffects.IsEnabled
-                || !ev.IsAllowed || ev.Player == ev.Attacker || ev.Attacker == null || !ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy)
+            if (!ev.IsAllowed || ev.Player == ev.Attacker || ev.DamageHandler.IsSuicide || ev.DamageHandler.IsFriendlyFire || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.Attacker == null || !ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy)
+            {
+                return;
+            }
+
+            ev.Attacker.ShowHint($"<line-height=95%><voffset=18em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+
+            if (_realisticEffects.IsEnabled)
             {
                 return;
             }
@@ -217,6 +247,41 @@ namespace Marine.Misc.Handlers
             if (ev.Item.Type == ItemType.Painkillers)
             {
                 ev.Player.GetEffect(EffectType.DamageReduction).ServerSetState(20, 180, true);
+            }
+        }
+
+        public void OnJoined(JoinedEventArgs ev)
+        {
+            if (ev.Player == null || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
+            {
+                return;
+            }
+
+            if (MySqlManager.Sync.Select(ev.Player.UserId) is Sync sync)
+            {
+                sync.InGame = true;
+
+                if (!ev.Player.RemoteAdminAccess)
+                {
+                    ev.Player.Group = _discordGroup;
+                }
+
+                MySqlManager.Sync.Update(sync);
+            }
+        }
+
+        public void OnDestroying(DestroyingEventArgs ev)
+        {
+            if (ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
+            {
+                return;
+            }
+
+            if (MySqlManager.Sync.Select(ev.Player.UserId) is Sync sync)
+            {
+                sync.InGame = false;
+
+                MySqlManager.Sync.Update(sync);
             }
         }
 

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marine.Misc", "Marine.Misc\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marine.Redux", "Marine.Redux\Marine.Redux.csproj", "{1E8B7521-0660-4BEB-8F0B-99596C96490F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marine.MySQL", "Marine.MySQL\Marine.MySQL.csproj", "{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marine.LevelSystem", "Marine.LevelSystem\Marine.LevelSystem.csproj", "{0C81F7E6-4CD0-47C6-B82A-5A634C1F2D5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +43,14 @@ Global
 		{1E8B7521-0660-4BEB-8F0B-99596C96490F}.Debug|x64.Build.0 = Debug|x64
 		{1E8B7521-0660-4BEB-8F0B-99596C96490F}.Release|x64.ActiveCfg = Release|x64
 		{1E8B7521-0660-4BEB-8F0B-99596C96490F}.Release|x64.Build.0 = Release|x64
+		{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}.Debug|x64.ActiveCfg = Debug|x64
+		{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}.Debug|x64.Build.0 = Debug|x64
+		{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}.Release|x64.ActiveCfg = Release|x64
+		{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}.Release|x64.Build.0 = Release|x64
+		{0C81F7E6-4CD0-47C6-B82A-5A634C1F2D5A}.Debug|x64.ActiveCfg = Debug|x64
+		{0C81F7E6-4CD0-47C6-B82A-5A634C1F2D5A}.Debug|x64.Build.0 = Debug|x64
+		{0C81F7E6-4CD0-47C6-B82A-5A634C1F2D5A}.Release|x64.ActiveCfg = Release|x64
+		{0C81F7E6-4CD0-47C6-B82A-5A634C1F2D5A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

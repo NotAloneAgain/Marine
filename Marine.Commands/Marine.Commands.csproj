@@ -51,6 +51,7 @@
     <Compile Include="API\Enums\CommandType.cs" />
     <Compile Include="API\Extensions.cs" />
     <Compile Include="Commands\Force.cs" />
+    <Compile Include="Commands\Level.cs" />
     <Compile Include="Commands\Steal.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Models\Commands.cs" />
@@ -59,6 +60,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Marine.MySQL\Marine.MySQL.csproj">
+      <Project>{a3a7544a-7786-4e9f-8a33-9b6adbdde104}</Project>
+      <Name>Marine.MySQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Marine.Redux\Marine.Redux.csproj">
       <Project>{1e8b7521-0660-4beb-8f0b-99596c96490f}</Project>
       <Name>Marine.Redux</Name>

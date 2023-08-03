@@ -15,7 +15,8 @@ namespace Marine.Commands.Models
                 var list = new List<CommandBase>()
                 {
                     Force,
-                    Steal
+                    Steal,
+                    Level
                 };
 
                 return list;
@@ -25,5 +26,7 @@ namespace Marine.Commands.Models
         public Force Force { get; set; } = new();
 
         public Steal Steal { get; set; } = new();
+
+        public Level Level { get; set; } = new();
     }
 }

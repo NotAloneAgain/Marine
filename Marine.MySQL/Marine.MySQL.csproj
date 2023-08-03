@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyName>Marine.Template</AssemblyName>
-    <RootNamespace>Marine.Template</RootNamespace>
-    <ProjectGuid>{1BBF38C7-0C1A-4BE7-B77C-559573CE4685}</ProjectGuid>
+    <AssemblyName>Marine.MySQL</AssemblyName>
+    <RootNamespace>Marine.MySQL</RootNamespace>
+    <ProjectGuid>{A3A7544A-7786-4E9F-8A33-9B6ADBDDE104}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +23,33 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySqlConnector.2.3.0-beta.3\lib\net471\MySqlConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.7.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="UnityEngine.UnityWebRequestModule" HintPath="$(UNITY_REFERENCES)\UnityEngine.UnityWebRequestModule.dll" />
     <Reference Include="UnityEngine.AnimationModule" HintPath="$(UNITY_REFERENCES)\UnityEngine.AnimationModule.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(UNITY_REFERENCES)\UnityEngine.PhysicsModule.dll" />
@@ -48,36 +75,26 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configs\Config.cs" />
-    <Compile Include="Handlers\EventHandlers.cs" />
+    <Compile Include="API\Enums\MySqlDataFlags.cs" />
+    <Compile Include="API\Enums\MySqlDataType.cs" />
+    <Compile Include="API\Events\ChangedExpEventArgs.cs" />
+    <Compile Include="API\Events\ChangedLevelEventArgs.cs" />
+    <Compile Include="API\Events\Handlers.cs" />
+    <Compile Include="API\Extensions.cs" />
+    <Compile Include="API\Models\Column.cs" />
+    <Compile Include="API\Models\Statistics.cs" />
+    <Compile Include="API\Models\Sync.cs" />
+    <Compile Include="API\MySqlManager.cs" />
+    <Compile Include="API\Tables\LevelsTable.cs" />
+    <Compile Include="API\Tables\SyncTable.cs" />
+    <Compile Include="API\Tables\Table.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Marine.Commands\Marine.Commands.csproj">
-      <Project>{cb9f5de6-840d-4b8b-951a-690a4496aed5}</Project>
-      <Name>Marine.Commands</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marine.LevelSystem\Marine.LevelSystem.csproj">
-      <Project>{0c81f7e6-4cd0-47c6-b82a-5a634c1f2d5a}</Project>
-      <Name>Marine.LevelSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marine.Misc\Marine.Misc.csproj">
-      <Project>{27fdb0b3-9ee6-4be4-9cd0-7febe77798c5}</Project>
-      <Name>Marine.Misc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marine.MySQL\Marine.MySQL.csproj">
-      <Project>{a3a7544a-7786-4e9f-8a33-9b6adbdde104}</Project>
-      <Name>Marine.MySQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marine.Redux\Marine.Redux.csproj">
-      <Project>{1e8b7521-0660-4beb-8f0b-99596c96490f}</Project>
-      <Name>Marine.Redux</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marine.ScpSwap\Marine.ScpSwap.csproj">
-      <Project>{3485efbd-aeb1-49bd-9ccb-06730e962678}</Project>
-      <Name>Marine.ScpSwap</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

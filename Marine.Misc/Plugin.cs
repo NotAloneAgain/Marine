@@ -43,8 +43,10 @@ namespace Marine.Misc
             Player.ReloadingWeapon += _player.OnReloadingWeapon;
             Player.InteractingDoor += _player.OnInteractingDoor;
             Player.ChangingRole += _player.OnChangingRole;
+            Player.Destroying += _player.OnDestroying;
             Player.UsedItem += _player.OnUsedItem;
             Player.Hurting += _player.OnHurting;
+            Player.Joined += _player.OnJoined;
             Player.Dying += _player.OnDying;
             Player.Shot += _player.OnShot;
 
@@ -65,8 +67,10 @@ namespace Marine.Misc
 
             Player.Shot -= _player.OnShot;
             Player.Dying -= _player.OnDying;
+            Player.Joined -= _player.OnJoined;
             Player.Hurting -= _player.OnHurting;
             Player.UsedItem -= _player.OnUsedItem;
+            Player.Destroying -= _player.OnDestroying;
             Player.ChangingRole -= _player.OnChangingRole;
             Player.TriggeringTesla -= _player.OnTriggeringTesla;
             Player.ReloadingWeapon -= _player.OnReloadingWeapon;
