@@ -44,7 +44,7 @@ namespace Marine.MySQL.API.Tables
             MySqlCommand command = new()
             {
                 Connection = _connection,
-                CommandText = $"INSERT INTO {Name} ({string.Join(", ", Columns.Select(column => column.Name))}) VALUES ('{stats.UserId}', {stats.Level}, {stats.Experience}, {stats.Experience});"
+                CommandText = $"INSERT INTO {Name} ({string.Join(", ", Columns.Select(column => column.Name))}) VALUES ('{stats.UserId}', {stats.Level}, {stats.Experience}, {stats.ExpMultiplayer});"
             };
 
             command.ExecuteNonQuery();
@@ -66,7 +66,7 @@ namespace Marine.MySQL.API.Tables
             MySqlCommand command = new()
             {
                 Connection = _connection,
-                CommandText = $"DELETE FROM {Name} WHERE user_id={stats.UserId};"
+                CommandText = $"DELETE FROM {Name} WHERE user_id='{stats.UserId}';"
             };
 
             command.ExecuteNonQuery();
