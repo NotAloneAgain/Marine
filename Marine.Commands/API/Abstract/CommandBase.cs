@@ -1,4 +1,5 @@
 ﻿using CommandSystem;
+using Discord;
 using Exiled.API.Features;
 using Marine.Commands.API.Enums;
 using RemoteAdmin;
@@ -42,9 +43,6 @@ namespace Marine.Commands.API.Abstract
 
         [YamlMember(Alias = "permissions")]
         public abstract CommandPermission Permission { get; set; }
-
-        [YamlIgnore]
-        public virtual Func<Player, bool> CustomPermission { get; set; }
 
         [YamlIgnore]
         public CommandHistory History { get; set; } = new ();
@@ -140,17 +138,8 @@ namespace Marine.Commands.API.Abstract
 
                 History.Add(player, use);
 
-                if (Permission != null && Permission.IsLimited)
+                if (!CheckPermissions(player))
                 {
-                    Log.Info("Permissions 1");
-
-                    if (CustomPermission != null && CustomPermission(player)
-                        || Permission.Users.Any() && Permission.Users.Contains(player.UserId)
-                        || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
-                    {
-                        goto FINAL;
-                    }
-
                     use.Result = CommandResultType.PermissionError;
 
                     response = Messages[CommandResultType.PermissionError];
@@ -158,9 +147,6 @@ namespace Marine.Commands.API.Abstract
                     return false;
                 }
 
-                goto FINAL;
-
-            FINAL:
                 use.Result = Handle(args, player, out response);
 
                 if (string.IsNullOrEmpty(response))
@@ -179,6 +165,21 @@ namespace Marine.Commands.API.Abstract
         }
 
         public abstract bool ParseSyntax(List<string> input, int count, out List<object> output);
+
+        public virtual bool CheckPermissions(Player player)
+        {
+            if (Permission != null && Permission.IsLimited)
+            {
+                if (CheckPermissions(player) || Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
 
         public abstract CommandResultType Handle(List<object> arguments, Player player, out string response);
     }

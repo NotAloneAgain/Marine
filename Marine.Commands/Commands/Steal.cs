@@ -55,8 +55,6 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override System.Func<Player, bool> CustomPermission { get; set; } = ply => Subclass.Has<Pickpocket>(ply) || Subclass.Has<Thief>(ply);
-
         public override int Cooldown { get; set; } = 30;
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
@@ -126,5 +124,7 @@ namespace Marine.Commands.Commands
 
             return true;
         }
+
+        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Thief>(player) || Subclass.Has<Pickpocket>(player);
     }
 }

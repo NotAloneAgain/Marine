@@ -3,11 +3,7 @@ using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.MySQL.API;
-using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Group;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Marine.Commands.Commands
 {
@@ -30,10 +26,8 @@ namespace Marine.Commands.Commands
 
         public override CommandPermission Permission { get; set; } = new()
         {
-            IsLimited = true,
+            IsLimited = false,
         };
-
-        public override Func<Player, bool> CustomPermission { get; set; } = ply => Subclass.Has<Pickpocket>(ply) || Subclass.Has<Thief>(ply);
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {

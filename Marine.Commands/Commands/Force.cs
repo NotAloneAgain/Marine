@@ -5,7 +5,6 @@ using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.ScpSwap.API;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,7 +30,7 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override Func<Player, bool> CustomPermission { get; set; } = ply => ply.IsScp && Swap.AllowedScps.Contains(ply.Role);
+        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.IsScp && Swap.AllowedScps.Contains(player.Role);
 
         public override bool ParseSyntax(List<string> input, int count, out List<object> output)
         {
