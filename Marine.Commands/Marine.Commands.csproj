@@ -58,7 +58,9 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marine.MySQL\Marine.MySQL.csproj">
       <Project>{a3a7544a-7786-4e9f-8a33-9b6adbdde104}</Project>

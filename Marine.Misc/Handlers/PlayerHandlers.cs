@@ -7,11 +7,11 @@ using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
 using Marine.Misc.Models;
 using Marine.MySQL.API;
-using Marine.MySQL.API.Models;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Marine.Misc.Handlers
@@ -69,13 +69,13 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
+            if (ev.Player.IsScp && ev.Door.IsLocked)
+            {
+                ev.IsAllowed = (ev.Door.IsCheckpoint || !ev.Door.IsKeycardDoor) && ev.Door.DoorLockType is not DoorLockType.Regular079 and not DoorLockType.Lockdown079;
+            }
+
             if (ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked || ev.Door.IsBroken)
             {
-                if (ev.IsAllowed && ev.Door.IsLocked)
-                {
-                    ev.IsAllowed = ev.Door.DoorLockType is DoorLockType.Regular079 or DoorLockType.Lockdown079;
-                }
-
                 return;
             }
 
@@ -90,10 +90,11 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
+            bool hasAccess = ev.Player.CheckPermissions(ev.Chamber.RequiredPermissions);
             bool hasCheckpoints = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints);
             bool hasContaiment = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo);
 
-            ev.IsAllowed = hasCheckpoints && hasContaiment;
+            ev.IsAllowed = hasAccess || ev.Locker.Loot.All(x => !x.TargetItem.IsWeapon()) && hasCheckpoints && hasContaiment;
         }
 
         public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
@@ -172,14 +173,14 @@ namespace Marine.Misc.Handlers
         #region RealisticEffects
         public void OnHurting(HurtingEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Player == ev.Attacker || ev.DamageHandler.IsSuicide || ev.DamageHandler.IsFriendlyFire || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.Attacker == null || !ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy)
+            if (!ev.IsAllowed || ev.Attacker == null || ev.Player == ev.Attacker || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam)
             {
                 return;
             }
 
             ev.Attacker.ShowHint($"<line-height=95%><voffset=18em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
 
-            if (_realisticEffects.IsEnabled)
+            if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || _realisticEffects.IsEnabled)
             {
                 return;
             }

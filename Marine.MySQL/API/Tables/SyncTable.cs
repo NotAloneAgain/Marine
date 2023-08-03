@@ -1,6 +1,6 @@
 ﻿using Marine.MySQL.API.Enums;
 using Marine.MySQL.API.Models;
-using MySqlConnector;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Marine.MySQL.API.Tables
 
         public override string Name { get; } = "sync";
 
-        public override List<Column> Columns { get; } = new List<Column>(3)
+        public override List<Column> Columns { get; } = new List<Column>(4)
         {
             new Column("id", MySqlDataType.Int, new List<MySqlDataFlags>
             {

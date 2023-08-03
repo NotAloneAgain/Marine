@@ -6,11 +6,11 @@ namespace Marine.MySQL
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        public override string Name => "Marine.MySQL";
+        public override string Name { get; } = "Marine.MySQL";
 
-        public override string Prefix => "Marine.MySQL";
+        public override string Prefix { get; } = "Marine.MySQL";
 
-        public override string Author => "i.your";
+        public override string Author { get; } = "i.your";
 
         public override PluginPriority Priority { get; } = PluginPriority.First;
 

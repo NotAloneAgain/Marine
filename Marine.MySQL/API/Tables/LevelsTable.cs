@@ -1,5 +1,5 @@
 ﻿using Marine.MySQL.API.Models;
-using MySqlConnector;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System;
 using Marine.MySQL.API.Enums;
