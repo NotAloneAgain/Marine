@@ -1,12 +1,9 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Marine.Misc.API;
 using MEC;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace Marine.Misc.Handlers
 {

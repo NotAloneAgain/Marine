@@ -69,9 +69,11 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if (ev.Player.IsScp && ev.Door.IsLocked)
+            if (ev.Player.IsScp)
             {
-                ev.IsAllowed = (ev.Door.IsCheckpoint || !ev.Door.IsKeycardDoor) && ev.Door.DoorLockType is not DoorLockType.Regular079 and not DoorLockType.Lockdown079;
+                ev.IsAllowed = !ev.Door.IsKeycardDoor
+                    || ev.Door.IsCheckpoint && ev.Door.DoorLockType is not DoorLockType.Regular079 and not DoorLockType.Lockdown079
+                    || ev.Door.IsLocked && !ev.Door.IsGate && ev.Door.DoorLockType is DoorLockType.Regular079 or DoorLockType.Lockdown079;
             }
 
             if (ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked || ev.Door.IsBroken)
