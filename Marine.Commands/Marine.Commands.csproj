@@ -61,7 +61,7 @@
     <Compile Include="Commands\Steal.cs" />
     <Compile Include="Commands\Item.cs" />
     <Compile Include="Commands\Teleport.cs" />
-    <Compile Include="Configs\Config.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

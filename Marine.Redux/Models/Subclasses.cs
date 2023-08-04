@@ -30,6 +30,8 @@ namespace Marine.Redux.Models
                     Engineer,
                     Head,
                     Medic,
+                    Infected,
+                    Hidden,
                     Manager
                 };
 
@@ -62,6 +64,10 @@ namespace Marine.Redux.Models
         public Head Head { get; set; } = new();
 
         public Manager Manager { get; set; } = new();
+
+        public Hidden Hidden { get; set; } = new();
+
+        public Infected Infected { get; set; } = new();
 
         public Pickpocket Pickpocket { get; set; } = new();
     }

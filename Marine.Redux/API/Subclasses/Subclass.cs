@@ -210,7 +210,7 @@ namespace Marine.Redux.API.Subclasses
 
         protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (ev.NewRole == Role && Can(ev.Player) && ev.Reason == SpawnReason.ForceClass)
+            if (ev.NewRole == Role && Can(ev.Player))
             {
                 Assign(ev.Player);
 
