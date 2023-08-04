@@ -53,6 +53,7 @@ namespace Marine.Misc
 
             Exiled.Events.Handlers.Scp914.UpgradingPickup += _map.OnUpgradingPickup;
             Map.GeneratorActivated += _map.OnGeneratorActivated;
+            Map.PlacingBulletHole += _map.OnPlacingBulletHole;
             Map.Generated += _map.OnGenerated;
 
             _harmony.PatchAll(GetType().Assembly);
@@ -65,6 +66,7 @@ namespace Marine.Misc
             _harmony.UnpatchAll(HarmonyId);
 
             Map.Generated -= _map.OnGenerated;
+            Map.PlacingBulletHole -= _map.OnPlacingBulletHole;
             Map.GeneratorActivated -= _map.OnGeneratorActivated;
             Exiled.Events.Handlers.Scp914.UpgradingPickup -= _map.OnUpgradingPickup;
 

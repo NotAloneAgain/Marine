@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Marine.Misc.API
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static bool CheckPermissions(this Player player, KeycardPermissions perms)
         {

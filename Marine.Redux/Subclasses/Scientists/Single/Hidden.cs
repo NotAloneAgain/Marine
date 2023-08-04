@@ -12,7 +12,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Message = new("Ты - Скрытный!\nТы имеете хорошие медицинские познания и можете лечить других (проверь консоль).", 12, true),
+            Message = new("Ты - Скрытный!\nТы можешь скрыться с помощью команды .hide.", 12, true),
             Inventory = new()
             {
                 IsRandomable = false,
@@ -25,14 +25,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
                     new Slot(new ItemChances()
                     {
                         { ItemType.Medkit, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.Medkit, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.Painkillers, 100 },
                     }, false)
                 }
             }

@@ -35,6 +35,8 @@ namespace Marine.Misc.Handlers
             door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
         }
 
+        public void OnPlacingBulletHole(PlacingBulletHole ev) => ev.IsAllowed = false;
+
         public void OnGeneratorActivated(GeneratorActivatedEventArgs ev)
         {
             var computers = Player.Get(RoleTypeId.Scp079);

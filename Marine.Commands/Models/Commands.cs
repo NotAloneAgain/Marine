@@ -21,6 +21,7 @@ namespace Marine.Commands.Models
                     Teleport,
                     Heal,
                     Upgrade,
+                    Hide,
                     Size,
                     DropItem,
                     DropRagdoll
@@ -45,6 +46,8 @@ namespace Marine.Commands.Models
         public Upgrade Upgrade { get; set; } = new();
 
         public Size Size { get; set; } = new();
+
+        public Hide Hide { get; set; } = new();
 
         public DropItem DropItem { get; set; } = new();
 

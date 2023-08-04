@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Interfaces;
 using System.ComponentModel;
 
-namespace Marine.Commands.Configs
+namespace Marine.Commands
 {
     public sealed class Config : IConfig
     {

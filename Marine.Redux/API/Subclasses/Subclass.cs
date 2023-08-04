@@ -188,7 +188,7 @@ namespace Marine.Redux.API.Subclasses
 
         protected virtual void OnRevoked(Player player, in RevokeReason reason) { }
 
-        protected void OnDestroying(DestroyingEventArgs ev)
+        protected virtual void OnDestroying(DestroyingEventArgs ev)
         {
             if (!Has(ev.Player))
             {
@@ -198,7 +198,7 @@ namespace Marine.Redux.API.Subclasses
             Revoke(ev.Player, RevokeReason.Leave);
         }
 
-        protected void OnDied(DiedEventArgs ev)
+        protected virtual void OnDied(DiedEventArgs ev)
         {
             if (!Has(ev.Player))
             {
@@ -208,26 +208,34 @@ namespace Marine.Redux.API.Subclasses
             Revoke(ev.Player, RevokeReason.Died);
         }
 
-        protected void OnChangingRole(ChangingRoleEventArgs ev)
+        protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (ev.Reason == SpawnReason.ForceClass)
-            {
-                return;
-            }
-
-            if (ev.NewRole == Role && Can(ev.Player))
+            if (ev.NewRole == Role && Can(ev.Player) && ev.Reason == SpawnReason.ForceClass)
             {
                 Assign(ev.Player);
 
                 return;
             }
 
-            if (!Has(ev.Player))
+            if (!Has(ev.Player) || ev.NewRole == GameRole)
             {
                 return;
             }
 
-            DestroyInfo(ev.Player);
+            if (ev.Reason == SpawnReason.Escaped)
+            {
+                DestroyInfo(ev.Player);
+
+                return;
+            }
+
+            Revoke(ev.Player, ev.Reason switch
+            {
+                SpawnReason.Died => RevokeReason.Died,
+                SpawnReason.Destroyed => RevokeReason.Leave,
+                SpawnReason.ForceClass => RevokeReason.Admin,
+                _ => RevokeReason.None
+            });
         }
 
         protected void CreateInfo(Player ply)

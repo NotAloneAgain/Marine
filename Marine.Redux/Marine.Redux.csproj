@@ -80,5 +80,11 @@
   <ItemGroup>
     <Folder Include="Subclasses\Guards\Group\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Marine.Misc\Marine.Misc.csproj">
+      <Project>{27fdb0b3-9ee6-4be4-9cd0-7febe77798c5}</Project>
+      <Name>Marine.Misc</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

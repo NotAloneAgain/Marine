@@ -1,8 +1,13 @@
-﻿using Marine.Redux.API;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Marine.Misc.API;
+using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Marine.Redux.Subclasses.Scientists.Single
 {
@@ -12,7 +17,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом.", 12, true),
+            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти/нажав на 2.", 12, true),
+            Health = 75,
             Inventory = new()
             {
                 IsRandomable = false,
@@ -21,18 +27,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
                     new Slot(new ItemChances()
                     {
                         { ItemType.KeycardScientist, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.Medkit, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.Medkit, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.Painkillers, 100 },
                     }, false)
                 }
             }
@@ -41,5 +35,58 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
 
         public override int Chance { get; set; } = 15;
+
+        public override void Subscribe()
+        {
+            base.Subscribe();
+
+            Exiled.Events.Handlers.Player.ProcessingHotkey += OnProcessingHotkey;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+        }
+
+        public override void Unsubscribe()
+        {
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.ProcessingHotkey -= OnProcessingHotkey;
+
+            base.Unsubscribe();
+        }
+
+        public override bool Can(in Player player) => base.Can(player) && Player.List.Count(x => x.Role.Type == RoleTypeId.Scp049) > 0;
+
+        protected override void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (ev.Reason == SpawnReason.Revived)
+            {
+                return;
+            }
+
+            base.OnChangingRole(ev);
+        }
+
+        private void OnDying(DyingEventArgs ev)
+        {
+            if (!Has(ev.Player) || ev.Player.Role.Type != Role)
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+
+            ev.Player.DropAllWithoutKeycard();
+            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
+        }
+
+        private void OnProcessingHotkey(ProcessingHotkeyEventArgs ev)
+        {
+            if (!Has(ev.Player) || ev.Player.Role.Type != Role || ev.Hotkey != HotkeyButton.SecondaryFirearm)
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+            ev.Player.DropAllWithoutKeycard();
+            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
+        }
     }
 }
