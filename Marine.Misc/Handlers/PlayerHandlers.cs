@@ -64,24 +64,24 @@ namespace Marine.Misc.Handlers
         #region RemoteKeycard
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
+            if (!_remoteKeycard.IsEnabled || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.IsBroken || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
             {
                 return;
             }
 
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScp && ev.Door.IsLocked && ev.Player.Role.Type != RoleTypeId.Scp079)
             {
-                ev.IsAllowed = !ev.Door.IsKeycardDoor
-                    || ev.Door.IsCheckpoint && ev.Door.DoorLockType is not DoorLockType.Regular079 and not DoorLockType.Lockdown079
-                    || ev.Door.IsLocked && !ev.Door.IsGate && ev.Door.DoorLockType is DoorLockType.Regular079 or DoorLockType.Lockdown079;
+                ev.IsAllowed = !ev.Door.IsGate && ev.Door.DoorLockType is DoorLockType.Regular079 or DoorLockType.Lockdown079;
+
+                return;
             }
 
-            if (ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked || ev.Door.IsBroken)
+            if (ev.IsAllowed)
             {
                 return;
             }
 
-            ev.IsAllowed = ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
+            ev.IsAllowed = ev.Door.IsCheckpoint ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
         }
 
         public void OnInteractingLocker(InteractingLockerEventArgs ev)

@@ -8,7 +8,7 @@ using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
 
-namespace Marine.Redux.Subclasses.Group
+namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Killer : GroupSubclass
     {

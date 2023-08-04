@@ -16,7 +16,9 @@ namespace Marine.Commands.Models
                 {
                     Force,
                     Steal,
-                    Level
+                    Level,
+                    Item,
+                    Teleport
                 };
 
                 return list;
@@ -28,5 +30,9 @@ namespace Marine.Commands.Models
         public Steal Steal { get; set; } = new();
 
         public Level Level { get; set; } = new();
+
+        public Item Item { get; set; } = new();
+
+        public Teleport Teleport { get; set; } = new();
     }
 }

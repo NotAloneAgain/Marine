@@ -13,7 +13,7 @@ namespace Marine.Misc.Handlers
         {
             var door = Door.Get(DoorType.NukeSurface);
 
-            door.RequiredPermissions.RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.AlphaWarhead;
+            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
             door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
 
             door = Door.Get(DoorType.Scp079First);

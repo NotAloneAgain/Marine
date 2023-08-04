@@ -53,6 +53,8 @@
     <Compile Include="Commands\Force.cs" />
     <Compile Include="Commands\Level.cs" />
     <Compile Include="Commands\Steal.cs" />
+    <Compile Include="Commands\Item.cs" />
+    <Compile Include="Commands\Teleport.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Plugin.cs" />

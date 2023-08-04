@@ -18,6 +18,11 @@ namespace Marine.Redux.API
             Show = show;
         }
 
+        public Message(string text, ushort duration, bool show, string color) : this(text, duration, show)
+        {
+            Color = color;
+        }
+
         [YamlMember(Alias = "text")]
         public string Text { get; set; } = string.Empty;
 

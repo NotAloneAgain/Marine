@@ -3,7 +3,7 @@ using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Group;
+using Marine.Redux.Subclasses.ClassD.Group;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

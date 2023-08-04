@@ -6,6 +6,7 @@ using Marine.Redux.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using YamlDotNet.Serialization;
 
@@ -72,8 +73,26 @@ namespace Marine.Redux.API.Subclasses
             {
                 if (subclass.Is<TSubclass>())
                 {
-                    Log.Info(subclass.Name);
+                    return subclass.Has(player);
+                }
+            }
 
+            return false;
+        }
+
+        public static bool AnyHas<TSubclass>() where TSubclass : Subclass
+        {
+            var subclass = _list.Find(sub => sub.Is<TSubclass>());
+
+            if (subclass == null)
+            {
+                return false;
+            }
+
+            foreach (var player in Player.List.Where(ply => ply.Role == (subclass.GameRole == RoleTypeId.None ? subclass.Role : subclass.GameRole)))
+            {
+                if (subclass.Has(player))
+                {
                     return true;
                 }
             }
@@ -101,8 +120,6 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Assign(Player player)
         {
-            Log.Info("Assign");
-
             Timing.CallDelayed(0.00001f, delegate ()
             {
                 SpawnInfo.Message.Send(player);

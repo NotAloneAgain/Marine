@@ -56,11 +56,14 @@
     <Compile Include="Models\Subclasses.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Subclasses\Group\Killer.cs" />
-    <Compile Include="Subclasses\Group\Pickpocket.cs" />
-    <Compile Include="Subclasses\Group\Thief.cs" />
-    <Compile Include="Subclasses\Single\Scp181.cs" />
-    <Compile Include="Subclasses\Single\Scp343.cs" />
+    <Compile Include="Subclasses\ClassD\Group\Dwarf.cs" />
+    <Compile Include="Subclasses\ClassD\Group\GigaChad.cs" />
+    <Compile Include="Subclasses\ClassD\Group\Killer.cs" />
+    <Compile Include="Subclasses\ClassD\Group\Pickpocket.cs" />
+    <Compile Include="Subclasses\ClassD\Group\Thief.cs" />
+    <Compile Include="Subclasses\ClassD\Single\Scp073.cs" />
+    <Compile Include="Subclasses\ClassD\Single\Scp181.cs" />
+    <Compile Include="Subclasses\ClassD\Single\Scp343.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -170,7 +170,7 @@ namespace Marine.Commands.API.Abstract
         {
             if (Permission != null && Permission.IsLimited)
             {
-                if (CheckPermissions(player) || Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
+                if (Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
                 {
                     return true;
                 }

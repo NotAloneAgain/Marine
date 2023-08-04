@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
@@ -7,7 +8,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Marine.Redux.Subclasses.Group
+namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Pickpocket : GroupSubclass
     {
@@ -106,6 +107,20 @@ namespace Marine.Redux.Subclasses.Group
 
         public override int Chance { get; set; } = 40;
 
+        public override void Subscribe()
+        {
+            base.Subscribe();
+
+            Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
+        }
+
+        public override void Unsubscribe()
+        {
+            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+
+            base.Unsubscribe();
+        }
+
         protected override void OnAssigned(Player player)
         {
             if (player.Items.Any(item => item.Type != ItemType.Coin))
@@ -119,6 +134,16 @@ namespace Marine.Redux.Subclasses.Group
             player.Health = 200;
 
             player.GetEffect(EffectType.MovementBoost).ServerSetState(20);
+        }
+
+        private void OnSearchingPickup(SearchingPickupEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.SearchTime *= 0.9f;
         }
     }
 }

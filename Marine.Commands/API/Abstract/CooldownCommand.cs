@@ -22,7 +22,7 @@ namespace Marine.Commands.API.Abstract
 
             var time = DateTime.Now - use.Time;
 
-            if (time.TotalSeconds <= Cooldown)
+            if (time.TotalSeconds < Cooldown)
             {
                 response = $"Вам осталось ждать {(Cooldown - time.TotalSeconds).GetSecondsString()}.";
 
