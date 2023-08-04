@@ -7,7 +7,6 @@ using Marine.Redux.API.Enums;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,8 +27,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = false,
-            Message = new("Вы - Бог.\nО своих способностях ты можешь прочитать в консоли.", 15, true, "#009A63"),
+            ShowInfo = true,
+            Message = new("Ты - Бог.\nО своих способностях ты можешь прочитать в консоли.", 15, true, "#009A63"),
             Inventory = new()
             {
                 IsRandomable = false,

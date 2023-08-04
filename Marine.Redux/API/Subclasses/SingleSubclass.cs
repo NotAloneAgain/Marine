@@ -14,7 +14,7 @@ namespace Marine.Redux.API.Subclasses
         [YamlIgnore]
         public Player Player { get; set; }
 
-        public override void Assign(Player player)
+        public sealed override void Assign(Player player)
         {
             if (Player != null)
             {
@@ -26,7 +26,7 @@ namespace Marine.Redux.API.Subclasses
             base.Assign(player);
         }
 
-        public override void Revoke(Player player, in RevokeReason reason)
+        public sealed override void Revoke(Player player, in RevokeReason reason)
         {
             if (player == null || !Has(player) || reason == RevokeReason.Died && player.IsAlive)
             {

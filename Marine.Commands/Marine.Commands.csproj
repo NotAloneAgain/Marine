@@ -50,8 +50,13 @@
     <Compile Include="API\Enums\CommandResultType.cs" />
     <Compile Include="API\Enums\CommandType.cs" />
     <Compile Include="API\Extensions.cs" />
+    <Compile Include="Commands\DropItem.cs" />
+    <Compile Include="Commands\DropRagdoll.cs" />
     <Compile Include="Commands\Force.cs" />
+    <Compile Include="Commands\Size.cs" />
+    <Compile Include="Commands\Upgrade.cs" />
     <Compile Include="Commands\Level.cs" />
+    <Compile Include="Commands\Heal.cs" />
     <Compile Include="Commands\Steal.cs" />
     <Compile Include="Commands\Item.cs" />
     <Compile Include="Commands\Teleport.cs" />

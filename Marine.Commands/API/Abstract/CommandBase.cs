@@ -182,5 +182,59 @@ namespace Marine.Commands.API.Abstract
         }
 
         public abstract CommandResultType Handle(List<object> arguments, Player player, out string response);
+
+        protected virtual bool TryParsePlayers(string players, out List<Player> result)
+        {
+            switch (players)
+            {
+                case "all":
+                    {
+                        result = Player.List.ToList();
+
+                        break;
+                    }
+                case "0":
+                case "me":
+                    {
+                        result = new List<Player>(1) { };
+
+                        break;
+                    }
+                default:
+                    {
+                        if (players.Contains("."))
+                        {
+                            var splitted = players.Split('.');
+
+                            result = new(splitted.Length);
+
+                            foreach (var data in splitted)
+                            {
+                                if (!Player.TryGet(data, out var player))
+                                {
+                                    continue;
+                                }
+
+                                result.Add(player);
+                            }
+                        }
+                        else
+                        {
+                            result = new(1);
+
+                            if (!Player.TryGet(players, out var player))
+                            {
+                                return false;
+                            }
+
+                            result.Add(player);
+                        }
+
+                        break;
+                    }
+            }
+
+            return result != null;
+        }
     }
 }

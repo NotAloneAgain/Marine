@@ -1,6 +1,8 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Scp914;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079;
 using System.Linq;
@@ -66,6 +68,21 @@ namespace Marine.Misc.Handlers
                     2 => 5,
                     _ => 3
                 });
+            }
+        }
+
+        public void OnUpgradingPickup(UpgradingPickupEventArgs ev)
+        {
+            if (ev.Pickup.Type == ItemType.MicroHID && ev.KnobSetting == Scp914.Scp914KnobSetting.Coarse)
+            {
+                Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
+
+                ev.Pickup.Destroy();
+            }
+
+            if (ev.Pickup.Type == ItemType.ParticleDisruptor)
+            {
+                ev.Pickup.Destroy();
             }
         }
     }

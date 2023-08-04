@@ -1,5 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
@@ -20,8 +19,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = false,
-            Message = new("Вы - SCP-073!\nУ вас очень крепкое тело и неплохая регенерация (проверь консоль).", 15, true, "#009A63"),
+            ShowInfo = true,
+            Message = new("Ты - SCP-073!\nУ тебя очень крепкое тело и неплохая регенерация (проверь консоль).", 15, true, "#009A63"),
             Health = 150,
             Shield = new Shield(100, 100, -0.36f, 1, 10, true),
             Inventory = new()
@@ -61,7 +60,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 return;
             }
 
-            if (ev.Player != ev.Attacker)
+            if (ev.Player != ev.Attacker && !ev.Attacker.IsGodModeEnabled)
             {
                 ev.Attacker.Hurt(ev.Amount / 4, ev.DamageHandler.Type);
             }

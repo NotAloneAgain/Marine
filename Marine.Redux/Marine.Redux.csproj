@@ -40,6 +40,7 @@
     <Compile Include="API\Enums\RevokeReason.cs" />
     <Compile Include="API\Enums\SubclassType.cs" />
     <Compile Include="API\Interfaces\IGroupPlayer.cs" />
+    <Compile Include="API\Interfaces\IHasHandlers.cs" />
     <Compile Include="API\Interfaces\IHasName.cs" />
     <Compile Include="API\Interfaces\IHasRandom.cs" />
     <Compile Include="API\Interfaces\ISinglePlayer.cs" />
@@ -61,10 +62,23 @@
     <Compile Include="Subclasses\ClassD\Group\Killer.cs" />
     <Compile Include="Subclasses\ClassD\Group\Pickpocket.cs" />
     <Compile Include="Subclasses\ClassD\Group\Thief.cs" />
+    <Compile Include="Subclasses\ClassD\Single\Gang.cs" />
+    <Compile Include="Subclasses\ClassD\Single\Letting.cs" />
     <Compile Include="Subclasses\ClassD\Single\Scp073.cs" />
     <Compile Include="Subclasses\ClassD\Single\Scp181.cs" />
     <Compile Include="Subclasses\ClassD\Single\Scp343.cs" />
+    <Compile Include="Subclasses\Guards\Single\Imposter.cs" />
+    <Compile Include="Subclasses\Guards\Single\Informator.cs" />
+    <Compile Include="Subclasses\Scientists\Group\Medic.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Engineer.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Programmer.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Head.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Hidden.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Infected.cs" />
+    <Compile Include="Subclasses\Scientists\Single\Manager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Subclasses\Guards\Group\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

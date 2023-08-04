@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Interactables.Interobjects.DoorUtils;
 using UnityEngine;
 
 namespace Marine.Commands.API
@@ -15,6 +17,18 @@ namespace Marine.Commands.API
             Player target = Player.Get(hit.transform.GetComponentInParent<ReferenceHub>());
 
             return target;
+        }
+
+        public static Door GetDoorFromView(this Player owner, float distance)
+        {
+            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out var hit, distance))
+            {
+                return null;
+            }
+
+            Door door = Door.Get(hit.transform.GetComponentInParent<DoorVariant>());
+
+            return door;
         }
 
         public static string GetSecondsString(this double seconds) => Mathf.RoundToInt((float)seconds).GetSecondsString();

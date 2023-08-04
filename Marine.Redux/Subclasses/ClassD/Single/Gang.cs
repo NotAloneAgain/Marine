@@ -3,36 +3,31 @@ using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Marine.Redux.Subclasses.ClassD.Group
+namespace Marine.Redux.Subclasses.ClassD.Single
 {
-    public class Dwarf : GroupSubclass
+    public class Gang : SingleSubclass
     {
-        public override string Name { get; set; } = "Карлик";
-
-        public override int Max { get; set; } = 3;
+        public override string Name { get; set; } = "Блатной";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
-            Message = new("Ты - карлик!\nНесмотря на твое слабое тело и маленький рост ты смог выжить тут.", 12, true, "#D6AE01"),
-            Size = Vector3.one * 0.59f,
-            Health = 50,
+            Message = new("Ты - блатной!\nТебя уважают все в тюрьме, это уважение завоевано силой.", 12, true),
+            Health = 125,
             Inventory = new()
             {
-                IsRandomable = true,
+                IsRandomable = false,
                 Slots = new List<Slot>(8)
                 {
                     new Slot(new ItemChances()
                     {
-                        { ItemType.Medkit, 100 },
+                        { ItemType.Adrenaline, 100 },
                     }, false),
                     new Slot(new ItemChances()
                     {
-                        { ItemType.Medkit, 50 },
                         { ItemType.Painkillers, 100 },
-                    }, true)
+                    }, false)
                 }
             }
         };

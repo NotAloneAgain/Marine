@@ -1,6 +1,8 @@
 ﻿using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
 using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Scientists.Group;
+using Marine.Redux.Subclasses.Scientists.Single;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
@@ -22,7 +24,13 @@ namespace Marine.Redux.Models
                     Pickpocket,
                     Scp073,
                     Scp181,
-                    Scp343
+                    Scp343,
+                    Gang,
+                    Letting,
+                    Engineer,
+                    Head,
+                    Medic,
+                    Manager
                 };
 
                 return list;
@@ -42,6 +50,18 @@ namespace Marine.Redux.Models
         public Scp181 Scp181 { get; set; } = new();
 
         public Scp343 Scp343 { get; set; } = new();
+
+        public Gang Gang { get; set; } = new();
+
+        public Letting Letting { get; set; } = new();
+
+        public Medic Medic { get; set; } = new();
+
+        public Engineer Engineer { get; set; } = new();
+
+        public Head Head { get; set; } = new();
+
+        public Manager Manager { get; set; } = new();
 
         public Pickpocket Pickpocket { get; set; } = new();
     }

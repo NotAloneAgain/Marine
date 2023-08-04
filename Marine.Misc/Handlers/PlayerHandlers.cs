@@ -292,6 +292,16 @@ namespace Marine.Misc.Handlers
             }
         }
 
+        public void OnProcessingHotkey(ProcessingHotkeyEventArgs ev)
+        {
+            if (!ev.IsAllowed || !ev.Player.IsAlive || ev.Player.IsHuman)
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
         #endregion
         #region Coroutines
         private IEnumerator<float> _ChangeLostValue(Player player, float value)

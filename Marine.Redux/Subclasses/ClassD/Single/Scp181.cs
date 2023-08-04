@@ -26,8 +26,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = false,
-            Message = new("Вы - Везунчик.\nВам настолько сильно везет, что её записали как аномальный объект SCP (проверь консоль).", 15, true, "#009A63"),
+            ShowInfo = true,
+            Message = new("Ты - Везунчик.\nТебе настолько сильно везет, что тебя записали как аномальный объект SCP (проверь консоль).", 15, true, "#009A63"),
             Inventory = new()
             {
                 IsRandomable = true,

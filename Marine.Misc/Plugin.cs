@@ -39,6 +39,7 @@ namespace Marine.Misc
 
             Player.UnlockingGenerator += _player.OnUnlockingGenerator;
             Player.InteractingLocker += _player.OnInteractingLocker;
+            Player.ProcessingHotkey += _player.OnProcessingHotkey;
             Player.TriggeringTesla += _player.OnTriggeringTesla;
             Player.ReloadingWeapon += _player.OnReloadingWeapon;
             Player.InteractingDoor += _player.OnInteractingDoor;
@@ -50,6 +51,7 @@ namespace Marine.Misc
             Player.Dying += _player.OnDying;
             Player.Shot += _player.OnShot;
 
+            Exiled.Events.Handlers.Scp914.UpgradingPickup += _map.OnUpgradingPickup;
             Map.GeneratorActivated += _map.OnGeneratorActivated;
             Map.Generated += _map.OnGenerated;
 
@@ -64,6 +66,7 @@ namespace Marine.Misc
 
             Map.Generated -= _map.OnGenerated;
             Map.GeneratorActivated -= _map.OnGeneratorActivated;
+            Exiled.Events.Handlers.Scp914.UpgradingPickup -= _map.OnUpgradingPickup;
 
             Player.Shot -= _player.OnShot;
             Player.Dying -= _player.OnDying;
@@ -75,6 +78,7 @@ namespace Marine.Misc
             Player.TriggeringTesla -= _player.OnTriggeringTesla;
             Player.ReloadingWeapon -= _player.OnReloadingWeapon;
             Player.InteractingDoor -= _player.OnInteractingDoor;
+            Player.ProcessingHotkey -= _player.OnProcessingHotkey;
             Player.InteractingLocker -= _player.OnInteractingLocker;
             Player.UnlockingGenerator -= _player.OnUnlockingGenerator;
 
