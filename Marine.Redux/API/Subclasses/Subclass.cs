@@ -49,14 +49,10 @@ namespace Marine.Redux.API.Subclasses
         {
             foreach (var subclass in _list)
             {
-                if (!subclass.Has(player))
+                if (subclass.Has(player))
                 {
-                    continue;
+                    return true;
                 }
-
-                Log.Info(subclass.Name);
-
-                return true;
             }
 
             return false;

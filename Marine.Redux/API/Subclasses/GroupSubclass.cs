@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Features;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
-using PlayerRoles;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
@@ -9,7 +8,7 @@ namespace Marine.Redux.API.Subclasses
 {
     public abstract class GroupSubclass : Subclass, IGroupPlayer
     {
-        public GroupSubclass()
+        public GroupSubclass() : base()
         {
             Players = new(Max);
         }
