@@ -29,7 +29,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 {
                     new Slot(new ItemChances()
                     {
-                        { ItemType.ParticleDisruptor, 1 },
                         { ItemType.AntiSCP207, 1 },
                         { ItemType.Flashlight, 30 },
                         { ItemType.Coin, 25 },

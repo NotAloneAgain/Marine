@@ -84,7 +84,7 @@ namespace Marine.Commands.Commands
 
             if (count == 2)
             {
-                if (!int.TryParse(input[0], out var role) || !int.TryParse(input[1], out var itemCount) || role > 20 || role < 0)
+                if (!sbyte.TryParse(input[0], out var role) || !int.TryParse(input[1], out var itemCount) || role > 20 || role < 0)
                 {
                     return false;
                 }

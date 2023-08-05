@@ -22,7 +22,7 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Assign(Player player)
         {
-            if (Has(player))
+            if (HasAny(player))
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override bool Has(in Player player)
         {
-            if (player == null || player.Role != Role)
+            if (player == null)
             {
                 return false;
             }

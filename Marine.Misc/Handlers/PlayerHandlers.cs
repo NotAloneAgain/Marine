@@ -175,12 +175,12 @@ namespace Marine.Misc.Handlers
         #region RealisticEffects
         public void OnHurting(HurtingEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Attacker == null || ev.Player == ev.Attacker || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam)
+            if (!ev.IsAllowed || ev.Attacker == null || ev.Player == ev.Attacker || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.DamageHandler.Type == DamageType.Explosion || ev.DamageHandler.Type == DamageType.Scp018)
             {
                 return;
             }
 
-            ev.Attacker.ShowHint($"<line-height=95%><voffset=18em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+            ev.Attacker.ShowHint($"<line-height=95%><voffset=15em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
 
             if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || _realisticEffects.IsEnabled)
             {

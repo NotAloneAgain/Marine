@@ -161,7 +161,7 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual bool Can(in Player player)
         {
-            if (player == null || HasAny(player))
+            if (player == null)
             {
                 return false;
             }
@@ -197,6 +197,11 @@ namespace Marine.Redux.API.Subclasses
 
         protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
         {
+            if (ev.SpawnFlags == RoleSpawnFlags.None)
+            {
+                return;
+            }
+
             if (ev.NewRole == Role && Can(ev.Player))
             {
                 Assign(ev.Player);
@@ -227,13 +232,13 @@ namespace Marine.Redux.API.Subclasses
 
         protected void CreateInfo(Player ply)
         {
-            ply.CustomInfo = $"{ply.CustomName}\n{Name}";
+            ply.CustomInfo = $"{ply.CustomName}{(string.IsNullOrEmpty(ply.CustomInfo) ? string.Empty : $"\n{ply.CustomInfo}")}\n{Name}";
             ply.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
         }
 
         protected void DestroyInfo(Player ply)
         {
-            ply.CustomInfo = string.Empty;
+            ply.CustomInfo = ply.CustomInfo.Replace(ply.CustomName, string.Empty).Replace("\n", string.Empty).Replace(Name, string.Empty);
             ply.InfoArea |= PlayerInfoArea.Role | PlayerInfoArea.Nickname;
         }
     }

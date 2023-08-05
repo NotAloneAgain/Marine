@@ -96,12 +96,14 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 _model = RoleTypeId.Scp173;
             }
 
-            if (_model == RoleTypeId.CustomRole)
+            _model = _model switch
             {
-                _model = RoleTypeId.ChaosRifleman;
-            }
+                RoleTypeId.CustomRole => RoleTypeId.ChaosRifleman,
+                RoleTypeId.Scp079 => RoleTypeId.ChaosConscript,
+                _ => _model
+            };
 
-            ev.Player.ChangeAppearance(_model, false);
+            ev.Player.ChangeAppearance(_model, true);
         }
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)

@@ -29,7 +29,7 @@ namespace Marine.LevelSystem.API
 
             _stats.Add(player.UserId, stats);
 
-            player.RankName = $"{player.RankName} | Уровень {stats.Level}";
+            player.CustomInfo = $"Уровень: {stats.Level}";
         }
 
         public static void Remove(this Player player)
