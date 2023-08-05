@@ -40,7 +40,7 @@ namespace Marine.Commands.Commands
             }
         };
 
-        public override int Cooldown { get; set; } = 5;
+        public override int Cooldown { get; set; } = 3;
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
@@ -51,7 +51,7 @@ namespace Marine.Commands.Commands
 
             if (arguments.Count == 2)
             {
-                Timing.RunCoroutine(_SpawnItems(player, (ItemType)arguments[1], (int)arguments[2]));
+                Timing.RunCoroutine(_SpawnItems(player, (ItemType)arguments[0], (int)arguments[1]));
 
                 return CommandResultType.Success;
             }
@@ -114,7 +114,7 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnItems(Player player, ItemType item, int count)
         {
-            for (int index = 0; index <= count; index++)
+            for (int index = 0; index < count; index++)
             {
                 Pickup.CreateAndSpawn(item, player.Position, Quaternion.Euler(player.Rotation), player);
 

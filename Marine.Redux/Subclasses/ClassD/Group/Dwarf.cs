@@ -9,6 +9,8 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public class Dwarf : GroupSubclass
     {
+        public Dwarf() : base() { }
+
         public override string Name { get; set; } = "Карлик";
 
         public override int Max { get; set; } = 3;

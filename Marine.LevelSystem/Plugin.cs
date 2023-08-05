@@ -28,7 +28,7 @@ namespace Marine.LevelSystem
 
             Player.Destroying += _player.OnDestroying;
             Player.Escaping += _player.OnEscaping;
-            Player.Verified += _player.OnVerified;
+            Player.Joined += _player.OnJoined;
             Player.Died += _player.OnDied;
 
             MySQL.API.Events.Handlers.ChangedExp += _levels.OnChangedExp;
@@ -40,7 +40,7 @@ namespace Marine.LevelSystem
         public override void OnDisabled()
         {
             Player.Died -= _player.OnDied;
-            Player.Verified -= _player.OnVerified;
+            Player.Joined -= _player.OnJoined;
             Player.Escaping -= _player.OnEscaping;
             Player.Destroying -= _player.OnDestroying;
 

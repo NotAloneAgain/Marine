@@ -15,6 +15,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 "\n\t\t- 25% получаемого вами урона отражается на противника." +
                 "\n\t\t- Вы получаете на ещё 25% меньше урона.";
 
+        public Scp073() : base() { }
+
         public override string Name { get; set; } = "SCP-073";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

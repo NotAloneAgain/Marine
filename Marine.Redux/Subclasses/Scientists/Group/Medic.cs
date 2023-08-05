@@ -16,6 +16,8 @@ namespace Marine.Redux.Subclasses.Scientists.Group
                 "\n\t\t- Возможность лечить других держа аптечку/таблетки/SCP-500 в руках [.heal]." +
                 "\n\t\t- Двойной эффект при лечении (аптечка у тебя восстановит 130 здоровья, обезболивающее восстановит 100 здоровья но с той же скоростью).";
 
+        public Medic() : base() { }
+
         public override string Name { get; set; } = "Медик";
 
         public override int Max { get; set; } = 2;

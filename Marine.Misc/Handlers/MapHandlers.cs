@@ -77,6 +77,8 @@ namespace Marine.Misc.Handlers
         {
             if (ev.Pickup.Type == ItemType.MicroHID && ev.KnobSetting == Scp914.Scp914KnobSetting.Coarse)
             {
+                ev.IsAllowed = false;
+
                 Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
 
                 ev.Pickup.Destroy();
@@ -84,6 +86,8 @@ namespace Marine.Misc.Handlers
 
             if (ev.Pickup.Type == ItemType.ParticleDisruptor)
             {
+                ev.IsAllowed = false;
+
                 ev.Pickup.Destroy();
             }
         }

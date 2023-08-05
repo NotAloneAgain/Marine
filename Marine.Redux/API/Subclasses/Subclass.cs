@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
+using Marine.Redux.Models;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -45,18 +46,7 @@ namespace Marine.Redux.API.Subclasses
         [YamlMember(Alias = "spawn_info")]
         public virtual SpawnInfo SpawnInfo { get; set; } = new SpawnInfo();
 
-        public static bool HasAny(in Player player)
-        {
-            foreach (var subclass in _list)
-            {
-                if (subclass.Has(player))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public static bool HasAny(Player player) => _list.Any(subclass => subclass.Has(player));
 
         public static bool Has<TSubclass>(in Player player) where TSubclass : Subclass
         {
@@ -116,7 +106,7 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Assign(Player player)
         {
-            Timing.CallDelayed(0.00001f, delegate ()
+            Timing.CallDelayed(0.00005f, delegate ()
             {
                 SpawnInfo.Message.Send(player);
 
@@ -130,14 +120,14 @@ namespace Marine.Redux.API.Subclasses
                     CreateInfo(player);
                 }
 
-                if (SpawnInfo.Size != Vector3.zero && SpawnInfo.Size != Vector3.one)
+                if (SpawnInfo.Size != Vector3.one)
                 {
                     player.Scale = SpawnInfo.Size;
                 }
 
                 if (GameRole != RoleTypeId.None)
                 {
-                    player.RoleManager.ServerSetRole(GameRole, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
+                    player.Role.Set(GameRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
                 }
 
                 player.ClearInventory();
@@ -162,10 +152,7 @@ namespace Marine.Redux.API.Subclasses
 
             DestroyInfo(player);
 
-            if (SpawnInfo.Size != Vector3.zero && SpawnInfo.Size != Vector3.one)
-            {
-                player.Scale = Vector3.one;
-            }
+            player.Scale = Vector3.one;
 
             OnRevoked(player, reason);
         }
@@ -217,7 +204,7 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
-            if (!Has(ev.Player) || ev.NewRole == GameRole)
+            if (!Has(ev.Player))
             {
                 return;
             }

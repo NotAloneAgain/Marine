@@ -46,7 +46,7 @@ namespace Marine.Commands.Commands
         {
             output = new();
 
-            if (count != 1 || int.TryParse(input[0], out var item) || item > 51 || item < 0)
+            if (count != 1 || !int.TryParse(input[0], out var item) || item > 51 || item < 0)
             {
                 return false;
             }

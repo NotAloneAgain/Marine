@@ -18,6 +18,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 "\n\t\t- На 10% меньше урона от любых источников, ведь все травмы приходятся в менее важные места." +
                 "\n\t\t- Шанс 5% избежать смертельный урон.";
 
+        public Scp181() : base() { }
+
         public int DoorChance { get; set; } = 3;
 
         public int SurviveChance { get; set; } = 5;

@@ -41,7 +41,7 @@ namespace Marine.Commands.Commands
             }
         };
 
-        public override int Cooldown { get; set; } = 5;
+        public override int Cooldown { get; set; } = 3;
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
@@ -115,9 +115,9 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnRagdolls(Player player, RoleTypeId role, int count)
         {
-            for (int index = 0; index <= count; index++)
+            for (int index = 0; index < count; index++)
             {
-                Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, Quaternion.Euler(player.Rotation), player);
+                Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, Quaternion.Euler(player.Rotation));
 
                 yield return Timing.WaitForSeconds(0.25f);
             }

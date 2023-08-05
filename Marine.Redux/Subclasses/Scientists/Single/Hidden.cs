@@ -8,6 +8,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 {
     public class Hidden : SingleSubclass
     {
+        public Hidden() : base() { }
+
         public override string Name { get; set; } = "Скрытный";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

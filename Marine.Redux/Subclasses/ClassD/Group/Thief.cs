@@ -9,6 +9,8 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Thief : GroupSubclass
     {
+        public Thief() : base() { }
+
         public override string Name { get; set; } = "Вор";
 
         public override int Max { get; set; } = 4;

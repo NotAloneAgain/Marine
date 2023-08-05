@@ -10,6 +10,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 {
     public class Head : SingleSubclass
     {
+        public Head() : base() { }
+
         public override string Name { get; set; } = "Научный Руководитель";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

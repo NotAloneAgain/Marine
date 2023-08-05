@@ -37,31 +37,24 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            if (player.CurrentItem == null || player.CurrentItem.Type is not ItemType.Painkillers and not ItemType.SCP500 and not ItemType.Medkit)
-            {
-                response = "Чем лечить то? Поцелуем?";
+            Door door = player.GetDoorFromView(5);
 
-                return CommandResultType.Fail;
-            }
-
-            Door target = player.GetDoorFromView(5);
-
-            if (target == null || !target.IsBreakable || target.IsBroken || target.IsElevator)
+            if (door == null || !door.IsBreakable || door.IsBroken || door.IsElevator)
             {
                 response = "Цель нераспознана (возможно, дверь нельзя сломать или она уже сломана).";
 
                 return CommandResultType.Fail;
             }
 
-            if (target.IsGate)
+            if (door.IsGate)
             {
                 response = "Невозможно улучшить ворота";
 
                 return CommandResultType.Fail;
             }
 
-            target.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
-            target.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
+            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
 
             return CommandResultType.Success;
         }

@@ -13,6 +13,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         private const string ConsoleMessage = "\n\t+ У тебя есть:" +
                 "\n\t\t- Возможность улучшать дверь, чтобы её было невозможно сломать гранатой или SCP-096 [.upgrade].";
 
+        public Engineer() : base() { }
+
         public override string Name { get; set; } = "Инженер";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

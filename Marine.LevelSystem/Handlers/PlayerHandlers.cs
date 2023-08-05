@@ -7,7 +7,7 @@ namespace Marine.LevelSystem.Handlers
 {
     internal sealed class PlayerHandlers
     {
-        public void OnVerified(VerifiedEventArgs ev) => ev.Player.Track();
+        public void OnJoined(JoinedEventArgs ev) => ev.Player.Track();
 
         public void OnDestroying(DestroyingEventArgs ev) => ev.Player.Remove();
 

@@ -23,6 +23,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private RoleTypeId _model = RoleTypeId.Tutorial;
 
+        public Scp343() : base() { }
+
         public override string Name { get; set; } = "SCP-343";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

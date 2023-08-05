@@ -8,6 +8,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Gang : SingleSubclass
     {
+        public Gang() : base() { }
+
         public override string Name { get; set; } = "Блатной";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

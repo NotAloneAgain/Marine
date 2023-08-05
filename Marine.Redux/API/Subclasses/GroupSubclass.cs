@@ -22,7 +22,7 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Assign(Player player)
         {
-            if (player == null || Has(player))
+            if (Has(player))
             {
                 return;
             }
@@ -34,14 +34,14 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Revoke(Player player, in RevokeReason reason)
         {
-            if (player == null || !Has(player) || reason == RevokeReason.Died && player.IsAlive)
+            if (player == null || !Has(player) || reason == RevokeReason.Died && player.IsAlive && player.Role == Role || reason == RevokeReason.Admin && player.Role == GameRole)
             {
                 return;
             }
 
-            base.Revoke(player, reason);
-
             Players.Remove(player);
+
+            base.Revoke(player, reason);
         }
 
         public sealed override bool Has(in Player player)

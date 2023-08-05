@@ -41,7 +41,7 @@ namespace Marine.Commands.Commands
             }
         };
 
-        public override int Cooldown { get; set; } = 30;
+        public override int Cooldown { get; set; } = 3;
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
