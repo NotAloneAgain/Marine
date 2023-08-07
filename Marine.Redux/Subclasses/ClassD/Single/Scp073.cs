@@ -46,7 +46,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override int Chance { get; set; } = 5;
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count(ply => ply.IsScp) >= 2;
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 8;
 
         protected override void OnAssigned(Player player)
         {

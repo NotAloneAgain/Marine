@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="API\Enums\RevokeReason.cs" />
     <Compile Include="API\Enums\SubclassType.cs" />
+    <Compile Include="API\Extensions.cs" />
     <Compile Include="API\Interfaces\IGroupPlayer.cs" />
     <Compile Include="API\Interfaces\IHasHandlers.cs" />
     <Compile Include="API\Interfaces\IHasName.cs" />

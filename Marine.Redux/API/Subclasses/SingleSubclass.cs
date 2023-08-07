@@ -16,7 +16,7 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Assign(Player player)
         {
-            if (Player != null)
+            if (HasAny(player) || Player != null)
             {
                 return;
             }

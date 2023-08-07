@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
@@ -37,7 +38,16 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            player.AddItem((ItemType)arguments[0]);
+            var id = (ItemType)arguments[0];
+
+            if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018)
+            {
+                response = "Атятя плохая штучка хотел получить";
+
+                return CommandResultType.Fail;
+            }
+
+            player.AddItem(id);
 
             return CommandResultType.Success;
         }

@@ -24,7 +24,8 @@ namespace Marine.Commands.Models
                     Hide,
                     Size,
                     DropItem,
-                    DropRagdoll
+                    DropRagdoll,
+                    Grenade
                 };
 
                 return list;
@@ -52,5 +53,7 @@ namespace Marine.Commands.Models
         public DropItem DropItem { get; set; } = new();
 
         public DropRagdoll DropRagdoll { get; set; } = new();
+
+        public Grenade Grenade { get; set; } = new();
     }
 }

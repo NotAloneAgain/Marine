@@ -46,7 +46,7 @@ namespace Marine.Redux.API.Subclasses
         [YamlMember(Alias = "spawn_info")]
         public virtual SpawnInfo SpawnInfo { get; set; } = new SpawnInfo();
 
-        public static bool HasAny(Player player) => _list.Any(subclass => subclass.Has(player));
+        public static bool HasAny(Player player) => ReadOnlyCollection.Any(sub => sub.Has(player));
 
         public static bool Has<TSubclass>(in Player player) where TSubclass : Subclass
         {

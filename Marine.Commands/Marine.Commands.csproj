@@ -53,6 +53,7 @@
     <Compile Include="Commands\DropItem.cs" />
     <Compile Include="Commands\DropRagdoll.cs" />
     <Compile Include="Commands\Force.cs" />
+    <Compile Include="Commands\Grenade.cs" />
     <Compile Include="Commands\Hide.cs" />
     <Compile Include="Commands\Size.cs" />
     <Compile Include="Commands\Upgrade.cs" />

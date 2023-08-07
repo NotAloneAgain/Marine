@@ -50,7 +50,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override int Chance { get; set; } = 3;
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count(ply => ply.IsScp) >= 2;
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 8;
 
         public override void Subscribe()
         {
@@ -91,19 +91,25 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             _model++;
 
-            if ((int)_model > 20)
-            {
-                _model = RoleTypeId.Scp173;
-            }
-
             _model = _model switch
             {
+                RoleTypeId.Overwatch or RoleTypeId.Filmmaker => RoleTypeId.Scp173,
                 RoleTypeId.CustomRole => RoleTypeId.ChaosRifleman,
                 RoleTypeId.Scp079 => RoleTypeId.ChaosConscript,
+                RoleTypeId.Scp0492 => RoleTypeId.NtfSergeant,
                 _ => _model
             };
 
-            ev.Player.ChangeAppearance(_model, true);
+            ev.Player.ShowHint($"<line-height=95%><size=90%><voffset=-20em><color=#{_model.GetColor()}>Ваша моделька: {_model.Translate()}</color></size></voffset>", 5);
+
+            if (_model == RoleTypeId.Tutorial)
+            {
+                ev.Player.Role.Set(GameRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+                return;
+            }
+
+            ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive), true);
         }
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)

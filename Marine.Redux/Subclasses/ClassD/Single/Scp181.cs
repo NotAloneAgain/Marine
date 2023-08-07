@@ -102,6 +102,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count(ply => ply.IsScp) >= 2;
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count() >= 8;
     }
 }
