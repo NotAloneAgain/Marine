@@ -1,4 +1,5 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Marine.LevelSystem.API;
 using PlayerRoles;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Marine.LevelSystem.Handlers
 
         public void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
+            if (Round.IsEnded || ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
             {
                 return;
             }

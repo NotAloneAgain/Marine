@@ -41,7 +41,7 @@ namespace Marine.ScpSwap.Configs
         public Dictionary<RoleTypeId, int> Slots { get; set; } = new(8)
         {
             { RoleTypeId.Scp096, 1 },
-            { RoleTypeId.Scp049, 2 },
+            { RoleTypeId.Scp049, 1 },
             { RoleTypeId.Scp173, 1 },
             { RoleTypeId.Scp939, 2 },
             { RoleTypeId.Scp106, 1 },

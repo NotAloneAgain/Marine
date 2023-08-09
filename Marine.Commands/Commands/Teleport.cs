@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace Marine.Commands.Commands
 {
-    public class Teleport : CooldownCommand
+    public class Teleport : CommandBase
     {
         private static readonly IEnumerable<Type> _teleportObjects;
 
@@ -36,11 +36,12 @@ namespace Marine.Commands.Commands
 
         public override string[] Aliases { get; set; } = new string[1] { "teleport" };
 
-        public override List<int> Counts { get; set; } = new List<int>(1) { 0 };
+        public override List<int> Counts { get; set; } = new List<int>(1) { 0, 1 };
 
         public override Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>()
         {
-            { 0, string.Empty }
+            { 0, string.Empty },
+            { 1, "[ТИП ОБЪЕКТА]" }
         };
 
         public override CommandPermission Permission { get; set; } = new()
@@ -48,16 +49,18 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override int Cooldown { get; set; } = 5;
-
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
-            if (base.Handle(arguments, player, out response) == CommandResultType.Fail)
-            {
-                return CommandResultType.Fail;
-            }
+            response = string.Empty;
 
-            player.RandomTeleport(_teleportObjects);
+            if (arguments.Count == 0)
+            {
+                player.RandomTeleport(_teleportObjects);
+            }
+            else
+            {
+                player.RandomTeleport(arguments[0] as Type);
+            }
 
             return CommandResultType.Success;
         }
@@ -65,6 +68,31 @@ namespace Marine.Commands.Commands
         public override bool ParseSyntax(List<string> input, int count, out List<object> output)
         {
             output = new();
+
+            if (count == 1)
+            {
+                switch (input[0])
+                {
+                    case "игрок" or "player":
+                        {
+                            output.Add(typeof(Player));
+
+                            break;
+                        }
+                    case "дверь" or "door":
+                        {
+                            output.Add(typeof(Door));
+
+                            break;
+                        }
+                    case "комната" or "room":
+                        {
+                            output.Add(typeof(Room));
+
+                            break;
+                        }
+                }
+            }
 
             return true;
         }

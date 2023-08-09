@@ -46,6 +46,20 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override int Chance { get; set; } = 5;
 
+        public override void Subscribe()
+        {
+            base.Subscribe();
+
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        }
+
+        public override void Unsubscribe()
+        {
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+
+            base.Unsubscribe();
+        }
+
         public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 8;
 
         protected override void OnAssigned(Player player)
@@ -57,14 +71,23 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player == null || !ev.IsAllowed || Has(ev.Player))
+            if (ev.Player == null || !ev.IsAllowed || !Has(ev.Player))
             {
                 return;
             }
 
-            if (ev.Player != ev.Attacker && !ev.Attacker.IsGodModeEnabled)
+            if (ev.Attacker != null && ev.Player.UserId != ev.Attacker.UserId && !ev.Attacker.IsGodModeEnabled)
             {
-                ev.Attacker.Hurt(ev.Amount / 4, ev.DamageHandler.Type);
+                var amount = ev.Amount / 4;
+
+                if (ev.Attacker.Health - amount > 0)
+                {
+                    ev.Attacker.Health -= amount;
+                }
+                else
+                {
+                    ev.Attacker.Kill("Урон, нанесенный SCP-073 был отражен на тебя...");
+                }
             }
 
             ev.Amount /= 2;

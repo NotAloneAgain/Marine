@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Enums;
@@ -56,6 +57,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         {
             base.Subscribe();
 
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
@@ -63,9 +66,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override void Unsubscribe()
         {
-            Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
-            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
+            Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             base.Unsubscribe();
         }
@@ -112,9 +117,29 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive), true);
         }
 
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
+        private void OnDying(DyingEventArgs ev)
+        {
+            if (!Has(ev.Attacker))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (ev.Player != Player || ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked)
+            if (!Has(ev.Player) || ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked)
             {
                 return;
             }

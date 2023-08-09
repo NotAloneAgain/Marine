@@ -180,9 +180,9 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            ev.Attacker.ShowHint($"<line-height=95%><voffset=15em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+            ev.Attacker.ShowHint($"<line-height=95%><voffset=12em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
 
-            if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || _realisticEffects.IsEnabled)
+            if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || !_realisticEffects.IsEnabled)
             {
                 return;
             }
@@ -234,7 +234,7 @@ namespace Marine.Misc.Handlers
         #region Others
         public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079)
+            if (!ev.IsAllowed || Warhead.IsInProgress || ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079)
             {
                 return;
             }
