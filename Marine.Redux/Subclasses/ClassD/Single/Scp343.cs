@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Enums;

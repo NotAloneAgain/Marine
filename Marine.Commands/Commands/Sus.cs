@@ -1,13 +1,10 @@
-﻿using CustomPlayerEffects;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
-using Marine.Misc.API;
 using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.Guards.Single;
-using Marine.Redux.Subclasses.Scientists.Single;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;

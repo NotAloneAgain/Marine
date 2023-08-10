@@ -20,7 +20,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = false,
             Message = new("Ты - карманник!\nТы появляешься с тем, что смог стащить и можешь воровать командой .steal.", 10, true),
             Inventory = new()
             {

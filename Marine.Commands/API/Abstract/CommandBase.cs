@@ -1,5 +1,4 @@
 ﻿using CommandSystem;
-using Discord;
 using Exiled.API.Features;
 using Marine.Commands.API.Enums;
 using RemoteAdmin;

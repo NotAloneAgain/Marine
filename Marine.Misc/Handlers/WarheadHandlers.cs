@@ -2,7 +2,6 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Mirror;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -76,26 +75,15 @@ namespace Marine.Misc.Handlers
         #region Optimization
         private static void OptimizeEverything()
         {
-            List<GameObject> handled = new();
-
             foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>().Distinct())
             {
-                if (gameObject == null || !gameObject.activeSelf || handled.Contains(gameObject))
+                if (gameObject == null || !gameObject.activeSelf)
                 {
                     continue;
                 }
-
-                handled.Add(gameObject);
 
                 if (Player.Get(gameObject) != null)
                 {
-                    continue;
-                }
-
-                if (IsGameObjectCanBeDestroyed(gameObject))
-                {
-                    NetworkServer.Destroy(gameObject);
-
                     continue;
                 }
 
@@ -148,6 +136,7 @@ namespace Marine.Misc.Handlers
             return _optionalObjects.Contains(gameObject.name) || gameObject.name.Contains("Button") || gameObject.name.Contains("Door") || gameObject.name.Contains("Intercom");
         }
 
+        [System.Obsolete]
         private static bool IsGameObjectCanBeDestroyed(GameObject gameObject)
         {
             var position = gameObject.transform.position;

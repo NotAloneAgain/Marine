@@ -1,13 +1,10 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
-using InventorySystem.Items.Usables;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Marine.Redux.Subclasses.Scientists.Single
 {

@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Features;
-using Exiled.Events;
 using Marine.MySQL.API.Events;
 using System;
 

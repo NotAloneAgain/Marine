@@ -1,5 +1,4 @@
-﻿using CustomPlayerEffects;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;

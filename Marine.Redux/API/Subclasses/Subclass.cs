@@ -3,7 +3,6 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
-using Marine.Redux.Models;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;

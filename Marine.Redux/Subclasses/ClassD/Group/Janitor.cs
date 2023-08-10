@@ -1,38 +1,41 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public class Janitor : GroupSubclass
     {
-        public GigaChad() : base() { }
+        public Janitor() : base() { }
 
-        public override string Name { get; set; } = "Гигант";
+        public override string Name { get; set; } = "Уборщик";
 
         public override int Max { get; set; } = 3;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = true,
-            Message = new("Ты - гигант!\nУ тебя крепкое тело и большой рост.", 12, true, "#D6AE01"),
-            Size = Vector3.one * 1.12f,
-            Health = 150,
+            Message = new("Ты - уборщик!\nТы убирался в комплексе, но теперь похоже не можешь продолжить свое дело.", 12, true, "#D6AE01"),
             Inventory = new()
             {
                 IsRandomable = false,
                 Slots = new List<Slot>(8)
+                {
+                    new Slot(new ItemChances()
+                    {
+                        { ItemType.KeycardJanitor, 100 }
+                    }, false),
+                }
             }
         };
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
-        public override int Chance { get; set; } = 15;
+        public override int Chance { get; set; } = 12;
+
+        protected override void OnAssigned(Player player) => player.Teleport(RoomType.LczCrossing);
     }
 }

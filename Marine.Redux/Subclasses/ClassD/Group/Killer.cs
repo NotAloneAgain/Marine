@@ -20,7 +20,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = false,
             Message = new("Ты - Убийца!\nУ тебя есть информацию о пистолете (проверь консоль) и +5% к наносимому вами урону.", 12, true),
             Inventory = new()
             {
