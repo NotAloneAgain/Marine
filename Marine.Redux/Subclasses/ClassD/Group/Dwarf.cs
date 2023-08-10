@@ -19,7 +19,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
         {
             ShowInfo = true,
             Message = new("Ты - карлик!\nНесмотря на твое слабое тело и маленький рост ты смог выжить тут.", 12, true, "#D6AE01"),
-            Size = Vector3.one * 0.59f,
+            Size = Vector3.one * 0.62f,
             Health = 50,
             Inventory = new()
             {

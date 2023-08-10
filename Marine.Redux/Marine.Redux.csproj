@@ -51,6 +51,7 @@
     <Compile Include="API\Message.cs" />
     <Compile Include="API\Shield.cs" />
     <Compile Include="API\SpawnInfo.cs" />
+    <Compile Include="API\Subclasses\Attributes\SubclassAttribute.cs" />
     <Compile Include="API\Subclasses\GroupSubclass.cs" />
     <Compile Include="API\Subclasses\SingleSubclass.cs" />
     <Compile Include="API\Subclasses\Subclass.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subclasses\ClassD\Group\Dwarf.cs" />
     <Compile Include="Subclasses\ClassD\Group\GigaChad.cs" />
+    <Compile Include="Subclasses\ClassD\Group\Janitor.cs" />
     <Compile Include="Subclasses\ClassD\Group\Killer.cs" />
     <Compile Include="Subclasses\ClassD\Group\Pickpocket.cs" />
     <Compile Include="Subclasses\ClassD\Group\Thief.cs" />

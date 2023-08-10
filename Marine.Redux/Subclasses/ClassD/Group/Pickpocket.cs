@@ -29,13 +29,13 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 {
                     new Slot(new ItemChances()
                     {
-                        { ItemType.AntiSCP207, 1 },
+                        { ItemType.KeycardJanitor, 5 },
                         { ItemType.Flashlight, 30 },
                         { ItemType.Coin, 25 },
                         { ItemType.Medkit, 25 },
                         { ItemType.Painkillers, 20 },
                         { ItemType.ArmorLight, 15 },
-                        { ItemType.SCP500, 5 },
+                        { ItemType.SCP500, 3 },
                     }, true),
                     new Slot(new ItemChances()
                     {
@@ -44,7 +44,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                         { ItemType.Medkit, 20 },
                         { ItemType.Painkillers, 15 },
                         { ItemType.ArmorLight, 10 },
-                        { ItemType.SCP500, 3 },
+                        { ItemType.SCP500, 2 },
                     }, true),
                     new Slot(new ItemChances()
                     {
@@ -53,7 +53,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                         { ItemType.Medkit, 15 },
                         { ItemType.Painkillers, 10 },
                         { ItemType.ArmorLight, 5 },
-                        { ItemType.SCP500, 2 },
+                        { ItemType.SCP500, 1 },
                     }, true),
                     new Slot(new ItemChances()
                     {
@@ -71,34 +71,25 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                         { ItemType.Medkit, 5 },
                         { ItemType.Painkillers, 3 },
                         { ItemType.ArmorLight, 1 },
-                        { ItemType.SCP500, 1 },
                     }, true),
                     new Slot(new ItemChances()
                     {
                         { ItemType.Flashlight, 10 },
                         { ItemType.Coin, 5 },
                         { ItemType.Medkit, 5 },
-                        { ItemType.Painkillers, 3 },
-                        { ItemType.ArmorLight, 1 },
-                        { ItemType.SCP500, 1 },
+                        { ItemType.Painkillers, 1 },
                     }, true),
                     new Slot(new ItemChances()
                     {
                         { ItemType.Flashlight, 5 },
                         { ItemType.Coin, 3 },
                         { ItemType.Medkit, 3 },
-                        { ItemType.Painkillers, 1 },
-                        { ItemType.ArmorLight, 1 },
-                        { ItemType.SCP500, 1 },
                     }, true),
                     new Slot(new ItemChances()
                     {
                         { ItemType.Flashlight, 3 },
                         { ItemType.Coin, 1 },
                         { ItemType.Medkit, 1 },
-                        { ItemType.Painkillers, 1 },
-                        { ItemType.ArmorLight, 1 },
-                        { ItemType.SCP500, 1 },
                     }, true),
                 }
             }

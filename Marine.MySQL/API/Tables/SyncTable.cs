@@ -44,6 +44,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Insert(Sync sync)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             if (sync == null)
             {
                 return;
@@ -60,6 +65,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Update(Sync sync)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             if (sync == null)
             {
                 return;
@@ -77,6 +87,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Delete(Sync sync)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             if (sync == null)
             {
                 return;
@@ -93,6 +108,11 @@ namespace Marine.MySQL.API.Tables
 
         public override Sync Select(string userId)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             if (string.IsNullOrEmpty(userId))
             {
                 return null!;

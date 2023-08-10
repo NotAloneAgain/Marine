@@ -19,7 +19,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти/нажав на 2.", 12, true),
+            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти или использовав команду .sus.", 12, true),
             Health = 75,
             Inventory = new()
             {
@@ -42,14 +42,12 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         {
             base.Subscribe();
 
-            Exiled.Events.Handlers.Player.ProcessingHotkey += OnProcessingHotkey;
             Exiled.Events.Handlers.Player.Dying += OnDying;
         }
 
         public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Dying -= OnDying;
-            Exiled.Events.Handlers.Player.ProcessingHotkey -= OnProcessingHotkey;
 
             base.Unsubscribe();
         }
@@ -75,18 +73,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
             ev.IsAllowed = false;
 
-            ev.Player.DropAllWithoutKeycard();
-            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
-        }
-
-        private void OnProcessingHotkey(ProcessingHotkeyEventArgs ev)
-        {
-            if (!Has(ev.Player) || ev.Player.Role.Type != Role || ev.Hotkey != HotkeyButton.SecondaryFirearm)
-            {
-                return;
-            }
-
-            ev.IsAllowed = false;
             ev.Player.DropAllWithoutKeycard();
             ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
         }

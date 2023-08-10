@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
+using PlayerRoles;
 using YamlDotNet.Serialization;
 
 namespace Marine.Redux.API
@@ -42,10 +43,14 @@ namespace Marine.Redux.API
                 return;
             }
 
-            string color = string.IsNullOrEmpty(Color) || Color == default ? player.Role.Type.GetColor().ToHex() : Color;
-            string text = $"<line-height=95%><size=95%><voffset=-18em><color={color}>{Text}</color></size></voffset>";
+            player.ShowHint(Formate(Text, player.Role.Type), Duration);
+        }
 
-            player.ShowHint(text, Duration);
+        public string Formate(in string text, RoleTypeId role)
+        {
+            string color = string.IsNullOrEmpty(Color) || Color == default ? role.GetColor().ToHex() : Color;
+
+            return $"<line-height=95%><size=95%><voffset=-18em><color={color}>{text}</color></size></voffset>";
         }
     }
 }

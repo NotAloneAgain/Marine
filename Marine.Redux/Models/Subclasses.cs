@@ -1,6 +1,7 @@
 ﻿using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
 using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Guards.Single;
 using Marine.Redux.Subclasses.Scientists.Group;
 using Marine.Redux.Subclasses.Scientists.Single;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Marine.Redux.Models
                     Giant,
                     Killer,
                     Thief,
+                    Janitor,
                     Pickpocket,
                     Scp073,
                     Scp181,
@@ -32,7 +34,9 @@ namespace Marine.Redux.Models
                     Medic,
                     Infected,
                     Hidden,
-                    Manager
+                    Programmer,
+                    Manager,
+                    Imposter
                 };
 
                 return list;
@@ -46,6 +50,8 @@ namespace Marine.Redux.Models
         public Killer Killer { get; set; } = new();
 
         public Thief Thief { get; set; } = new();
+
+        public Janitor Janitor { get; set; } = new();
 
         public Scp073 Scp073 { get; set; } = new();
 
@@ -68,6 +74,10 @@ namespace Marine.Redux.Models
         public Hidden Hidden { get; set; } = new();
 
         public Infected Infected { get; set; } = new();
+
+        public Programmer Programmer { get; set; } = new();
+
+        public Imposter Imposter { get; set; } = new();
 
         public Pickpocket Pickpocket { get; set; } = new();
     }

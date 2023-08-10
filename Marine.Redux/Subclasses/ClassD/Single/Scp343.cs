@@ -139,7 +139,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsLocked)
+            if (!Has(ev.Player) || ev.Door.IsMoving || ev.Door.IsLocked)
             {
                 return;
             }

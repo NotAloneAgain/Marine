@@ -130,13 +130,16 @@ namespace Marine.Redux.API.Subclasses
                     player.Role.Set(GameRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
                 }
 
-                player.ClearInventory();
-
-                SpawnInfo.Inventory.Randomize();
-
-                foreach (var item in SpawnInfo.Inventory.Items)
+                if (SpawnInfo.Inventory != null && SpawnInfo.Inventory.Slots.Any())
                 {
-                    player.AddItem(item);
+                    player.ClearInventory();
+
+                    SpawnInfo.Inventory.Randomize();
+
+                    foreach (var item in SpawnInfo.Inventory.Items)
+                    {
+                        player.AddItem(item);
+                    }
                 }
 
                 OnAssigned(player);

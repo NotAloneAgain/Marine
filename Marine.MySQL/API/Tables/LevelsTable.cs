@@ -41,6 +41,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Insert(Statistics stats)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             MySqlCommand command = new()
             {
                 Connection = _connection,
@@ -52,6 +57,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Update(Statistics stats)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             MySqlCommand command = new()
             {
                 Connection = _connection,
@@ -63,6 +73,11 @@ namespace Marine.MySQL.API.Tables
 
         public override void Delete(Statistics stats)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             MySqlCommand command = new()
             {
                 Connection = _connection,
@@ -74,6 +89,11 @@ namespace Marine.MySQL.API.Tables
 
         public override Statistics Select(string key)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             MySqlCommand command = new()
             {
                 Connection = _connection,

@@ -80,13 +80,18 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             {
                 var amount = ev.Amount / 4;
 
+                if (ev.Attacker.IsScp)
+                {
+                    amount = 100;
+                }
+
                 if (ev.Attacker.Health - amount > 0)
                 {
-                    ev.Attacker.Health -= amount;
+                    ev.Attacker.Hurt(ev.Player, amount, ev.DamageHandler.Type, default, "Отражение SCP-073");
                 }
                 else
                 {
-                    ev.Attacker.Kill("Урон, нанесенный SCP-073 был отражен на тебя...");
+                    ev.Attacker.Kill("Отражение SCP-073");
                 }
             }
 

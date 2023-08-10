@@ -234,7 +234,7 @@ namespace Marine.Misc.Handlers
         #region Others
         public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
         {
-            if (!ev.IsAllowed || Warhead.IsInProgress || ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079)
+            if (!ev.IsAllowed || !Warhead.IsInProgress && ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079)
             {
                 return;
             }

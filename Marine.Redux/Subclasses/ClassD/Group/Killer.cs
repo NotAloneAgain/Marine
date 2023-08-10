@@ -16,7 +16,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Убийца";
 
-        public override int Max { get; set; } = 3;
+        public override int Max { get; set; } = 2;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
@@ -29,14 +29,14 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 {
                     new Slot(new ItemChances()
                     {
-                        { ItemType.GunCOM15, 2 },
-                        { ItemType.Adrenaline, 30 },
+                        { ItemType.GunCOM15, 50 },
                         { ItemType.Medkit, 100 }
                     }, true),
                     new Slot(new ItemChances()
                     {
+                        { ItemType.Adrenaline, 50 },
                         { ItemType.Painkillers, 100 },
-                    }, false),
+                    }, true),
                     new Slot(new ItemChances()
                     {
                         { ItemType.Painkillers, 100 },
@@ -47,7 +47,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
-        public override int Chance { get; set; } = 10;
+        public override int Chance { get; set; } = 6;
 
         public override void Subscribe()
         {
@@ -83,7 +83,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 return;
             }
 
-            ev.Amount *= 1.05f;
+            ev.Amount *= 1.1f;
         }
 
         private string Translate(RoomType type) => type switch
@@ -92,6 +92,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
             RoomType.Lcz173 => "оружейке К.С. SCP-173.",
             RoomType.LczToilets => "туалетах",
             RoomType.LczGlassBox => "К.С. SCP-372",
+            RoomType.Lcz330 => "К.С. SCP-330",
             _ => "неизвестно..."
         };
     }

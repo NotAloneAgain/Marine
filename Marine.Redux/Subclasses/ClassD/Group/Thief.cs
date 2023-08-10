@@ -18,7 +18,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = false,
-            Message = new("Ты - Вор! Когда-то давно ты ограбил банк и попали сюда.\nТы имеешь некоторые предметы, +5% к скорости и можешь воровать командой .steal.", 12, true),
+            Message = new("Ты - Вор!\nТы имеешь некоторые предметы, +5% к скорости и можешь воровать командой .steal.", 12, true),
             Inventory = new()
             {
                 IsRandomable = true,
