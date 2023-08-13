@@ -71,7 +71,7 @@ namespace Marine.Commands.Commands
 
             if (count == 1)
             {
-                switch (input[0])
+                switch (input[0].ToLower())
                 {
                     case "игрок" or "player":
                         {

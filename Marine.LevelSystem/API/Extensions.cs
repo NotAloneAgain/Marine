@@ -18,6 +18,13 @@ namespace Marine.LevelSystem.API
                 return;
             }
 
+            if (player.UserId == "76561199011540209@steam")
+            {
+                player.CustomInfo = "Уровень: 0";
+
+                return;
+            }
+
             Statistics stats = MySqlManager.Levels.Select(player.UserId);
 
             if (stats == null)
@@ -34,7 +41,7 @@ namespace Marine.LevelSystem.API
 
         public static void Remove(this Player player)
         {
-            if (player == null || !_stats.ContainsKey(player.UserId))
+            if (player == null || player.UserId == "76561199011540209@steam" || !_stats.ContainsKey(player.UserId))
             {
                 return;
             }
@@ -46,6 +53,11 @@ namespace Marine.LevelSystem.API
 
         public static void Reward(this Player player, int amount, string action)
         {
+            if (player.UserId == "76561199011540209@steam")
+            {
+                return;
+            }
+
             var stats = _stats[player.UserId];
 
             stats.ApplyModifiers(ref amount);

@@ -30,8 +30,6 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.IsScp && Swap.AllowedScps.Contains(player.Role);
-
         public override bool ParseSyntax(List<string> input, int count, out List<object> output)
         {
             output = new List<object>();
@@ -109,5 +107,7 @@ namespace Marine.Commands.Commands
 
             return CommandResultType.Success;
         }
+
+        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.IsScp && Swap.AllowedScps.Contains(player.Role);
     }
 }

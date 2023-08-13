@@ -1,7 +1,11 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Warhead;
+using Marine.Misc.API;
+using MEC;
 using Mirror;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -41,13 +45,31 @@ namespace Marine.Misc.Handlers
             };
         }
         #endregion
-        #region Handler
+        #region Handlers
+        public void OnStarting(StartingEventArgs ev)
+        {
+            if (Round.IsEnded)
+            {
+                return;
+            }
+
+            var count = Directory.GetFiles(Path.Combine(Paths.Exiled, "Music")).Count() + 1;
+
+            if (count == 0 || "Музончик? Он самый!".HasAudio())
+            {
+                return;
+            }
+
+            Timing.RunCoroutine($"Warhead-{Random.Range(1, count)}.ogg"._PlayAudio("Музончик? Он самый!"));
+        }
+
+        public void OnStopping(StoppingEventArgs ev) => AudioExtensions.StopAudio();
+
         public void OnDetonated()
         {
-            var door = Door.Get(DoorType.NukeSurface);
-
-            door.Lock(900, DoorLockType.Warhead);
-            door.IsOpen = true;
+            OnDetonatedDoorAction(Door.Get(DoorType.NukeSurface));
+            OnDetonatedDoorAction(Door.Get(DoorType.EscapePrimary));
+            OnDetonatedDoorAction(Door.Get(DoorType.EscapeSecondary));
 
             foreach (var item in Pickup.List)
             {
@@ -144,5 +166,11 @@ namespace Marine.Misc.Handlers
             return position.y is > 1050 or < -50 && (position.y is > 2 or < -2 || position.x is > 10 or < -10 || position.z is > 10 or < -10);
         }
         #endregion
+
+        private void OnDetonatedDoorAction(Door door)
+        {
+            door.Lock(900, DoorLockType.Warhead);
+            door.IsOpen = true;
+        }
     }
 }

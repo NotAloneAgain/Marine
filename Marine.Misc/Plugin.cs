@@ -33,7 +33,10 @@ namespace Marine.Misc
             _harmony = new(HarmonyId);
 
             Warhead.Detonated += _warhead.OnDetonated;
+            Warhead.Starting += _warhead.OnStarting;
+            Warhead.Stopping += _warhead.OnStopping;
 
+            Server.RoundEnded += _server.OnEndedRound;
             Server.RoundStarted += _server.OnRoundStarted;
             Server.RestartingRound += _server.OnRestartingRound;
 
@@ -86,7 +89,10 @@ namespace Marine.Misc
 
             Server.RestartingRound -= _server.OnRestartingRound;
             Server.RoundStarted -= _server.OnRoundStarted;
+            Server.RoundEnded -= _server.OnEndedRound;
 
+            Warhead.Stopping -= _warhead.OnStopping;
+            Warhead.Starting -= _warhead.OnStarting;
             Warhead.Detonated -= _warhead.OnDetonated;
 
             _harmony = null;

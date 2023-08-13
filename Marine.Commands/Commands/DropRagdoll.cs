@@ -114,7 +114,7 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnRagdolls(Player player, RoleTypeId role, int count)
         {
-            for (int index = 0; index < count; index++)
+            for (int index = 0; index < count - 1; index++)
             {
                 Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, Quaternion.Euler(player.Rotation));
 

@@ -8,6 +8,7 @@ using Marine.Redux.API.Subclasses;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Marine.Redux.Subclasses.Scientists.Single
@@ -41,6 +42,20 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override int Chance { get; set; } = 10;
 
+        public override void Subscribe()
+        {
+            base.Subscribe();
+
+            Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
+        }
+
+        public override void Unsubscribe()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawningTeam;
+
+            base.Unsubscribe();
+        }
+
         protected override void OnAssigned(Player player)
         {
             player.Teleport(DoorType.LczCafe);
@@ -60,19 +75,26 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         private IEnumerator<float> _ShowData(Player player)
         {
-            while (player != null && player.IsAlive)
+            yield return Timing.WaitForSeconds(1);
+
+            while (player != null && player.IsAlive && Has(player))
             {
-                foreach (var ply in Player.List)
+                var list = Player.List.Where(x => x.IsAlive && x.UserId != player.UserId && x.LeadingTeam == player.LeadingTeam && !x.IsTutorial);
+
+                if (list.Any())
                 {
-                    if (ply.IsDead || ply.UserId == player.UserId)
+                    foreach (var ply in list)
                     {
-                        continue;
+                        player.SendConsoleMessage($"{ply.CustomName} - {ply.Role.Type.Translate()}: {ParseState(ply)} {ParseDistance(player, ply)}", ply.Role.Team switch
+                        {
+                            Team.SCPs => "red",
+                            Team.ChaosInsurgency => "green",
+                            _ => "yellow"
+                        });
                     }
 
-                    player.SendConsoleMessage($"{ply.CustomName} - {ply.Role.Type.Translate()}: {ParseState(ply)} {ParseDistance(player, ply)}", "yellow");
+                    player.ShowHint(SpawnInfo.Message.Formate("Вам поступила информация от C.A.S.S.I.E", Role), 6);
                 }
-
-                player.ShowHint(SpawnInfo.Message.Formate("Вам поступила информация от C.A.S.S.I.E", Role), 6);
 
                 yield return Timing.WaitForSeconds(60);
             }

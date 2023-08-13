@@ -19,7 +19,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти или использовав команду .sus.", 12, true),
+            Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти или использовав команду .zombie.", 12, true),
             Health = 75,
             Inventory = new()
             {
@@ -72,7 +72,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
             }
 
             ev.IsAllowed = false;
-
             ev.Player.DropAllWithoutKeycard();
             ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
         }

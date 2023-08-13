@@ -1,27 +1,28 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Marine.Commands.Commands
 {
-    public class Grenade : CooldownCommand
+    public class Ball : CooldownCommand
     {
-        public override string Command { get; set; } = "grenade";
+        public override string Command { get; set; } = "ball";
 
-        public override string Description { get; set; } = "Команда для взрыва.";
+        public override string Description { get; set; } = "Команда для спавна мячика под человеком.";
 
         public override List<CommandType> Types { get; set; } = new List<CommandType>(2) { CommandType.RemoteAdmin, CommandType.ServerConsole };
 
-        public override List<int> Counts { get; set; } = new List<int>() { 1, 2 };
+        public override List<int> Counts { get; set; } = new List<int>() { 1 };
 
         public override Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>()
         {
             { 1, "[ИГРОК]" },
-            { 2, "[ИГРОК] [ВРЕМЯ АКТИВАЦИИ]" }
         };
 
         public override CommandPermission Permission { get; set; } = new()
@@ -55,14 +56,7 @@ namespace Marine.Commands.Commands
 
             foreach (var ply in list)
             {
-                var grenade = ExplosiveGrenade.Create(ItemType.GrenadeHE, ply) as ExplosiveGrenade;
-
-                if (arguments.Count == 2)
-                {
-                    grenade.FuseTime = (float)arguments[1];
-                }
-
-                grenade.SpawnActive(ply.Position, ply);
+                Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, Quaternion.Euler(ply.Rotation), ply);
             }
 
             return CommandResultType.Success;
@@ -72,26 +66,19 @@ namespace Marine.Commands.Commands
         {
             output = new();
 
-            if (!TryParsePlayers(input[0], out var players))
+            if (count == 1)
             {
-                return false;
-            }
-
-            output.Add(players);
-
-            if (count == 2)
-            {
-                if (!float.TryParse(input[1], out var value))
+                if (!TryParsePlayers(input[0], out var players))
                 {
                     return false;
                 }
 
-                output.Add(value);
+                output.Add(players);
 
                 return true;
             }
 
-            return true;
+            return false;
         }
     }
 }

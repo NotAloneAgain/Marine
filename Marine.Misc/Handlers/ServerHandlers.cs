@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Server;
 using Marine.Misc.API;
 using MEC;
 using System.Collections.Generic;
@@ -24,10 +25,9 @@ namespace Marine.Misc.Handlers
             _coroutines[1] = Timing.RunCoroutine(_CleanupRagdolls());
         }
 
-        public void OnRestartingRound()
-        {
-            Timing.KillCoroutines(_coroutines);
-        }
+        public void OnRestartingRound() => Timing.KillCoroutines(_coroutines);
+
+        public void OnEndedRound(RoundEndedEventArgs ev) => AudioExtensions.StopAudio();
         #endregion
         #region Coroutines
         public IEnumerator<float> _CleanupItems()

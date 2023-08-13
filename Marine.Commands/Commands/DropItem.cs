@@ -114,7 +114,7 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnItems(Player player, ItemType item, int count)
         {
-            for (int index = 0; index < count; index++)
+            for (int index = 0; index < count - 1; index++)
             {
                 Pickup.CreateAndSpawn(item, player.Position, Quaternion.Euler(player.Rotation), player);
 

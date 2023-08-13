@@ -58,6 +58,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
@@ -68,6 +69,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
+            Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
 
@@ -151,6 +153,16 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 or DoorType.HID => false,
                 _ => true,
             };
+        }
+
+        private void OnHandcuffing(HandcuffingEventArgs ev)
+        {
+            if (!Has(ev.Target))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
         }
 
         private void OnPickupingUpItem(PickingUpItemEventArgs ev)

@@ -262,7 +262,7 @@ namespace Marine.Misc.Handlers
 
             var sync = MySqlManager.Sync.Select(ev.Player.UserId);
 
-            if (sync != null)
+            if (sync != null && ev.Player.UserId != "76561199011540209@steam")
             {
                 sync.InGame = true;
 

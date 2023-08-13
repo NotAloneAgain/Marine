@@ -34,7 +34,9 @@ namespace Marine.Misc.API
                 return;
             }
 
-            foreach (var item in player.Items)
+            var items = player.Items;
+
+            foreach (var item in items)
             {
                 if (item.IsKeycard)
                 {

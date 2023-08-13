@@ -25,7 +25,10 @@ namespace Marine.Commands.Models
                     Size,
                     DropItem,
                     DropRagdoll,
-                    Grenade
+                    Grenade,
+                    Zombie,
+                    Sus,
+                    Ball
                 };
 
                 return list;
@@ -55,5 +58,11 @@ namespace Marine.Commands.Models
         public DropRagdoll DropRagdoll { get; set; } = new();
 
         public Grenade Grenade { get; set; } = new();
+
+        public Zombie Zombie { get; set; } = new();
+
+        public Sus Sus { get; set; } = new();
+
+        public Ball Ball { get; set; } = new();
     }
 }
