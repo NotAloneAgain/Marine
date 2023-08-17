@@ -33,7 +33,9 @@ namespace Marine.Commands.Commands
                 "mog",
                 "soviet",
                 "modt",
-                "mod5"
+                "mod5",
+                "ceo",
+                "mod4"
             }
         };
 

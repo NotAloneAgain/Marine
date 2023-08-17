@@ -1,6 +1,7 @@
 ﻿using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
 using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Guards.Group;
 using Marine.Redux.Subclasses.Guards.Single;
 using Marine.Redux.Subclasses.Scientists.Group;
 using Marine.Redux.Subclasses.Scientists.Single;
@@ -36,7 +37,13 @@ namespace Marine.Redux.Models
                     Hidden,
                     Programmer,
                     Manager,
-                    Imposter
+                    Imposter,
+                    Assault,
+                    Bomber,
+                    Informator,
+                    Junior,
+                    Senior,
+                    Sniper
                 };
 
                 return list;
@@ -78,6 +85,18 @@ namespace Marine.Redux.Models
         public Programmer Programmer { get; set; } = new();
 
         public Imposter Imposter { get; set; } = new();
+
+        public Assault Assault { get; set; } = new();
+
+        public Bomber Bomber { get; set; } = new();
+
+        public Informator Informator { get; set; } = new();
+
+        public Junior Junior { get; set; } = new();
+
+        public Senior Senior { get; set; } = new();
+
+        public Sniper Sniper { get; set; } = new();
 
         public Pickpocket Pickpocket { get; set; } = new();
     }

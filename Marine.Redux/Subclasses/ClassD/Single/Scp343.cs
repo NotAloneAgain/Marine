@@ -50,8 +50,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override int Chance { get; set; } = 3;
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 8;
-
         public override void Subscribe()
         {
             base.Subscribe();
@@ -75,6 +73,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             base.Unsubscribe();
         }
+
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
 
         protected override void OnAssigned(Player player)
         {
@@ -108,13 +108,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             ev.Player.ShowHint($"<line-height=95%><size=90%><voffset=-20em><color=#{_model.GetColor()}>Ваша моделька: {_model.Translate()}</color></size></voffset>", 5);
 
-            if (_model == RoleTypeId.Tutorial)
-            {
-                ev.Player.Role.Set(GameRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-                return;
-            }
-
+            ev.Player.ChangeAppearance(GameRole, Player.List.Where(ply => ply.IsAlive), true);
             ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive), true);
         }
 

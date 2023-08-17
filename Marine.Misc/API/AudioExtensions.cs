@@ -64,7 +64,7 @@ namespace Marine.Misc.API
 
             audio.LogDebug = false;
             audio.BroadcastChannel = VoiceChat.VoiceChatChannel.Intercom;
-            audio.Volume = 32;
+            audio.Volume = 18;
             audio.Loop = true;
 
             audio.CurrentPlay = path;

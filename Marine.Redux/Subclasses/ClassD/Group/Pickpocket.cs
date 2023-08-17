@@ -114,7 +114,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         protected override void OnAssigned(Player player)
         {
-            if (player.Items.Any(item => item.Type != ItemType.Coin))
+            if (player.Items.Any(item => item.Type != ItemType.Coin) || player.Items.Count != 8)
             {
                 return;
             }

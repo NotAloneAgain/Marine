@@ -33,6 +33,9 @@ namespace Marine.Redux.API.Subclasses
 
         public abstract string Name { get; set; }
 
+        [YamlMember(Alias = "keep_after_escape")]
+        public virtual bool KeepAfterEscape { get; set; } = true;
+
         [YamlMember(Alias = "chance")]
         public abstract int Chance { get; set; }
 
@@ -218,7 +221,7 @@ namespace Marine.Redux.API.Subclasses
 
             if (ev.Reason == SpawnReason.Escaped)
             {
-                DestroyInfo(ev.Player);
+                OnEscaping(ev.Player);
 
                 return;
             }
@@ -230,6 +233,25 @@ namespace Marine.Redux.API.Subclasses
                 SpawnReason.ForceClass => RevokeReason.Admin,
                 _ => RevokeReason.None
             });
+        }
+
+        protected virtual void OnEscaping(Player player)
+        {
+            if (KeepAfterEscape)
+            {
+                Timing.CallDelayed(0.00005f, delegate ()
+                {
+                    player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
+
+                    player.MaxHealth = SpawnInfo.Health;
+                    player.Health = SpawnInfo.Health;
+
+                    if (SpawnInfo.ShowInfo)
+                    {
+                        DestroyInfo(player);
+                    }
+                });
+            }
         }
 
         protected void CreateInfo(Player ply)

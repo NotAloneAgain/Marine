@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Marine.Commands.Patches
 {
@@ -12,12 +10,12 @@ namespace Marine.Commands.Patches
     {
         private protected readonly Regex _regex;
 
-        public CustomCommandPatch()
+        private protected CustomCommandPatch()
         {
             _regex = new Regex(@"(\d+)([smhdw])");
         }
 
-        public abstract List<object> ParseArguments(List<string> args);
+        public abstract List<object> ParseArguments(List<string> args, Player sender);
 
         public virtual List<Player> ParsePlayers(string input, Player sender)
         {

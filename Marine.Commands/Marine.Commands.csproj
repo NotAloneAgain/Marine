@@ -68,10 +68,11 @@
     <Compile Include="Commands\Teleport.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Models\Commands.cs" />
-    <Compile Include="Patches\CustomBanPatch.cs" />
-    <Compile Include="Patches\CustomCommandPatch.cs" />
-    <Compile Include="Patches\CustomKickPatch.cs" />
-    <Compile Include="Patches\CustomMutePatch.cs" />
+    <Compile Include="Patches\CustomCommand\CustomBanPatch.cs" />
+    <Compile Include="Patches\CustomCommand\CustomCommandPatch.cs" />
+    <Compile Include="Patches\CustomCommand\CustomMutePatch.cs" />
+    <Compile Include="Patches\Generic\ForceclassPatch.cs" />
+    <Compile Include="Patches\Generic\GiveItemPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

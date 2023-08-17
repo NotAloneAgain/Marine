@@ -93,7 +93,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 foreach (var door in otherDoors)
                 {
                     door.IsOpen = false;
-                    door.Lock(1.28f, DoorLockType.NoPower);
+                    door.Lock(1.2f, DoorLockType.NoPower);
                 }
 
                 ev.Door.Room.TurnOffLights(1.18f);
@@ -102,6 +102,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count() >= 8;
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count() >= 5;
     }
 }

@@ -76,12 +76,12 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if (ev.IsAllowed)
+            if (ev.IsAllowed || ev.Door.IsLocked)
             {
                 return;
             }
 
-            ev.IsAllowed = ev.Door.IsCheckpoint || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
+            ev.IsAllowed = ev.Player.IsNTF && ev.Door.Type == DoorType.GateB || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
         }
 
         public void OnInteractingLocker(InteractingLockerEventArgs ev)
@@ -234,7 +234,7 @@ namespace Marine.Misc.Handlers
         #region Others
         public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
         {
-            if (!ev.IsAllowed || !Warhead.IsInProgress && ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079)
+            if (!ev.IsAllowed || !Warhead.IsInProgress && ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Tesla.Room.AreLightsOff)
             {
                 return;
             }
@@ -266,7 +266,7 @@ namespace Marine.Misc.Handlers
             {
                 sync.InGame = true;
 
-                if (!ev.Player.RemoteAdminAccess)
+                if (!ev.Player.RemoteAdminAccess || ev.Player.Group == null)
                 {
                     ev.Player.Group = _discordGroup;
                 }

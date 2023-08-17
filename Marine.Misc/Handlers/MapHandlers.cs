@@ -91,5 +91,24 @@ namespace Marine.Misc.Handlers
                 ev.Pickup.Destroy();
             }
         }
+
+        public void OnUpgradingInventoryItem(UpgradingInventoryItemEventArgs ev)
+        {
+            if (ev.Item.Type == ItemType.MicroHID && ev.KnobSetting == Scp914.Scp914KnobSetting.Coarse)
+            {
+                ev.IsAllowed = false;
+
+                ev.Item.Destroy();
+
+                ev.Player.AddItem(ItemType.Jailbird);
+            }
+
+            if (ev.Item.Type == ItemType.ParticleDisruptor)
+            {
+                ev.IsAllowed = false;
+
+                ev.Item.Destroy();
+            }
+        }
     }
 }

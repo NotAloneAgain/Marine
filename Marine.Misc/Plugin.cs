@@ -54,6 +54,7 @@ namespace Marine.Misc
             Player.Dying += _player.OnDying;
             Player.Shot += _player.OnShot;
 
+            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += _map.OnUpgradingInventoryItem;
             Exiled.Events.Handlers.Scp914.UpgradingPickup += _map.OnUpgradingPickup;
             Map.GeneratorActivated += _map.OnGeneratorActivated;
             Map.PlacingBulletHole += _map.OnPlacingBulletHole;
@@ -72,6 +73,7 @@ namespace Marine.Misc
             Map.PlacingBulletHole -= _map.OnPlacingBulletHole;
             Map.GeneratorActivated -= _map.OnGeneratorActivated;
             Exiled.Events.Handlers.Scp914.UpgradingPickup -= _map.OnUpgradingPickup;
+            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= _map.OnUpgradingInventoryItem;
 
             Player.Shot -= _player.OnShot;
             Player.Dying -= _player.OnDying;

@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
@@ -60,7 +61,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Unsubscribe();
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 8;
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
 
         protected override void OnAssigned(Player player)
         {
@@ -76,9 +77,20 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 return;
             }
 
+            ev.Amount = ev.DamageHandler.Type switch
+            {
+                DamageType.Scp049 or DamageType.Scp173 or DamageType.Scp096 => 50,
+                _ => ev.Amount / 2
+            };
+
+            if (ev.DamageHandler.Type != DamageType.PocketDimension)
+            {
+                return;
+            }
+
             if (ev.Attacker != null && ev.Player.UserId != ev.Attacker.UserId && !ev.Attacker.IsGodModeEnabled)
             {
-                var amount = ev.Amount / 4;
+                var amount = ev.Amount / 3;
 
                 if (ev.Attacker.IsScp)
                 {
@@ -95,7 +107,10 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 }
             }
 
-            ev.Amount /= 2;
+            if (ev.Amount == 0)
+            {
+                ev.Amount = 25;
+            }
         }
     }
 }

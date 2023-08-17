@@ -3,6 +3,8 @@ using Exiled.API.Features;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
+using Marine.Redux.API.Subclasses;
+using Marine.Redux.Subclasses.Guards.Single;
 using Marine.ScpSwap.API;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -71,6 +73,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
+            RoleTypeId oldRole = player.Role.Type;
             RoleTypeId role = (RoleTypeId)arguments[0];
 
             if (role == player.Role.Type)
@@ -103,7 +106,20 @@ namespace Marine.Commands.Commands
 
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);
 
-            player.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Желаем удачной игры за SCP-{role.ToString().Substring(3)}!</color></b></voffset></size>", 6);
+            string scp = $"SCP-{role.ToString().Substring(3)}";
+
+            player.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Желаем удачной игры за {scp}!</color></b></voffset></size>", 6);
+
+            foreach (var informator in Player.List)
+            {
+                if (!Subclass.Has<Informator>(informator))
+                {
+                    continue;
+                }
+
+                informator.ShowHint("<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Информация обновлена!</color></b></voffset></size>", 3);
+                informator.SendConsoleMessage($"SCP-{oldRole.ToString().Substring(3)} стал {scp}", "yellow");
+            }
 
             return CommandResultType.Success;
         }
