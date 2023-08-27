@@ -81,7 +81,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            ev.IsAllowed = ev.Player.IsNTF && ev.Door.Type == DoorType.GateB || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
+            ev.IsAllowed = ev.Player.IsNTF && ev.Door.Type == DoorType.GateB || ((ev.Door.IsCheckpoint || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB) ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions));
         }
 
         public void OnInteractingLocker(InteractingLockerEventArgs ev)

@@ -36,7 +36,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
             foreach (var ply in Player.List)
             {
-                if (ply.IsScp)
+                if (!ply.IsScp)
                 {
                     continue;
                 }

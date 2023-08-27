@@ -207,6 +207,8 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
+            ev.Player.ShowHint(string.Empty, 0.05f);
+
             if (ev.NewRole == Role && Can(ev.Player))
             {
                 Assign(ev.Player);

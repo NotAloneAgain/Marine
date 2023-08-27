@@ -75,10 +75,10 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         private IEnumerator<float> _ShowData(Player player)
         {
-            yield return Timing.WaitForSeconds(1);
-
             while (player != null && player.IsAlive && Has(player))
             {
+                yield return Timing.WaitForSeconds(60);
+
                 var list = Player.List.Where(x => x.IsAlive && x.UserId != player.UserId && x.LeadingTeam == player.LeadingTeam && !x.IsTutorial);
 
                 if (list.Any())
@@ -95,8 +95,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
                     player.ShowHint(SpawnInfo.Message.Formate("Вам поступила информация от C.A.S.S.I.E", Role), 6);
                 }
-
-                yield return Timing.WaitForSeconds(60);
             }
         }
 
