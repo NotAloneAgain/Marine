@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp049;
+using Exiled.Events.EventArgs.Scp079;
 using Marine.LevelSystem.API;
 using PlayerRoles;
 using UnityEngine;
@@ -47,5 +49,9 @@ namespace Marine.LevelSystem.Handlers
             ev.Player.Reward(50, "побег");
             ev.Player.Cuffer?.Reward(50, "вывод связанного противника");
         }
+
+        public void OnGainingExperience(GainingExperienceEventArgs ev) => ev.Player.Reward(ev.Amount, "полезное действие SCP-079");
+
+        public void OnFinishingRecall(FinishingRecallEventArgs ev) => ev.Player.Reward(25, "поднятие зомби");
     }
 }

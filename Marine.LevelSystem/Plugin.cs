@@ -26,6 +26,8 @@ namespace Marine.LevelSystem
 
             Server.RoundEnded += _server.OnRoundEnded;
 
+            Scp079.GainingExperience += _player.OnGainingExperience;
+            Scp049.FinishingRecall += _player.OnFinishingRecall;
             Player.Destroying += _player.OnDestroying;
             Player.Escaping += _player.OnEscaping;
             Player.Verified += _player.OnVerified;
@@ -39,10 +41,17 @@ namespace Marine.LevelSystem
 
         public override void OnDisabled()
         {
+            Server.RoundEnded -= _server.OnRoundEnded;
+
             Player.Died -= _player.OnDied;
             Player.Verified -= _player.OnVerified;
             Player.Escaping -= _player.OnEscaping;
             Player.Destroying -= _player.OnDestroying;
+            Scp049.FinishingRecall -= _player.OnFinishingRecall;
+            Scp079.GainingExperience -= _player.OnGainingExperience;
+
+            MySQL.API.Events.Handlers.ChangedExp -= _levels.OnChangedExp;
+            MySQL.API.Events.Handlers.ChangedLevel -= _levels.OnChangedLevel;
 
             _levels = null;
             _player = null;

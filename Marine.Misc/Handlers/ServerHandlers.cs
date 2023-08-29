@@ -27,11 +27,20 @@ namespace Marine.Misc.Handlers
             _coroutines[1] = Timing.RunCoroutine(_CleanupRagdolls());
             _coroutines[2] = Timing.RunCoroutine(_RandomBlackout());
             _coroutines[3] = Timing.RunCoroutine(_RandomLockdown());
+            Server.FriendlyFire = false;
         }
 
-        public void OnRestartingRound() => Timing.KillCoroutines(_coroutines);
+        public void OnRestartingRound()
+        {
+            Timing.KillCoroutines(_coroutines);
+            Server.FriendlyFire = false;
+        }
 
-        public void OnEndedRound(RoundEndedEventArgs ev) => Timing.CallDelayed(5, AudioExtensions.StopAudio);
+        public void OnEndedRound(RoundEndedEventArgs ev)
+        {
+            Server.FriendlyFire = true;
+            Timing.CallDelayed(5, AudioExtensions.StopAudio);
+        }
         #endregion
         #region Coroutines
         public IEnumerator<float> _RandomBlackout()
@@ -61,6 +70,7 @@ namespace Marine.Misc.Handlers
                     {
                         door.IsOpen = false;
                         door.Lock(duration, Exiled.API.Enums.DoorLockType.Isolation);
+                        door.Room.Blackout(0.5f);
                     }
                 }
             }

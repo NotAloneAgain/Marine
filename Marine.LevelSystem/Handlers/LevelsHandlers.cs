@@ -1,4 +1,8 @@
-﻿using Marine.MySQL.API.Events;
+﻿using Exiled.API.Features;
+using Marine.LevelSystem.API;
+using Marine.MySQL.API.Events;
+using MEC;
+using System.Collections.Generic;
 
 namespace Marine.LevelSystem.Handlers
 {
@@ -17,19 +21,30 @@ namespace Marine.LevelSystem.Handlers
 
         public void OnChangedExp(ChangedExpEventArgs ev)
         {
-            ev.Player.ShowHint(string.Format(_changedExpText, ev.New - ev.Old, ev.Reason), 4);
+            ShowHint(ev.Player, string.Format(_changedExpText, ev.New - ev.Old, ev.Reason), 4);
+
+            ev.Player.Update();
         }
 
         public void OnChangedLevel(ChangedLevelEventArgs ev)
         {
             if (ev.Old < ev.New)
             {
-                ev.Player.ShowHint(string.Format(_levelUpText, ev.Old, ev.New), 6);
+                ShowHint(ev.Player, string.Format(_levelUpText, ev.Old, ev.New), 6);
             }
             else
             {
-                ev.Player.ShowHint(string.Format(_levelDownText, ev.Old, ev.New), 6);
+                ShowHint(ev.Player, string.Format(_levelDownText, ev.Old, ev.New), 6);
             }
+
+            ev.Player.Update();
+        }
+
+        private IEnumerator<float> ShowHint(Player player, string text, float duration)
+        {
+            yield return Timing.WaitForSeconds(player.CurrentHint.Duration);
+
+            player.ShowHint(text, duration);
         }
     }
 }
