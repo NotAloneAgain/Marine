@@ -101,6 +101,8 @@ namespace Marine.Misc.Handlers
 
         public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
         {
+            ev.IsAllowed = ev.IsAllowed && Round.ElapsedTime.TotalMinutes >= 4;
+
             if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>()
                 || ev.IsAllowed)
             {

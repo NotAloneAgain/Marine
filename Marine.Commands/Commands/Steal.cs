@@ -4,6 +4,7 @@ using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
+using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -76,6 +77,13 @@ namespace Marine.Commands.Commands
             if (target == null || target == player || !target.IsAlive)
             {
                 response = "Цель нераспознана";
+
+                return CommandResultType.Fail;
+            }
+
+            if (player.Role.Type != RoleTypeId.ClassD && target.LeadingTeam == player.LeadingTeam)
+            {
+                response = "Вы не можете воровать у своей организации!";
 
                 return CommandResultType.Fail;
             }

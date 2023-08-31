@@ -101,7 +101,13 @@ namespace Marine.Commands.Patches.Generic
                         _usings.Add(Round.UptimeRounds, new() { { player.UserId, 1 } });
                     }
 
-                    if (_usings[Round.UptimeRounds][player.UserId] > 3)
+                    int max = player.GroupName switch
+                    {
+                        "don3" or "don2" or "don1" => 3,
+                        _ => 5
+                    };
+
+                    if (_usings[Round.UptimeRounds][player.UserId] > max)
                     {
                         response = "Ты уже максимальное кол-во раз использовал донат!";
                         return false;

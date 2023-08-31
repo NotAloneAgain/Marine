@@ -57,6 +57,7 @@
     <Compile Include="Commands\Ball.cs" />
     <Compile Include="Commands\Grenade.cs" />
     <Compile Include="Commands\Sus.cs" />
+    <Compile Include="Commands\Knock.cs" />
     <Compile Include="Commands\Zombie.cs" />
     <Compile Include="Commands\Hide.cs" />
     <Compile Include="Commands\Size.cs" />

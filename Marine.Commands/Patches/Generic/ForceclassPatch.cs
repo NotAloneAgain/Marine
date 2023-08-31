@@ -56,7 +56,7 @@ namespace Marine.Commands.Patches.Generic
             __instance.ProvideRoleFlag(array, out var flags);
             var role = roleBase.RoleTypeId;
 
-            if (Player.TryGet(senderHub, out var player) && player.GroupName != "don4" && player.GroupName.Contains("don"))
+            if (Player.TryGet(senderHub, out var player) && player.GroupName != "don4" && (player.GroupName.Contains("don") || player.GroupName.Contains("cons")))
             {
                 if (flags != RoleSpawnFlags.All && (int)flags != 3)
                 {
@@ -120,7 +120,8 @@ namespace Marine.Commands.Patches.Generic
                 int max = player.GroupName switch
                 {
                     "don3" => 3,
-                    _ => 2
+                    "don2" or "don1" => 2,
+                    _ => 5
                 };
 
                 if (_usings[Round.UptimeRounds][player.UserId] > max)

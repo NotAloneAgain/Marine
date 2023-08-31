@@ -34,7 +34,7 @@ namespace Marine.Misc.API
                 return;
             }
 
-            var items = player.Items;
+            var items = player.Items.ToList();
 
             foreach (var item in items)
             {

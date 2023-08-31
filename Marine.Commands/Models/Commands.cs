@@ -28,7 +28,8 @@ namespace Marine.Commands.Models
                     Grenade,
                     Zombie,
                     Sus,
-                    Ball
+                    Ball,
+                    Knock
                 };
 
                 return list;
@@ -64,5 +65,7 @@ namespace Marine.Commands.Models
         public Sus Sus { get; set; } = new();
 
         public Ball Ball { get; set; } = new();
+
+        public Knock Knock { get; set; } = new();
     }
 }
