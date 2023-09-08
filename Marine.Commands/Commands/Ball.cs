@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
@@ -57,7 +58,17 @@ namespace Marine.Commands.Commands
 
             foreach (var ply in list)
             {
-                Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, ply.Rotation, ply);
+                var pickup = Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, ply.Rotation, ply);
+
+                var projectile = pickup as Scp018Projectile;
+
+                float d = 1 - Mathf.Abs(Vector3.Dot(player.CameraTransform.forward, Vector3.up));
+                Vector3 forward = player.CameraTransform.forward;
+                Vector3 a2 = forward * d;
+
+                var rigidbody = projectile.GameObject.GetComponent<Rigidbody>();
+
+                rigidbody.velocity = InventorySystem.Items.ThrowableProjectiles.ThrowableNetworkHandler.GetLimitedVelocity(pickup.Position) + a2 * projectile.VelocityPerBounce;
             }
 
             return CommandResultType.Success;

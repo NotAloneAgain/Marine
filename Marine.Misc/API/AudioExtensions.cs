@@ -1,25 +1,18 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Components;
 using MEC;
 using Mirror;
 using SCPSLAudioApi;
 using SCPSLAudioApi.AudioCore;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 namespace Marine.Misc.API
 {
     public static class AudioExtensions
     {
-        private static readonly HashSet<ReferenceHub> _dummies;
+        private static ReferenceHub _dummy;
         private static bool _initialized;
-
-        static AudioExtensions()
-        {
-            _dummies = new(100);
-        }
 
         public static IEnumerator<float> _PlayAudio(this string audioFile)
         {
@@ -30,18 +23,18 @@ namespace Marine.Misc.API
                 _initialized = true;
             }
 
-            if ("Музончик? Он самый!".HasAudio())
+            if (HasAudio())
             {
                 yield break;
             }
 
             var prefab = Object.Instantiate(NetworkManager.singleton.playerPrefab);
 
-            var conn = new FakeAudioConn(_dummies.Count + 1);
+            var conn = new FakeAudioConn(0);
 
             var hub = prefab.GetComponent<ReferenceHub>();
 
-            _dummies.Add(hub);
+            _dummy = hub;
 
             NetworkServer.AddPlayerForConnection(conn, prefab);
 
@@ -73,12 +66,11 @@ namespace Marine.Misc.API
 
         public static void StopAudio()
         {
-            foreach (var dummy in _dummies)
-            {
-                Timing.CallDelayed(0.5f, () => NetworkServer.Destroy(dummy.gameObject));
-            }
+            Timing.CallDelayed(0.5f, () => NetworkServer.Destroy(_dummy.gameObject));
+
+            _dummy = null;
         }
 
-        public static bool HasAudio(this string tag) => _dummies.FirstOrDefault(dummy => dummy.nicknameSync.MyNick == tag) != null;
+        public static bool HasAudio() => _dummy != null;
     }
 }

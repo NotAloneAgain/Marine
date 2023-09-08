@@ -1,4 +1,5 @@
-﻿using Exiled.API.Extensions;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
@@ -17,10 +18,19 @@ namespace Marine.Misc.Handlers
     internal sealed class ServerHandlers
     {
         #region Initialize
+        private List<ZoneType> _zones;
         private CoroutineHandle[] _coroutines;
 
         internal ServerHandlers()
         {
+            _zones = new List<ZoneType>(4)
+            {
+                ZoneType.Surface,
+                ZoneType.Entrance,
+                ZoneType.LightContainment,
+                ZoneType.HeavyContainment,
+            };
+
             _coroutines = new CoroutineHandle[10];
         }
         #endregion
@@ -57,7 +67,33 @@ namespace Marine.Misc.Handlers
 
                 if (Random.Range(0, 100) >= 86)
                 {
-                    Map.TurnOffAllLights(Random.Range(10, 240));
+                    var duration = Random.Range(10, 240);
+
+                    var zonesCount = Random.Range(0, 5);
+
+                    HashSet<ZoneType> zones = zonesCount switch
+                    {
+                        4 or 5 => new(1),
+                        _ => new(zonesCount)
+                    };
+
+                    while (zonesCount > 0)
+                    {
+                        zones.Add(_zones[Random.Range(0, _zones.Count)]);
+                    }
+
+                    foreach (RoomLightController instance in RoomLightController.Instances)
+                    {
+                        if (instance == null)
+                            continue;
+
+                        Room room = instance.GetComponentInParent<Room>();
+
+                        if (room != null && (zones.Contains(ZoneType.Unspecified) || zones.Contains(room.Zone)))
+                        {
+                            instance.ServerFlickerLights(duration);
+                        }
+                    }
                 }
             }
         }
@@ -75,7 +111,7 @@ namespace Marine.Misc.Handlers
                     foreach (var door in Door.List)
                     {
                         door.IsOpen = false;
-                        door.Lock(duration, Exiled.API.Enums.DoorLockType.Isolation);
+                        door.Lock(duration, DoorLockType.Isolation);
                         door.Room.Blackout(0.5f);
                     }
                 }

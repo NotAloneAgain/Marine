@@ -134,7 +134,9 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if (RoleExtensions.GetTeam(ev.NewRole) is not Team.FoundationForces or Team.ChaosInsurgency || ev.NewRole == RoleTypeId.FacilityGuard)
+            var team = RoleExtensions.GetTeam(ev.NewRole);
+
+            if (team is not Team.FoundationForces or Team.ChaosInsurgency || ev.NewRole != RoleTypeId.NtfPrivate && team == Team.FoundationForces)
             {
                 return;
             }

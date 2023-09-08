@@ -54,16 +54,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override bool Can(in Player player) => base.Can(player) && Player.List.Count(x => x.Role.Type == RoleTypeId.Scp049) > 0;
 
-        protected override void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (ev.Reason == SpawnReason.Revived)
-            {
-                return;
-            }
-
-            base.OnChangingRole(ev);
-        }
-
         private void OnDying(DyingEventArgs ev)
         {
             if (!Has(ev.Player) || ev.Player.Role.Type != Role)
@@ -73,7 +63,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
             ev.IsAllowed = false;
             ev.Player.DropAllWithoutKeycard();
-            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived);
+            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.ForceClass);
         }
     }
 }

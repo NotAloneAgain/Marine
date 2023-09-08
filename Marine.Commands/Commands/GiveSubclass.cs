@@ -31,10 +31,7 @@ namespace Marine.Commands.Commands
             Groups = new HashSet<string>()
             {
                 "adm",
-                "mog",
-                "soviet",
                 "modt",
-                "ceo",
             }
         };
 

@@ -80,7 +80,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.IsAllowed || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
+            if (!Has(ev.Player) || ev.IsAllowed || ev.Door == null || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
             {
                 return;
             }
@@ -95,7 +95,14 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                     door.Lock(1.2f, DoorLockType.NoPower);
                 }
 
-                ev.Door.Room.TurnOffLights(1.18f);
+                if (ev.Door.Room == null)
+                {
+                    ev.Player.CurrentRoom?.TurnOffLights(1.3f);
+                }
+                else
+                {
+                    ev.Door.Room.TurnOffLights(1.3f);
+                }
 
                 ev.IsAllowed = true;
             }

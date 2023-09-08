@@ -24,18 +24,17 @@ namespace Marine.Misc.Handlers
         {
             _optionalObjects = new[]
             {
-                "Canvas", "Point light", "TMP SubMeshUI [CHINESE Material + fallback1 Atlas]", "Text (TMP)", "Stator",
+                "Canvas", "TMP SubMeshUI [CHINESE Material + fallback1 Atlas]", "Text (TMP)", "Stator",
                 "Frame", "CameraPosition", "Cylinder", "All", "Reflection Probe", "szklo", "Label (1)", "collider",
                 "Lockdown", "camera", "obracadlo", "cctvmodel", "MotorStator", "rotor", "Side Colliders", "newmodel(Clone)",
                 "GFX", "Cube", "cctv1", "Cylinder.001", "Cylinder.002", "Lens", "Lamp", "Clutter", "079 Camera", "Quad",
-                "Point light (1)", "head", "ElevatorPanel", "RID_C", "RID", "Collider_Glass", "Lock_Down", "Lock_Up",
-                "MovablePart", "RailingCollider", "Scp079Speaker", "Point light (2)", "Cube (1)", "Second Digit",
-                "First Digit", "Reverb Zone", "Lighting", "Lamp (2)", "Lamp (1)", "pilka", "body", "Lights", "monitor",
+                "head", "ElevatorPanel", "RID_C", "RID", "Collider_Glass", "Lock_Down", "Lock_Up",
+                "MovablePart", "RailingCollider", "Scp079Speaker", "Cube (1)", "Second Digit",
+                "First Digit", "Reverb Zone", "pilka", "body", "monitor",
                 "Quad (1)", "BTPar", "Monitor", "Gas", "Labels", "Cube (2)", "Plane", "Text", "longstand", "Spawnpoints",
-                "default", "cctventrance", "Point light (3)", "TyreBurnoutSmoke (3)", "Background", "Body", "Desk", "Seat",
+                "default", "cctventrance", "TyreBurnoutSmoke (3)", "Background", "Body", "Desk", "Seat",
                 "Cube (3)", "Keyboard", "EV_Lamp", "Plane (2)", "Obj", "TyreBurnoutSmoke", "RailingColliders", "Collider",
-                ";)", "Safe Teleport Position #1", "Label", "AntijumperCells", "PrisonChamber", "TyreBurnoutSmoke (2)",
-                "PrisonLight (1)"
+                ";)", "Safe Teleport Position #1", "Label", "AntijumperCells", "PrisonChamber", "TyreBurnoutSmoke (2)"
             };
 
             _additionalObjects = new[]
@@ -43,8 +42,6 @@ namespace Marine.Misc.Handlers
                 "SCP-914 Controller",
                 "DecontaminationManager",
                 "Tesla Gate Controller",
-                "LightControllerObject",
-                "FlickerableLightController"
             };
         }
         #endregion
@@ -58,7 +55,7 @@ namespace Marine.Misc.Handlers
 
             var count = Directory.GetFiles(Path.Combine(Paths.Exiled, "Music")).Count() + 1;
 
-            if (count == 0 || "Музончик? Он самый!".HasAudio())
+            if (count == 0)
             {
                 return;
             }

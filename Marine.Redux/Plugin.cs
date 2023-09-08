@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Exiled.API.Enums;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.Handlers;
+using Marine.Redux.API.Enums;
+using Marine.Redux.API.Subclasses;
+using System;
+using System.Linq;
 
 namespace Marine.Redux
 {
@@ -8,12 +14,14 @@ namespace Marine.Redux
 
         public override string Prefix => "marine.redux";
 
-        public override string Author => "i.your";
+        public override string Author => "NotAloneAgain";
 
         public override Version Version { get; } = new(1, 0, 0);
 
         public override void OnEnabled()
         {
+            Player.ChangingRole += OnChangingRole;
+
             foreach (var subclass in Config.Subclasses.All)
             {
                 subclass.Subscribe();
@@ -24,6 +32,8 @@ namespace Marine.Redux
 
         public override void OnDisabled()
         {
+            Player.ChangingRole -= OnChangingRole;
+
             foreach (var subclass in Config.Subclasses.All)
             {
                 subclass.Unsubscribe();
@@ -37,5 +47,43 @@ namespace Marine.Redux
         public override void OnRegisteringCommands() { }
 
         public override void OnUnregisteringCommands() { }
+
+        private void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if ((int)ev.SpawnFlags != 3 || !ev.IsAllowed || (ev.Player.Group?.KickPower ?? 0) <= 0 && ev.Reason == SpawnReason.ForceClass)
+            {
+                return;
+            }
+
+            foreach (var subclass in Subclass.ReadOnlyCollection.Where(sub => sub.Role == ev.NewRole))
+            {
+                if (subclass.Can(ev.Player))
+                {
+                    subclass.Assign(ev.Player);
+
+                    return;
+                }
+
+                if (!subclass.Has(ev.Player))
+                {
+                    return;
+                }
+
+                if (ev.Reason == SpawnReason.Escaped)
+                {
+                    subclass.OnEscaping(ev.Player);
+
+                    return;
+                }
+
+                subclass.Revoke(ev.Player, ev.Reason switch
+                {
+                    SpawnReason.Died => RevokeReason.Died,
+                    SpawnReason.Destroyed => RevokeReason.Leave,
+                    SpawnReason.ForceClass => RevokeReason.Admin,
+                    _ => RevokeReason.None
+                });
+            }
+        }
     }
 }

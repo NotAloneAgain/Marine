@@ -12,9 +12,9 @@ namespace Marine.LevelSystem
 
         public override string Name => "Marine.LevelSystem";
 
-        public override string Prefix => "Marine.LevelSystem";
+        public override string Prefix => "marine.level_system";
 
-        public override string Author => "i.your";
+        public override string Author => "NotAloneAgain";
 
         public override Version Version { get; } = new(1, 0, 0);
 

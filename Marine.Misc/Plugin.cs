@@ -7,7 +7,7 @@ namespace Marine.Misc
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private const string HarmonyId = "Ray-Grey.Marine.Misc";
+        private const string HarmonyId = "NotAloneAgain.Misc";
 
         private WarheadHandlers _warhead;
         private ServerHandlers _server;
@@ -19,7 +19,7 @@ namespace Marine.Misc
 
         public override string Prefix => "marine.misc";
 
-        public override string Author => "i.your";
+        public override string Author => "NotAloneAgain";
 
         public override Version Version { get; } = new(1, 0, 0);
 

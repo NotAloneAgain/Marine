@@ -8,9 +8,9 @@ namespace Marine.MySQL
     {
         public override string Name { get; } = "Marine.MySQL";
 
-        public override string Prefix { get; } = "Marine.MySQL";
+        public override string Prefix { get; } = "marine.my_sql";
 
-        public override string Author { get; } = "i.your";
+        public override string Author { get; } = "NotAloneAgain";
 
         public override PluginPriority Priority { get; } = PluginPriority.First;
 

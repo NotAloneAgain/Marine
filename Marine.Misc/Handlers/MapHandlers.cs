@@ -35,7 +35,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            int generators = (Generator.List.Count(x => x.IsEngaged) + 1);
+            int generators = Generator.List.Count(x => x.IsEngaged) + 1;
             int xp = 50 * generators;
 
             foreach (var ply in computers)

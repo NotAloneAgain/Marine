@@ -99,7 +99,6 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Subscribe()
         {
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.Died += OnDied;
         }
@@ -108,7 +107,6 @@ namespace Marine.Redux.API.Subclasses
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
-            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
         }
 
         public virtual void Assign(Player player)
@@ -205,42 +203,7 @@ namespace Marine.Redux.API.Subclasses
             Revoke(ev.Player, RevokeReason.Died);
         }
 
-        protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (ev.SpawnFlags == RoleSpawnFlags.None)
-            {
-                return;
-            }
-
-            if (ev.NewRole == Role && Can(ev.Player))
-            {
-                Assign(ev.Player);
-
-                return;
-            }
-
-            if (!Has(ev.Player))
-            {
-                return;
-            }
-
-            if (ev.Reason == SpawnReason.Escaped)
-            {
-                OnEscaping(ev.Player);
-
-                return;
-            }
-
-            Revoke(ev.Player, ev.Reason switch
-            {
-                SpawnReason.Died => RevokeReason.Died,
-                SpawnReason.Destroyed => RevokeReason.Leave,
-                SpawnReason.ForceClass => RevokeReason.Admin,
-                _ => RevokeReason.None
-            });
-        }
-
-        protected virtual void OnEscaping(Player player)
+        public virtual void OnEscaping(Player player)
         {
             if (KeepAfterEscape)
             {
