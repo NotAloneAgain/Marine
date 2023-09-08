@@ -29,7 +29,8 @@ namespace Marine.Commands.Models
                     Zombie,
                     Sus,
                     Ball,
-                    Knock
+                    Knock,
+                    Subclass
                 };
 
                 return list;
@@ -67,5 +68,7 @@ namespace Marine.Commands.Models
         public Ball Ball { get; set; } = new();
 
         public Knock Knock { get; set; } = new();
+
+        public GiveSubclass Subclass { get; set; } = new();
     }
 }

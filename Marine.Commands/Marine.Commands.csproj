@@ -55,6 +55,7 @@
     <Compile Include="Commands\DropRagdoll.cs" />
     <Compile Include="Commands\Force.cs" />
     <Compile Include="Commands\Ball.cs" />
+    <Compile Include="Commands\GiveSubclass.cs" />
     <Compile Include="Commands\Grenade.cs" />
     <Compile Include="Commands\Sus.cs" />
     <Compile Include="Commands\Knock.cs" />

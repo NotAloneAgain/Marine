@@ -78,6 +78,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         protected override void OnAssigned(Player player)
         {
+            player.IsUsingStamina = false;
             player.IsGodModeEnabled = true;
 
             player.SendConsoleMessage(ConsoleMessage, "yellow");
@@ -86,6 +87,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         protected override void OnRevoked(Player player, in RevokeReason reason)
         {
             player.IsGodModeEnabled = false;
+            player.IsUsingStamina = true;
         }
 
         private void OnFlippingCoin(FlippingCoinEventArgs ev)
@@ -100,16 +102,16 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             _model = _model switch
             {
                 RoleTypeId.Overwatch or RoleTypeId.Filmmaker => RoleTypeId.Scp173,
+                RoleTypeId.Spectator => RoleTypeId.Scp106,
                 RoleTypeId.CustomRole => RoleTypeId.ChaosRifleman,
                 RoleTypeId.Scp079 => RoleTypeId.ChaosConscript,
                 RoleTypeId.Scp0492 => RoleTypeId.NtfSergeant,
                 _ => _model
             };
 
-            ev.Player.ShowHint($"<line-height=95%><size=90%><voffset=-20em><color=#{_model.GetColor()}>Ваша моделька: {_model.Translate()}</color></size></voffset>", 5);
+            ev.Player.ShowHint($"<line-height=95%><size=90%><voffset=-20em><color={_model.GetColor().ToHex()}>Ваша моделька: {_model.Translate()}</color></size></voffset>", 5);
 
-            ev.Player.ChangeAppearance(GameRole, Player.List.Where(ply => ply.IsAlive), true);
-            ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive), true);
+            ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive && ply.UserId != Player.UserId), true);
         }
 
         private void OnHurting(HurtingEventArgs ev)
@@ -124,8 +126,13 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (!Has(ev.Attacker))
+            if (!Has(ev.Attacker) && !Has(ev.Player))
             {
+                if (Player != null && ev.IsAllowed)
+                {
+                    Player.ChangeAppearance(GameRole, new List<Player>(1) { ev.Player }, true);
+                }
+
                 return;
             }
 

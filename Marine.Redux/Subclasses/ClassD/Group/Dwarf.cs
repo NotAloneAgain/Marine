@@ -1,4 +1,6 @@
-﻿using Marine.Redux.API;
+﻿using Exiled.API.Features;
+using Marine.Redux.API;
+using Marine.Redux.API.Enums;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
@@ -42,5 +44,9 @@ namespace Marine.Redux.Subclasses.ClassD.Group
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
         public override int Chance { get; set; } = 15;
+
+        protected override void OnAssigned(Player player) => player.IsUsingStamina = false;
+
+        protected override void OnRevoked(Player player, in RevokeReason reason) => player.IsUsingStamina = true;
     }
 }

@@ -13,8 +13,9 @@ namespace Marine.Redux.Subclasses.ClassD.Single
     public class Scp073 : SingleSubclass
     {
         private const string ConsoleMessage = "\n\t+ Помимо этого:" +
-                "\n\t\t- 25% получаемого вами урона отражается на противника." +
-                "\n\t\t- Вы получаете на ещё 25% меньше урона.";
+                "\n\t\t- Возможность выбивать двери командой .knock (наведись на дверь)." +
+                "\n\t\t- Треть получаемого вами урона отражается на противника." +
+                "\n\t\t- Вы получаете на 50% меньше урона.";
 
         public Scp073() : base() { }
 
@@ -24,8 +25,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         {
             ShowInfo = true,
             Message = new("Ты - SCP-073!\nУ тебя очень крепкое тело и неплохая регенерация (проверь консоль).", 15, true, "#009A63"),
-            Health = 150,
-            Shield = new Shield(100, 100, -0.36f, 1, 10, true),
+            Health = 120,
+            Shield = new Shield(100, 100, -0.75f, 1, 6, true),
             Inventory = new()
             {
                 IsRandomable = false,
@@ -79,11 +80,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             ev.Amount = ev.DamageHandler.Type switch
             {
-                DamageType.Scp049 or DamageType.Scp173 or DamageType.Scp096 => 50,
+                DamageType.Scp049 or DamageType.Scp173 or DamageType.Scp096 => 40,
                 _ => ev.Amount / 2
             };
 
-            if (ev.DamageHandler.Type != DamageType.PocketDimension)
+            if (ev.DamageHandler.Type == DamageType.PocketDimension)
             {
                 return;
             }
@@ -109,7 +110,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             if (ev.Amount == 0)
             {
-                ev.Amount = 25;
+                ev.Amount = 20;
             }
         }
     }

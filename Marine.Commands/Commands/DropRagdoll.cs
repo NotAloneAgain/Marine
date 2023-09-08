@@ -117,7 +117,7 @@ namespace Marine.Commands.Commands
         {
             for (int index = 0; index < count - 1; index++)
             {
-                Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, Quaternion.Euler(player.Rotation));
+                Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, player.Rotation);
 
                 yield return Timing.WaitForSeconds(0.25f);
             }

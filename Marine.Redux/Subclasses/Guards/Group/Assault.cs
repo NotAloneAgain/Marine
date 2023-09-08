@@ -1,6 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
-using Marine.Redux.API;
+﻿using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
@@ -18,9 +16,8 @@ namespace Marine.Redux.Subclasses.Guards.Group
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Health = 150,
-            Shield = new Shield(15, 15, -0.4f, 1, 5, true),
-            Message = new("Ты - Штурмовик!\nТы проверенный в боях сотрудник, готовый ко всем ситуациям.", 12, true),
+            Health = 125,
+            Message = new("Ты - Штурмовик!\nТы проверенный в боях сотрудник, готовый ко всем ситуациям. Используй .knock чтобы выбивать двери.", 12, true),
             Inventory = new()
             {
                 IsRandomable = false,
@@ -32,7 +29,7 @@ namespace Marine.Redux.Subclasses.Guards.Group
                     }, false),
                     new Slot(new ItemChances()
                     {
-                        { ItemType.GunLogicer, 50 },
+                        { ItemType.GunFRMG0, 40 },
                         { ItemType.GunFSP9, 100 },
                     }, false),
                     new Slot(new ItemChances()
@@ -57,6 +54,6 @@ namespace Marine.Redux.Subclasses.Guards.Group
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 12;
+        public override int Chance { get; set; } = 16;
     }
 }

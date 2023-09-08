@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
@@ -59,8 +60,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         protected override void OnAssigned(Player player)
         {
-            base.OnAssigned(player);
-
             player.GetEffect(EffectType.DamageReduction)?.ServerSetState(20, 0, false);
 
             player.SendConsoleMessage(ConsoleMessage, "yellow");
@@ -81,7 +80,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.IsAllowed || ev.Door.IsMoving || ev.Door.IsBroken || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
+            if (!Has(ev.Player) || ev.IsAllowed || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
             {
                 return;
             }

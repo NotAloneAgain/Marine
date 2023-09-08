@@ -15,7 +15,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
-            Message = new("Ты - блатной!\nТебя уважают все в тюрьме, это уважение завоевано силой.", 12, true),
+            Message = new("Ты - блатной!\nТебя уважают все в тюрьме, это уважение завоевано силой. Используй .knock чтобы выбивать двери.", 12, true),
             Health = 125,
             Inventory = new()
             {

@@ -1,12 +1,16 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using Marine.Misc.API;
 using MEC;
+using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
+
+#pragma warning disable IDE0060
 
 namespace Marine.Misc.Handlers
 {
@@ -17,7 +21,7 @@ namespace Marine.Misc.Handlers
 
         internal ServerHandlers()
         {
-            _coroutines = new CoroutineHandle[4];
+            _coroutines = new CoroutineHandle[10];
         }
         #endregion
         #region Handlers
@@ -27,12 +31,14 @@ namespace Marine.Misc.Handlers
             _coroutines[1] = Timing.RunCoroutine(_CleanupRagdolls());
             _coroutines[2] = Timing.RunCoroutine(_RandomBlackout());
             _coroutines[3] = Timing.RunCoroutine(_RandomLockdown());
+
             Server.FriendlyFire = false;
         }
 
         public void OnRestartingRound()
         {
             Timing.KillCoroutines(_coroutines);
+
             Server.FriendlyFire = false;
         }
 
@@ -80,8 +86,10 @@ namespace Marine.Misc.Handlers
         {
             List<Pickup> toClear = new(500);
 
-            while (Round.InProgress)
+            while (true)
             {
+                yield return Timing.WaitForSeconds(300);
+
                 foreach (var item in Pickup.List)
                 {
                     if (!item.IsSpawned || item.Room == null)
@@ -117,23 +125,28 @@ namespace Marine.Misc.Handlers
 
                     item.Destroy();
                 }
-
-                yield return Timing.WaitForSeconds(300);
             }
         }
 
         public IEnumerator<float> _CleanupRagdolls()
         {
             HashSet<Ragdoll> toClear = new(100);
-            HashSet<Ragdoll> recalling = new(20);
+            HashSet<Ragdoll> recalling = new(25);
 
-            while (Round.InProgress)
+            while (true)
             {
+                yield return Timing.WaitForSeconds(120);
+
                 foreach (var player in Player.List)
                 {
+                    if (player.Role.Type != RoleTypeId.Scp049)
+                    {
+                        continue;
+                    }
+
                     var role = player.Role.As<Scp049Role>();
 
-                    if (role != null)
+                    if (role != null && role.RecallingRagdoll != null)
                     {
                         continue;
                     }
@@ -159,8 +172,6 @@ namespace Marine.Misc.Handlers
                 }
 
                 recalling.Clear();
-
-                yield return Timing.WaitForSeconds(120);
             }
         }
         #endregion

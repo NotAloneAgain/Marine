@@ -1,4 +1,6 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
@@ -58,6 +60,13 @@ namespace Marine.Redux.Subclasses.ClassD.Group
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
 
             base.Unsubscribe();
+        }
+
+        protected override void OnAssigned(Player player)
+        {
+            player.GetEffect(EffectType.MovementBoost)?.ServerSetState(5, 0, false);
+
+            base.OnAssigned(player);
         }
 
         private void OnSearchingPickup(SearchingPickupEventArgs ev)

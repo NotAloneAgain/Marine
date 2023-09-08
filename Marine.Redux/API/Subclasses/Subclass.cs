@@ -23,6 +23,8 @@ namespace Marine.Redux.API.Subclasses
 
         public Subclass()
         {
+            Id = _list.Count + 1;
+
             _list.Add(this);
         }
 
@@ -32,6 +34,9 @@ namespace Marine.Redux.API.Subclasses
         public abstract SubclassType Type { get; }
 
         public abstract string Name { get; set; }
+
+        [YamlIgnore]
+        public int Id { get; }
 
         [YamlMember(Alias = "keep_after_escape")]
         public virtual bool KeepAfterEscape { get; set; } = true;
@@ -212,11 +217,6 @@ namespace Marine.Redux.API.Subclasses
                 Assign(ev.Player);
 
                 return;
-            }
-
-            if (!HasAny(ev.Player))
-            {
-                ev.Player.ShowHint(string.Empty, 0.05f);
             }
 
             if (!Has(ev.Player))

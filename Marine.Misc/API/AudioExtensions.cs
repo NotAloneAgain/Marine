@@ -21,7 +21,7 @@ namespace Marine.Misc.API
             _dummies = new(100);
         }
 
-        public static IEnumerator<float> _PlayAudio(this string audioFile, string tag)
+        public static IEnumerator<float> _PlayAudio(this string audioFile)
         {
             if (!_initialized)
             {
@@ -30,7 +30,7 @@ namespace Marine.Misc.API
                 _initialized = true;
             }
 
-            if (tag.HasAudio())
+            if ("Музончик? Он самый!".HasAudio())
             {
                 yield break;
             }
@@ -54,7 +54,7 @@ namespace Marine.Misc.API
                 yield return Timing.WaitForSeconds(0.005f);
             }
 
-            hub.nicknameSync.MyNick = tag;
+            hub.nicknameSync.MyNick = "Музончик? Он самый!";
 
             var audio = AudioPlayerBase.Get(hub);
 
@@ -64,7 +64,7 @@ namespace Marine.Misc.API
 
             audio.LogDebug = false;
             audio.BroadcastChannel = VoiceChat.VoiceChatChannel.Intercom;
-            audio.Volume = 10;
+            audio.Volume = 3;
             audio.Loop = true;
 
             audio.CurrentPlay = path;
@@ -75,7 +75,7 @@ namespace Marine.Misc.API
         {
             foreach (var dummy in _dummies)
             {
-                Timing.CallDelayed(0.1f, () => NetworkServer.Destroy(dummy.gameObject));
+                Timing.CallDelayed(0.5f, () => NetworkServer.Destroy(dummy.gameObject));
             }
         }
 

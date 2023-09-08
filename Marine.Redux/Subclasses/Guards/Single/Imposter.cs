@@ -26,7 +26,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 3;
+        public override int Chance { get; set; } = 5;
 
         protected override void OnAssigned(Player player)
         {

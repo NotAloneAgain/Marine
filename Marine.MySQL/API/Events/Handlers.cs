@@ -1,4 +1,4 @@
-﻿using static Exiled.Events.Events;
+﻿using Exiled.Events.Features;
 
 namespace Marine.MySQL.API.Events
 {

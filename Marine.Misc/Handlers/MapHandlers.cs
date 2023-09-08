@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Scp914;
@@ -13,31 +14,19 @@ namespace Marine.Misc.Handlers
     {
         public void OnGenerated()
         {
-            var door = Door.Get(DoorType.NukeSurface);
+            var door = Door.Get(DoorType.NukeSurface).As<BreakableDoor>();
 
-            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
-            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
+            door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
 
-            door = Door.Get(DoorType.Scp079First);
+            door = Door.Get(DoorType.HID).As<BreakableDoor>();
 
-            door.RequiredPermissions.RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelThree;
-
-            door = Door.Get(DoorType.Scp079Second);
-
-            door.RequiredPermissions.RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelThree;
-
-            door = Door.Get(DoorType.Scp079Armory);
-
-            door.RequiredPermissions.RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.ArmoryLevelTwo;
-
-            door = Door.Get(DoorType.HID);
-
-            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
         }
 
-        public void OnPlacingBulletHole(PlacingBulletHole ev) => ev.IsAllowed = false;
+        public void OnPlacingBulletHole(PlacingBulletHoleEventArgs ev) => ev.IsAllowed = false;
 
-        public void OnGeneratorActivated(GeneratorActivatedEventArgs ev)
+        public void OnGeneratorActivated(GeneratorActivatingEventArgs ev)
         {
             var computers = Player.Get(RoleTypeId.Scp079);
 

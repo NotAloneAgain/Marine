@@ -1,5 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
@@ -26,7 +25,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 10;
+        public override int Chance { get; set; } = 11;
 
         protected override void OnAssigned(Player player)
         {
@@ -47,10 +46,12 @@ namespace Marine.Redux.Subclasses.Guards.Single
                     false => ", "
                 };
 
+                first = false;
+
                 scps += $"{suffix}{ply.Role.Type.ToString().ToUpper().Replace("SCP", "SCP-")}";
             }
 
-            player.SendConsoleMessage(scps, "red");
+            player.SendConsoleMessage($"{scps}.", "red");
         }
     }
 }

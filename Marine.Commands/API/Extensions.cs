@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
 using UnityEngine;
 

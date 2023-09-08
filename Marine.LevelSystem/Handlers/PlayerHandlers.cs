@@ -16,7 +16,7 @@ namespace Marine.LevelSystem.Handlers
 
         public void OnDied(DiedEventArgs ev)
         {
-            if (Round.IsEnded || ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
+            if (!Round.InProgress || ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
             {
                 return;
             }
@@ -50,7 +50,7 @@ namespace Marine.LevelSystem.Handlers
             ev.Player.Cuffer?.Reward(50, "вывод связанного противника");
         }
 
-        public void OnGainingExperience(GainingExperienceEventArgs ev) => ev.Player.Reward(ev.Amount, "полезное действие SCP-079");
+        public void OnGainingExperience(GainingExperienceEventArgs ev) => ev.Player.Reward(ev.Amount, "полезное действие за SCP-079");
 
         public void OnFinishingRecall(FinishingRecallEventArgs ev) => ev.Player.Reward(25, "поднятие зомби");
     }

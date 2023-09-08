@@ -57,7 +57,7 @@ namespace Marine.Commands.Commands
 
             foreach (var ply in list)
             {
-                Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, Quaternion.Euler(ply.Rotation), ply);
+                Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, ply.Rotation, ply);
             }
 
             return CommandResultType.Success;

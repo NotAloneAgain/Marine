@@ -1,10 +1,15 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Scientists.Single;
+using Marine.Redux.Subclasses.ClassD.Group;
+using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Guards.Group;
+using PlayerRoles;
 using System.Collections.Generic;
 
 namespace Marine.Commands.Commands
@@ -40,21 +45,28 @@ namespace Marine.Commands.Commands
 
             Door door = player.GetDoorFromView(5);
 
-            if (door == null || !door.IsBreakable || door.IsBroken || door.IsElevator || door.IsLocked)
+            if (player.IsCuffed)
             {
-                response = "Цель нераспознана (дверь нельзя выбить блять бобик).";
+                response = "Ты связан бобик";
 
                 return CommandResultType.Fail;
             }
 
-            if (door.IsGate)
+            if (door == null)
             {
-                response = "Бобик ты зачем ворота пытаешься выбить, нахуй пошел";
+                response = "Цель не распознана.";
 
                 return CommandResultType.Fail;
             }
 
-            door.DamageDoor(250, DoorDamageType.Grenade);
+            if (!door.Is<BreakableDoor>(out var breakable) || breakable.IsDestroyed || door.IsElevator || door.IsLocked && door.DoorLockType is DoorLockType.Lockdown2176 or DoorLockType.Regular079 || door.IsGate || IsBlocked(door.Type))
+            {
+                response = "Эту дверь нельзя сломать.";
+
+                return CommandResultType.Fail;
+            }
+
+            breakable.Damage(250, DoorDamageType.Grenade);
 
             return CommandResultType.Success;
         }
@@ -66,6 +78,15 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) && Subclass.Has<GigaChad>(player);
+        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.Role.Team is Team.FoundationForces or Team.ChaosInsurgency && (player.Role.Type != RoleTypeId.FacilityGuard || Subclass.Has<Assault>(player)) || Subclass.Has<Gang>(player) || Subclass.Has<Scp073>(player) || Subclass.Has<GigaChad>(player);
+
+        private bool IsBlocked(DoorType door) => door switch
+        {
+            DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB
+            or DoorType.HczArmory or DoorType.LczArmory
+            or DoorType.Scp049Armory or DoorType.Scp173Armory
+            or DoorType.HID or DoorType.Intercom => true,
+            _ => false,
+        };
     }
 }

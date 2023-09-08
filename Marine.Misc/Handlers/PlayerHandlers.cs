@@ -2,6 +2,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
@@ -64,7 +65,7 @@ namespace Marine.Misc.Handlers
         #region RemoteKeycard
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!_remoteKeycard.IsEnabled || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.IsBroken || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
+            if (!_remoteKeycard.IsEnabled || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
             {
                 return;
             }
@@ -81,7 +82,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            ev.IsAllowed = ev.Player.IsNTF && ev.Door.Type == DoorType.GateB || ((ev.Door.IsCheckpoint || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB) ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions));
+            ev.IsAllowed = (ev.Door.IsCheckpoint || ev.Door.Type is DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB) ? ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints) : ev.Player.CheckPermissions(ev.Door.RequiredPermissions.RequiredPermissions);
         }
 
         public void OnInteractingLocker(InteractingLockerEventArgs ev)
@@ -94,17 +95,23 @@ namespace Marine.Misc.Handlers
 
             bool hasAccess = ev.Player.CheckPermissions(ev.Chamber.RequiredPermissions);
             bool hasCheckpoints = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints);
-            bool hasContaiment = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo);
+            bool hasContainment = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo);
 
-            ev.IsAllowed = hasAccess || ev.Locker.Loot.All(x => !x.TargetItem.IsWeapon()) && hasCheckpoints && hasContaiment;
+            ev.IsAllowed = hasAccess || ev.Locker.Loot.All(x => !x.TargetItem.IsWeapon()) && hasCheckpoints && hasContainment;
         }
 
         public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
         {
-            ev.IsAllowed = ev.IsAllowed && Round.ElapsedTime.TotalMinutes >= 4;
+            if (Round.ElapsedTime.TotalMinutes < 4)
+            {
+                ev.IsAllowed = false;
 
-            if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>()
-                || ev.IsAllowed)
+                return;
+            }
+
+            ev.IsAllowed = ev.IsAllowed;
+
+            if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>() || ev.IsAllowed)
             {
                 return;
             }
@@ -127,7 +134,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if (ev.NewRole.GetSide() != Side.ChaosInsurgency || ev.NewRole == RoleTypeId.ClassD)
+            if (RoleExtensions.GetTeam(ev.NewRole) is not Team.FoundationForces or Team.ChaosInsurgency || ev.NewRole == RoleTypeId.FacilityGuard)
             {
                 return;
             }
@@ -182,7 +189,17 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            ev.Attacker.ShowHint($"<line-height=95%><voffset=12em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+            if (ev.DamageHandler.Type != DamageType.PocketDimension && ev.Amount > 0)
+            {
+                if (ev.Player.Health - ev.Amount <= 0)
+                {
+                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>Убит!</color></size></voffset>", 1);
+                }
+                else
+                {
+                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+                }
+            }
 
             if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || !_realisticEffects.IsEnabled)
             {
@@ -247,6 +264,11 @@ namespace Marine.Misc.Handlers
             ev.IsTriggerable = false;
         }
 
+        public void OnUsingRadioBattery(UsingRadioBatteryEventArgs ev)
+        {
+            ev.Drain *= 0.05f;
+        }
+
         public void OnUsedItem(UsedItemEventArgs ev)
         {
             if (ev.Item.Type == ItemType.Painkillers)
@@ -292,16 +314,6 @@ namespace Marine.Misc.Handlers
 
                 MySqlManager.Sync.Update(sync);
             }
-        }
-
-        public void OnProcessingHotkey(ProcessingHotkeyEventArgs ev)
-        {
-            if (!ev.IsAllowed || !ev.Player.IsAlive || ev.Player.IsHuman)
-            {
-                return;
-            }
-
-            ev.IsAllowed = false;
         }
 
         #endregion

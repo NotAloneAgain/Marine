@@ -117,7 +117,7 @@ namespace Marine.Commands.Commands
         {
             for (int index = 0; index < count - 1; index++)
             {
-                Pickup.CreateAndSpawn(item, player.Position, Quaternion.Euler(player.Rotation), player);
+                Pickup.CreateAndSpawn(item, player.Position, player.Rotation, player);
 
                 yield return Timing.WaitForSeconds(0.1f);
             }

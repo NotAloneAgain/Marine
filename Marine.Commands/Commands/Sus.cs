@@ -39,7 +39,7 @@ namespace Marine.Commands.Commands
 
             if (player.IsInventoryFull)
             {
-                Pickup.CreateAndSpawn(ItemType.GunAK, player.Position, Quaternion.Euler(player.Rotation), player);
+                Pickup.CreateAndSpawn(ItemType.GunAK, player.Position, player.Rotation, player);
             }
             else
             {

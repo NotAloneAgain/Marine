@@ -42,7 +42,7 @@ namespace Marine.LevelSystem.Handlers
 
         private IEnumerator<float> ShowHint(Player player, string text, float duration)
         {
-            yield return Timing.WaitForSeconds(player.CurrentHint.Duration);
+            yield return Timing.WaitForSeconds(player.CurrentHint?.Duration ?? 0.05f);
 
             player.ShowHint(text, duration);
         }

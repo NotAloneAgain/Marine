@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
@@ -39,7 +40,7 @@ namespace Marine.Commands.Commands
 
             Door door = player.GetDoorFromView(5);
 
-            if (door == null || !door.IsBreakable || door.IsBroken || door.IsElevator)
+            if (door == null || !door.Is<BreakableDoor>(out var breakable) || breakable.IsDestroyed || door.IsElevator)
             {
                 response = "Цель нераспознана (возможно, дверь нельзя сломать или она уже сломана).";
 
@@ -53,8 +54,8 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
-            door.IgnoredDamageTypes |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
+            breakable.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
+            breakable.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
 
             return CommandResultType.Success;
         }

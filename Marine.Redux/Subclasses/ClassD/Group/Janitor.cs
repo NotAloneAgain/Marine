@@ -5,6 +5,8 @@ using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Marine.Redux.Subclasses.ClassD.Group
 {
@@ -36,6 +38,11 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override int Chance { get; set; } = 12;
 
-        protected override void OnAssigned(Player player) => player.Teleport(RoomType.LczCrossing);
+        protected override void OnAssigned(Player player)
+        {
+            var rooms = Room.List.Where(room => room.Type == RoomType.LczTCross);
+
+            player.Position = rooms.ElementAt(Random.Range(0, rooms.Count())).Position + Vector3.up;
+        }
     }
 }

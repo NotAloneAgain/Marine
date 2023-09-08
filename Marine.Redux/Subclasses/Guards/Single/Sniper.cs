@@ -1,6 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
-using Marine.Redux.API;
+﻿using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
@@ -56,6 +54,6 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 15;
+        public override int Chance { get; set; } = 16;
     }
 }

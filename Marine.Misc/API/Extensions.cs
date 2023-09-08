@@ -1,8 +1,10 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Keycards;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 

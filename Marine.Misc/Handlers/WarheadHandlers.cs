@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Warhead;
 using Marine.Misc.API;
@@ -8,6 +9,8 @@ using Mirror;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+
+#pragma warning disable IDE0060
 
 namespace Marine.Misc.Handlers
 {
@@ -60,7 +63,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            Timing.RunCoroutine($"Warhead-{Random.Range(1, count)}.ogg"._PlayAudio("Музончик? Он самый!"));
+            Timing.RunCoroutine($"Warhead-{Random.Range(1, count)}.ogg"._PlayAudio());
         }
 
         public void OnStopping(StoppingEventArgs ev) => AudioExtensions.StopAudio();

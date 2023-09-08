@@ -23,6 +23,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="netstandard">
+      <HintPath>..\..\..\..\..\Users\stran\source\lib\netstandard.dll</HintPath>
+    </Reference>
     <Reference Include="SCPSLAudioApi">
       <HintPath>..\..\..\..\..\Users\stran\Downloads\SCPSLAudioApi.dll</HintPath>
     </Reference>
