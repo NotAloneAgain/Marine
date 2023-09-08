@@ -50,24 +50,14 @@ namespace Marine.Redux
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if ((int)ev.SpawnFlags != 3 || !ev.IsAllowed || (ev.Player.Group?.KickPower ?? 0) <= 0 && ev.Reason == SpawnReason.ForceClass)
+            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || (ev.Player.Group?.KickPower ?? 0) <= 0 && ev.Reason == SpawnReason.ForceClass)
             {
                 return;
             }
 
-            foreach (var subclass in Subclass.ReadOnlyCollection.Where(sub => sub.Role == ev.NewRole))
+            if (Subclass.HasAny(ev.Player))
             {
-                if (subclass.Can(ev.Player))
-                {
-                    subclass.Assign(ev.Player);
-
-                    return;
-                }
-
-                if (!subclass.Has(ev.Player))
-                {
-                    return;
-                }
+                var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
 
                 if (ev.Reason == SpawnReason.Escaped)
                 {
@@ -83,6 +73,23 @@ namespace Marine.Redux
                     SpawnReason.ForceClass => RevokeReason.Admin,
                     _ => RevokeReason.None
                 });
+            }
+            else
+            {
+                foreach (var subclass in Subclass.ReadOnlyCollection)
+                {
+                    if (subclass.Role != ev.NewRole)
+                    {
+                        continue;
+                    }
+
+                    if (subclass.Can(ev.Player))
+                    {
+                        subclass.Assign(ev.Player);
+
+                        break;
+                    }
+                }
             }
         }
     }
