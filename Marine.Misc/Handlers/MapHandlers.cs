@@ -73,7 +73,7 @@ namespace Marine.Misc.Handlers
                 ev.Pickup.Destroy();
             }
 
-            if (ev.Pickup.Type == ItemType.ParticleDisruptor)
+            if (ev.Pickup.Type is ItemType.ParticleDisruptor or ItemType.Jailbird)
             {
                 ev.IsAllowed = false;
 
@@ -92,7 +92,7 @@ namespace Marine.Misc.Handlers
                 ev.Player.AddItem(ItemType.Jailbird);
             }
 
-            if (ev.Item.Type == ItemType.ParticleDisruptor)
+            if (ev.Item.Type is ItemType.ParticleDisruptor or ItemType.Jailbird)
             {
                 ev.IsAllowed = false;
 

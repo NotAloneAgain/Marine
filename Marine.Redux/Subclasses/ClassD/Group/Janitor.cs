@@ -36,7 +36,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
-        public override int Chance { get; set; } = 12;
+        public override int Chance { get; set; } = 15;
 
         protected override void OnAssigned(Player player)
         {

@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Handlers;
 using Marine.Redux.API.Enums;
@@ -50,8 +51,33 @@ namespace Marine.Redux
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || (ev.Player.Group?.KickPower ?? 0) <= 0 && ev.Reason == SpawnReason.ForceClass)
+            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None)
             {
+                return;
+            }
+
+            if (ev.NewRole.GetTeam() is PlayerRoles.Team.Dead or PlayerRoles.Team.OtherAlive)
+            {
+                if (Subclass.HasAny(ev.Player))
+                {
+                    var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+
+                    if (ev.Reason == SpawnReason.Escaped)
+                    {
+                        subclass.OnEscaping(ev.Player);
+
+                        return;
+                    }
+
+                    subclass.Revoke(ev.Player, ev.Reason switch
+                    {
+                        SpawnReason.Died => RevokeReason.Died,
+                        SpawnReason.Destroyed => RevokeReason.Leave,
+                        SpawnReason.ForceClass => RevokeReason.Admin,
+                        _ => RevokeReason.None
+                    });
+                }
+
                 return;
             }
 

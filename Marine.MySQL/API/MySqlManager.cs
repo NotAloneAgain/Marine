@@ -4,14 +4,39 @@ namespace Marine.MySQL.API
 {
     public static class MySqlManager
     {
-        public static LevelsTable Levels { get; private set; }
+        private static LevelsTable _levels;
+        private static SyncTable _sync;
 
-        public static SyncTable Sync { get; private set; }
+        public static LevelsTable Levels
+        {
+            get
+            {
+                if (_levels.IsClosed)
+                {
+                    _levels.Open();
+                }
+
+                return _levels;
+            }
+        }
+
+        public static SyncTable Sync
+        {
+            get
+            {
+                if (_sync.IsClosed)
+                {
+                    _sync.Open();
+                }
+
+                return _sync;
+            }
+        }
 
         public static void Init(string connDiscord, string connScp)
         {
-            Levels = new(connScp);
-            Sync = new(connDiscord);
+            _levels = new(connScp);
+            _sync = new(connDiscord);
 
             Levels.Open();
             Sync.Open();

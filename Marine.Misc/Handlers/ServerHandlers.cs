@@ -19,7 +19,7 @@ namespace Marine.Misc.Handlers
     {
         #region Initialize
         private List<ZoneType> _zones;
-        private CoroutineHandle[] _coroutines;
+        private List<CoroutineHandle> _coroutines;
 
         internal ServerHandlers()
         {
@@ -31,23 +31,25 @@ namespace Marine.Misc.Handlers
                 ZoneType.HeavyContainment,
             };
 
-            _coroutines = new CoroutineHandle[10];
+            _coroutines = new (10);
         }
         #endregion
         #region Handlers
         public void OnRoundStarted()
         {
-            _coroutines[0] = Timing.RunCoroutine(_CleanupItems());
-            _coroutines[1] = Timing.RunCoroutine(_CleanupRagdolls());
-            _coroutines[2] = Timing.RunCoroutine(_RandomBlackout());
-            _coroutines[3] = Timing.RunCoroutine(_RandomLockdown());
+            _coroutines.Clear();
+
+            _coroutines.Add(Timing.RunCoroutine(_CleanupItems()));
+            _coroutines.Add(Timing.RunCoroutine(_CleanupRagdolls()));
+            _coroutines.Add(Timing.RunCoroutine(_RandomBlackout()));
+            _coroutines.Add(Timing.RunCoroutine(_RandomLockdown()));
 
             Server.FriendlyFire = false;
         }
 
         public void OnRestartingRound()
         {
-            Timing.KillCoroutines(_coroutines);
+            Timing.KillCoroutines(_coroutines.ToArray());
 
             Server.FriendlyFire = false;
         }
@@ -122,7 +124,7 @@ namespace Marine.Misc.Handlers
         {
             List<Pickup> toClear = new(500);
 
-            while (true)
+            while (Round.InProgress)
             {
                 yield return Timing.WaitForSeconds(300);
 
@@ -169,7 +171,7 @@ namespace Marine.Misc.Handlers
             HashSet<Ragdoll> toClear = new(100);
             HashSet<Ragdoll> recalling = new(25);
 
-            while (true)
+            while (Round.InProgress)
             {
                 yield return Timing.WaitForSeconds(120);
 
@@ -192,7 +194,7 @@ namespace Marine.Misc.Handlers
 
                 foreach (var ragdoll in Ragdoll.List)
                 {
-                    if (recalling.Contains(ragdoll))
+                    if (recalling.Contains(ragdoll) || !ragdoll.Role.IsHuman())
                     {
                         continue;
                     }

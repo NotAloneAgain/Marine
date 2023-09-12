@@ -54,7 +54,7 @@ namespace Marine.Misc.Handlers
         #region InfinityAmmo
         public void OnReloadingWeapon(ReloadingWeaponEventArgs ev)
         {
-            if (!_infinityAmmo.IsEnabled)
+            if (!_infinityAmmo.IsEnabled || ev.Player.IsHost || ev.Player.IsNPC)
             {
                 return;
             }
@@ -65,7 +65,7 @@ namespace Marine.Misc.Handlers
         #region RemoteKeycard
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!_remoteKeycard.IsEnabled || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
+            if (!_remoteKeycard.IsEnabled || ev.Player.IsHost || ev.Player.IsNPC || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace Marine.Misc.Handlers
         public void OnInteractingLocker(InteractingLockerEventArgs ev)
         {
             if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>()
-                || ev.IsAllowed)
+                || ev.IsAllowed || ev.Player.IsHost || ev.Player.IsNPC)
             {
                 return;
             }
@@ -102,14 +102,17 @@ namespace Marine.Misc.Handlers
 
         public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
         {
+            if (ev.Player.IsHost || ev.Player.IsNPC)
+            {
+                return;
+            }
+
             if (Round.ElapsedTime.TotalMinutes < 4)
             {
                 ev.IsAllowed = false;
 
                 return;
             }
-
-            ev.IsAllowed = ev.IsAllowed;
 
             if (!_remoteKeycard.IsEnabled || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>() || ev.IsAllowed)
             {
@@ -122,7 +125,7 @@ namespace Marine.Misc.Handlers
         #region BetterRoles
         public void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (!_betterRoles.IsEnabled || !ev.IsAllowed)
+            if (!_betterRoles.IsEnabled || ev.Player.IsHost || ev.Player.IsNPC || !ev.IsAllowed)
             {
                 return;
             }
@@ -163,7 +166,9 @@ namespace Marine.Misc.Handlers
                 || ev.Player.CurrentItem.Type is ItemType.ParticleDisruptor or ItemType.GunShotgun
                 || !ev.CanHurt
                 || ev.Target == null
-                || ev.Player.IsScp)
+                || ev.Player.IsScp
+                || ev.Player.IsHost
+                || ev.Player.IsNPC)
             {
                 return;
             }
@@ -186,47 +191,67 @@ namespace Marine.Misc.Handlers
         #region RealisticEffects
         public void OnHurting(HurtingEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Attacker == null || ev.Player == ev.Attacker || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.DamageHandler.Type == DamageType.Explosion || ev.DamageHandler.Type == DamageType.Scp018)
+            if (!ev.IsAllowed || ev.Attacker == null || ev.Attacker.IsNPC || ev.Attacker.IsHost || ev.Player.IsHost || ev.Player.IsNPC || ev.Player.UserId == ev.Attacker.UserId || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.DamageHandler.Type is DamageType.Explosion or DamageType.Scp018)
             {
                 return;
             }
 
-            if (ev.DamageHandler.Type != DamageType.PocketDimension && ev.Amount > 0)
+            bool isHuman = ev.DamageHandler.Type.IsHumanDamage();
+
+            Log.Info($"IsHuman: {isHuman}");
+
+            if (isHuman && ev.Amount > 0)
             {
                 if (ev.Player.Health - ev.Amount <= 0)
                 {
+                    Log.Info("Death");
+
                     ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>Убит!</color></size></voffset>", 1);
                 }
                 else
                 {
-                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
+                    Log.Info("Calculate amount");
+
+                    int amount = Mathf.RoundToInt(ev.Amount);
+
+                    Log.Info($"Amount: {amount}");
+
+                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>{amount}</color></size></voffset>", 1);
                 }
             }
 
+            Log.Info("HitMarker sended");
+
             if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || !_realisticEffects.IsEnabled)
             {
+                Log.Info("Skip...");
+
                 return;
             }
 
-            if (ev.DamageHandler.Type == DamageType.Scp0492)
+            Log.Info(ev.DamageHandler.Type);
+
+            if (isHuman)
             {
+                Log.Info("Bleeding Human");
+
+                ev.Player.EnableEffect(EffectType.Bleeding, _realisticEffects.BleedingShot, _realisticEffects.AddDuration);
+            }
+            else if (ev.DamageHandler.Type == DamageType.Scp0492)
+            {
+                Log.Info("Poisoned");
+
                 ev.Player.EnableEffect(EffectType.Poisoned, _realisticEffects.ZombiePoison, _realisticEffects.AddDuration);
 
                 return;
             }
-
-            if (ev.DamageHandler.Type == DamageType.Scp939)
+            else if (ev.DamageHandler.Type == DamageType.Scp939)
             {
+                Log.Info("Bleeding 939");
+
                 ev.Player.EnableEffect(EffectType.Bleeding, _realisticEffects.Bleeding939, _realisticEffects.AddDuration);
 
                 return;
-            }
-
-            if (ev.DamageHandler.Type is DamageType.Firearm
-                or DamageType.Revolver or DamageType.Crossvec or DamageType.AK or DamageType.E11Sr or DamageType.Fsp9
-                or DamageType.Logicer or DamageType.Shotgun or DamageType.Com45 or DamageType.Com18)
-            {
-                ev.Player.EnableEffect(EffectType.Bleeding, _realisticEffects.BleedingShot, _realisticEffects.AddDuration);
             }
         }
         #endregion
@@ -234,7 +259,7 @@ namespace Marine.Misc.Handlers
         public void OnDying(DyingEventArgs ev)
         {
             if (!_zombieInfection.IsEnabled
-                || !ev.Player.IsHuman || !ev.IsAllowed)
+                || !ev.Player.IsHuman || !ev.IsAllowed || ev.Player.IsHost || ev.Player.IsNPC)
             {
                 return;
             }
@@ -255,7 +280,7 @@ namespace Marine.Misc.Handlers
         #region Others
         public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
         {
-            if (!ev.IsAllowed || !Warhead.IsInProgress && ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Tesla.Room.AreLightsOff)
+            if (!ev.IsAllowed || ev.Player.IsHost || ev.Player.IsNPC || !Warhead.IsInProgress && ev.Player.Role.Team != Team.FoundationForces && ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Tesla.Room.AreLightsOff)
             {
                 return;
             }
@@ -268,6 +293,11 @@ namespace Marine.Misc.Handlers
 
         public void OnUsingRadioBattery(UsingRadioBatteryEventArgs ev)
         {
+            if (ev.Player.IsHost || ev.Player.IsNPC)
+            {
+                return;
+            }
+
             ev.Drain *= 0.05f;
         }
 
@@ -281,7 +311,7 @@ namespace Marine.Misc.Handlers
 
         public void OnVerified(VerifiedEventArgs ev)
         {
-            if (ev.Player == null || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
             {
                 return;
             }
@@ -303,7 +333,7 @@ namespace Marine.Misc.Handlers
 
         public void OnDestroying(DestroyingEventArgs ev)
         {
-            if (ev.Player == null || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || ev.Player.AuthenticationType is not AuthenticationType.Steam and not AuthenticationType.Discord)
             {
                 return;
             }
@@ -326,7 +356,7 @@ namespace Marine.Misc.Handlers
 
             var scp = player.Role.Base as Scp079Role;
 
-            if (scp == null || !scp.SubroutineModule.TryGetSubroutine(out Scp079LostSignalHandler lost))
+            if (scp == null || player.IsHost || player.IsNPC || !scp.SubroutineModule.TryGetSubroutine(out Scp079LostSignalHandler lost))
             {
                 yield break;
             }

@@ -132,7 +132,7 @@ namespace Marine.Redux.API.Subclasses
 
                 if (GameRole != RoleTypeId.None)
                 {
-                    player.Role.Set(GameRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                    player.Role.Set(GameRole, SpawnReason.None, RoleSpawnFlags.None);
                 }
 
                 if (SpawnInfo.Inventory != null && SpawnInfo.Inventory.Slots.Any())

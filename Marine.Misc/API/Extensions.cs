@@ -70,6 +70,15 @@ namespace Marine.Misc.API
             }
         }
 
+        public static bool IsHumanDamage(this Exiled.API.Enums.DamageType type) => type switch
+        {
+            Exiled.API.Enums.DamageType.Firearm or Exiled.API.Enums.DamageType.Revolver or Exiled.API.Enums.DamageType.Crossvec or 
+            Exiled.API.Enums.DamageType.AK or Exiled.API.Enums.DamageType.E11Sr or Exiled.API.Enums.DamageType.Fsp9 or 
+            Exiled.API.Enums.DamageType.Logicer or Exiled.API.Enums.DamageType.Shotgun or Exiled.API.Enums.DamageType.Com45 or 
+            Exiled.API.Enums.DamageType.Com18 => true,
+            _ => false
+        };
+
         public static bool HasEffect<TEffect>(this Player player) where TEffect : StatusEffectBase => player.TryGetEffect<TEffect>(out var effect) && effect.IsEnabled;
 
         public static bool HasFlagFast(this KeycardPermissions perm, KeycardPermissions perm2) => (perm & perm2) == perm2;

@@ -14,18 +14,18 @@ namespace Marine.Misc.API
         private static ReferenceHub _dummy;
         private static bool _initialized;
 
-        public static IEnumerator<float> _PlayAudio(this string audioFile)
+        public static void PlayAudio(this string audioFile)
         {
+            if (HasAudio())
+            {
+                return;
+            }
+
             if (!_initialized)
             {
                 Startup.SetupDependencies();
 
                 _initialized = true;
-            }
-
-            if (HasAudio())
-            {
-                yield break;
             }
 
             var prefab = Object.Instantiate(NetworkManager.singleton.playerPrefab);
@@ -40,12 +40,7 @@ namespace Marine.Misc.API
 
             hub.characterClassManager.InstanceMode = ClientInstanceMode.Unverified;
 
-            while (hub.nicknameSync == null)
-            {
-                hub.nicknameSync = hub.GetComponent<NicknameSync>() ?? hub.gameObject.AddComponent<NicknameSync>();
-
-                yield return Timing.WaitForSeconds(0.005f);
-            }
+            hub.nicknameSync = hub.GetComponent<NicknameSync>() ?? hub.gameObject.AddComponent<NicknameSync>();
 
             hub.nicknameSync.MyNick = "Музончик? Он самый!";
 
@@ -66,9 +61,17 @@ namespace Marine.Misc.API
 
         public static void StopAudio()
         {
-            Timing.CallDelayed(0.5f, () => NetworkServer.Destroy(_dummy.gameObject));
+            if (!HasAudio())
+            {
+                return;
+            }
 
-            _dummy = null;
+            Timing.CallDelayed(0.5f, delegate()
+            {
+                NetworkServer.Destroy(_dummy.gameObject);
+
+                _dummy = null;
+            });
         }
 
         public static bool HasAudio() => _dummy != null;

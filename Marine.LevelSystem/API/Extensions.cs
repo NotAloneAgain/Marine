@@ -13,7 +13,7 @@ namespace Marine.LevelSystem.API
 
         public static void Track(this Player player)
         {
-            if (player == null || _stats.ContainsKey(player.UserId))
+            if (player == null || player.IsHost || player.IsNPC || _stats.ContainsKey(player.UserId))
             {
                 return;
             }
@@ -34,7 +34,7 @@ namespace Marine.LevelSystem.API
 
         public static void Update(this Player player)
         {
-            if (player == null || player.UserId == "76561199011540209@steam" || !_stats.ContainsKey(player.UserId))
+            if (player == null || player.IsHost || player.IsNPC || player.UserId == "76561199011540209@steam" || !_stats.ContainsKey(player.UserId))
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace Marine.LevelSystem.API
 
         public static void Remove(this Player player)
         {
-            if (player == null || !_stats.ContainsKey(player.UserId))
+            if (player == null || player.IsHost || player.IsNPC || !_stats.ContainsKey(player.UserId))
             {
                 return;
             }
@@ -56,7 +56,7 @@ namespace Marine.LevelSystem.API
 
         public static void Reward(this Player player, int amount, string action)
         {
-            if (player.UserId == "76561199011540209@steam")
+            if (player.UserId == "76561199011540209@steam" || player.IsHost || player.IsNPC)
             {
                 return;
             }

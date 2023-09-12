@@ -66,14 +66,17 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         protected override void OnAssigned(Player player)
         {
-            base.OnAssigned(player);
-
             player.SendConsoleMessage(ConsoleMessage, "yellow");
         }
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player == null || !ev.IsAllowed || !Has(ev.Player))
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || !ev.IsAllowed || !Has(ev.Player))
+            {
+                return;
+            }
+
+            if (ev.Attacker?.IsHost ?? true || (ev.Attacker?.IsNPC ?? true))
             {
                 return;
             }

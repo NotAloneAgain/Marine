@@ -16,7 +16,7 @@ namespace Marine.LevelSystem.Handlers
 
         public void OnDied(DiedEventArgs ev)
         {
-            if (!Round.InProgress || ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
+            if (!Round.InProgress || ev.Player.IsHost || ev.Player.IsNPC || ev.Attacker == null || ev.Player == null || ev.Player == ev.Attacker || ev.TargetOldRole == RoleTypeId.Tutorial || ev.Attacker.Role.Type == RoleTypeId.Tutorial)
             {
                 return;
             }

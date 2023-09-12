@@ -111,7 +111,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             ev.Player.ShowHint($"<line-height=95%><size=90%><voffset=-20em><color={_model.GetColor().ToHex()}>Ваша моделька: {_model.Translate()}</color></size></voffset>", 5);
 
-            ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive && ply.UserId != Player.UserId), true);
+            ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive && ply.Role.Type != RoleTypeId.Scp079 && ply.UserId != Player.UserId), true);
         }
 
         private void OnHurting(HurtingEventArgs ev)

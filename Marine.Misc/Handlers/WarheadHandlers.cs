@@ -60,7 +60,9 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            Timing.RunCoroutine($"Warhead-{Random.Range(1, count)}.ogg"._PlayAudio());
+            var path = $"Warhead-{Random.Range(1, count)}.ogg";
+
+            AudioExtensions.PlayAudio(path);
         }
 
         public void OnStopping(StoppingEventArgs ev) => AudioExtensions.StopAudio();

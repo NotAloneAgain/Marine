@@ -1,6 +1,7 @@
 ﻿using Marine.MySQL.API.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Marine.MySQL.API.Tables
@@ -14,6 +15,8 @@ namespace Marine.MySQL.API.Tables
         public abstract string Name { get; }
 
         public abstract List<Column> Columns { get; }
+
+        public bool IsClosed => _connection.State is not ConnectionState.Open and not ConnectionState.Connecting;
 
         public void Open() => _connection.Open();
 
