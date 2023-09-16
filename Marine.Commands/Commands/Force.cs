@@ -97,7 +97,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            if (Player.Get(role).Count() == Swap.Slots[role])
+            if (Player.Get(role).Count() >= Swap.Slots[role])
             {
                 response = "Все слоты за данный объект заняты.";
 

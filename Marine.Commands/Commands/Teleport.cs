@@ -27,7 +27,7 @@ namespace Marine.Commands.Commands
 
         public override string Command { get; set; } = "tp";
 
-        public override string Description { get; set; } = "Команда для выдачи предмета.";
+        public override string Description { get; set; } = "Команда для телепортации.";
 
         public override List<CommandType> Types { get; set; } = new List<CommandType>(1) { CommandType.PlayerConsole };
 

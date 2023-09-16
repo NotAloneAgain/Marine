@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using HarmonyLib;
+using Marine.ScpSwap.API;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using RemoteAdmin;
@@ -93,10 +94,25 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
-                if (team == Team.SCPs && (players.Count(x => x.Role.Type == role) >= (role == RoleTypeId.Scp939 ? 2 : 1) || Round.ElapsedTime.TotalMinutes > 2))
+                if (team == Team.SCPs)
                 {
-                    response = "Уже прошло более двух минут с начала раунда";
-                    return false;
+                    if (Round.ElapsedTime.TotalMinutes > 2)
+                    {
+                        response = "Уже прошло более двух минут с начала раунда";
+                        return false;
+                    }
+
+                    if (players.Count(x => x.Role.Team == Team.SCPs) >= 5)
+                    {
+                        response = "SCP-Объектов и так 5 или более.";
+                        return false;
+                    }
+
+                    if (players.Count(x => x.Role.Type == role) >= Swap.Slots[role])
+                    {
+                        response = "Все слоты за данный объект заняты!";
+                        return false;
+                    }
                 }
 
                 int max = player.GroupName switch
