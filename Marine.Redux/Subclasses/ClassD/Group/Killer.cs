@@ -7,6 +7,7 @@ using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Marine.Redux.Subclasses.ClassD.Group
 {
@@ -64,6 +65,11 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         protected override void OnAssigned(Player player)
         {
+            if (player.HasItem(ItemType.GunCOM15))
+            {
+                return;
+            }
+
             foreach (var pickup in Pickup.List)
             {
                 if (pickup == null || pickup.Room == null || pickup.Room.Zone != ZoneType.LightContainment || pickup.Type != ItemType.GunCOM15)
@@ -82,7 +88,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 return;
             }
 
-            ev.Amount *= 1.1f;
+            ev.Amount = Mathf.Clamp(ev.Amount * 1.1f, 0, float.MaxValue);
         }
 
         private string Translate(RoomType type) => type switch

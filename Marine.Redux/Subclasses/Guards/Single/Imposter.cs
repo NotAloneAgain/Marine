@@ -16,6 +16,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
+            ShowInfo = true,
             Message = new("Ты - Предатель!\nТы тайный агент повстанцев хаоса, для того чтобы перевоплотиться используй .sus.", 12, true),
             Inventory = new()
             {
@@ -26,7 +27,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 5;
+        public override int Chance { get; set; } = 6;
 
         protected override void OnAssigned(Player player)
         {

@@ -13,7 +13,7 @@ namespace Marine.Commands.Patches.Generic
     [HarmonyPatch(typeof(GiveCommand), nameof(GiveCommand.Execute))]
     public static class GiveItemPatch
     {
-        private static Dictionary<int, Dictionary<string, int>> _usings;
+        private static Dictionary<string, int> _usings;
 
         static GiveItemPatch() => _usings = new();
 
@@ -83,35 +83,24 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    if (_usings.ContainsKey(Round.UptimeRounds))
-                    {
-                        var usings = _usings[Round.UptimeRounds];
-
-                        if (usings.ContainsKey(player.UserId))
-                        {
-                            usings[player.UserId]++;
-                        }
-                        else
-                        {
-                            usings.Add(player.UserId, 1);
-                        }
-                    }
-                    else
-                    {
-                        _usings.Add(Round.UptimeRounds, new() { { player.UserId, 1 } });
-                    }
-
                     int max = player.GroupName switch
                     {
                         "don3" or "don2" or "don1" => 3,
                         _ => 5
                     };
 
-                    if (_usings[Round.UptimeRounds][player.UserId] > max)
+                    if (!_usings.ContainsKey(player.UserId))
+                    {
+                        _usings.Add(player.UserId, 0);
+                    }
+
+                    if (_usings[player.UserId] > max)
                     {
                         response = "Ты уже максимальное кол-во раз использовал донат!";
                         return false;
                     }
+
+                    _usings[player.UserId]++;
                 }
 
                 foreach (ReferenceHub referenceHub in targets)
@@ -155,5 +144,7 @@ namespace Marine.Commands.Patches.Generic
             response = (errors == 0) ? string.Format("Done! The request affected {0} player{1}!", handled, (handled == 1) ? string.Empty : "s") : string.Format("Failed to execute the command! Failures: {0}\nLast error log:\n{1}", errors, text);
             return false;
         }
+
+        public static void Reset() => _usings.Clear();
     }
 }

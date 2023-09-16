@@ -22,6 +22,7 @@ namespace Marine.Redux
         public override void OnEnabled()
         {
             Player.ChangingRole += OnChangingRole;
+            Player.TriggeringTesla += OnTriggeringTesla;
 
             foreach (var subclass in Config.Subclasses.All)
             {
@@ -33,6 +34,7 @@ namespace Marine.Redux
 
         public override void OnDisabled()
         {
+            Player.TriggeringTesla -= OnTriggeringTesla;
             Player.ChangingRole -= OnChangingRole;
 
             foreach (var subclass in Config.Subclasses.All)
@@ -48,6 +50,26 @@ namespace Marine.Redux
         public override void OnRegisteringCommands() { }
 
         public override void OnUnregisteringCommands() { }
+
+        private void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
+        {
+            if (!Subclass.HasAny(ev.Player))
+            {
+                return;
+            }
+
+            var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+
+            if (subclass == null || subclass.CanTriggerTesla)
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+            ev.IsInIdleRange = false;
+            ev.IsInHurtingRange = false;
+            ev.IsTriggerable = false;
+        }
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {

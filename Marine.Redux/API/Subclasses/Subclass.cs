@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Marine.Misc.API;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
 using MEC;
@@ -40,6 +41,9 @@ namespace Marine.Redux.API.Subclasses
 
         [YamlMember(Alias = "keep_after_escape")]
         public virtual bool KeepAfterEscape { get; set; } = true;
+
+        [YamlMember(Alias = "can_trigger_tesla")]
+        public virtual bool CanTriggerTesla { get; set; } = true;
 
         [YamlMember(Alias = "chance")]
         public abstract int Chance { get; set; }
@@ -111,6 +115,8 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Assign(Player player)
         {
+            $"Assign {Name} to {player.Nickname} ({player.UserId})".AddLog();
+
             Timing.CallDelayed(0.00005f, delegate ()
             {
                 SpawnInfo.Message.Send(player);

@@ -2,10 +2,8 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
-using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Marine.Redux.Subclasses.ClassD.Single
@@ -26,22 +24,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ShowInfo = true,
             Message = new("Ты - SCP-073!\nУ тебя очень крепкое тело и неплохая регенерация (проверь консоль).", 15, true, "#009A63"),
             Health = 120,
-            Shield = new Shield(100, 100, -0.75f, 1, 6, true),
-            Inventory = new()
-            {
-                IsRandomable = false,
-                Slots = new List<Slot>(8)
-                {
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.KeycardJanitor, 100 },
-                    }, false),
-                    new Slot(new ItemChances()
-                    {
-                        { ItemType.ArmorLight, 100 },
-                    }, false)
-                }
-            }
+            Shield = new Shield(100, 100, -0.75f, 1, 5, true)
         };
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
@@ -71,49 +54,37 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || !ev.IsAllowed || !Has(ev.Player))
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || !ev.IsAllowed || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !Has(ev.Player))
             {
                 return;
             }
 
-            if (ev.Attacker?.IsHost ?? true || (ev.Attacker?.IsNPC ?? true))
-            {
-                return;
-            }
+            bool isScp = ev.Attacker.IsScp;
 
-            ev.Amount = ev.DamageHandler.Type switch
+            var amount = isScp switch
             {
-                DamageType.Scp049 or DamageType.Scp173 or DamageType.Scp096 => 40,
+                true => 100,
+                _ => ev.Amount / 3
+            };
+
+            ev.Amount = isScp switch
+            {
+                true => 40,
                 _ => ev.Amount / 2
             };
 
-            if (ev.DamageHandler.Type == DamageType.PocketDimension)
+            if (ev.Player.UserId == ev.Attacker.UserId || ev.Attacker.IsGodModeEnabled || ev.DamageHandler.Type is DamageType.PocketDimension)
             {
                 return;
             }
 
-            if (ev.Attacker != null && ev.Player.UserId != ev.Attacker.UserId && !ev.Attacker.IsGodModeEnabled)
+            if (ev.Attacker.Health - amount > 0)
             {
-                var amount = ev.Amount / 3;
-
-                if (ev.Attacker.IsScp)
-                {
-                    amount = 100;
-                }
-
-                if (ev.Attacker.Health - amount > 0)
-                {
-                    ev.Attacker.Hurt(ev.Player, amount, ev.DamageHandler.Type, default, "Отражение SCP-073");
-                }
-                else
-                {
-                    ev.Attacker.Kill("Отражение SCP-073");
-                }
+                ev.Attacker.Hurt(ev.Player, amount, ev.DamageHandler.Type, default, "Отражение SCP-073");
             }
-
-            if (ev.Amount == 0)
+            else
             {
-                ev.Amount = 20;
+                ev.Attacker.Kill("Отражение SCP-073");
             }
         }
     }

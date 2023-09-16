@@ -40,6 +40,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
 
+        public override bool CanTriggerTesla { get; set; } = false;
+
         public override int Chance { get; set; } = 10;
 
         public override void Subscribe()

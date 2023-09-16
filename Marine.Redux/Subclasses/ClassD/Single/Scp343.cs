@@ -9,6 +9,7 @@ using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Marine.Redux.Subclasses.ClassD.Single
 {
@@ -48,6 +49,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override RoleTypeId GameRole { get; set; } = RoleTypeId.Tutorial;
 
+        public override bool CanTriggerTesla { get; set; } = false;
+
         public override int Chance { get; set; } = 3;
 
         public override void Subscribe()
@@ -60,10 +63,20 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
+            Exiled.Events.Handlers.Player.ActivatingGenerator += OnActivatingGenerator;
+            Exiled.Events.Handlers.Player.ActivatingWarheadPanel += OnActivatingWarheadPanel;
+            Exiled.Events.Handlers.Player.EnteringKillerCollision += OnEnteringKillerCollision;
+            Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard += OnEnteringEnvironmentalHazard;
         }
 
         public override void Unsubscribe()
         {
+            Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard -= OnEnteringEnvironmentalHazard;
+            Exiled.Events.Handlers.Player.EnteringKillerCollision -= OnEnteringKillerCollision;
+            Exiled.Events.Handlers.Player.ActivatingWarheadPanel -= OnActivatingWarheadPanel;
+            Exiled.Events.Handlers.Player.ActivatingGenerator -= OnActivatingGenerator;
+            Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
@@ -116,12 +129,28 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (!Has(ev.Player))
+            bool isPlayer = Has(ev.Player);
+
+            if (!isPlayer && !Has(ev.Attacker))
             {
                 return;
             }
 
             ev.IsAllowed = false;
+
+            if (Player != null && isPlayer && ev.DamageHandler.Type == DamageType.Warhead)
+            {
+                ev.Player.Teleport(Room.Get(RoomType.Surface).Position + Vector3.up * 3);
+
+                return;
+            }
+
+            if (Player != null && isPlayer && ev.DamageHandler.Type == DamageType.Decontamination)
+            {
+                ev.Player.Teleport(Room.Get(RoomType.HczServers).Position + Vector3.up * 3);
+
+                return;
+            }
         }
 
         private void OnDying(DyingEventArgs ev)
@@ -168,7 +197,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnPickupingUpItem(PickingUpItemEventArgs ev)
         {
-            if (ev.Player != Player || !ev.IsAllowed)
+            if (!Has(ev.Player) || !ev.IsAllowed)
             {
                 return;
             }
@@ -181,6 +210,56 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 ev.IsAllowed = false;
                 ev.Player.AddItem(ItemType.Medkit);
             }
+        }
+
+        private void OnEnteringEnvironmentalHazard(EnteringEnvironmentalHazardEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
+        private void OnEnteringKillerCollision(EnteringKillerCollisionEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
+        private void OnActivatingWarheadPanel(ActivatingWarheadPanelEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
+        private void OnActivatingGenerator(ActivatingGeneratorEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+        }
+
+        private void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
         }
     }
 }

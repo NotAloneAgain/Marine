@@ -54,6 +54,6 @@ namespace Marine.Redux.Subclasses.Guards.Group
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 16;
+        public override int Chance { get; set; } = 18;
     }
 }

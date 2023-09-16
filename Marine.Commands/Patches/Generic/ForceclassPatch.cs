@@ -17,7 +17,7 @@ namespace Marine.Commands.Patches.Generic
     [HarmonyPatch(typeof(ForceRoleCommand), nameof(ForceRoleCommand.Execute))]
     public static class ForceclassPatch
     {
-        private static Dictionary<int, Dictionary<string, int>> _usings;
+        private static Dictionary<string, int> _usings;
 
         static ForceclassPatch() => _usings = new();
 
@@ -99,24 +99,6 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
-                if (_usings.ContainsKey(Round.UptimeRounds))
-                {
-                    var usings = _usings[Round.UptimeRounds];
-
-                    if (usings.ContainsKey(player.UserId))
-                    {
-                        usings[player.UserId]++;
-                    }
-                    else
-                    {
-                        usings.Add(player.UserId, 1);
-                    }
-                }
-                else
-                {
-                    _usings.Add(Round.UptimeRounds, new() { { player.UserId, 1 } });
-                }
-
                 int max = player.GroupName switch
                 {
                     "don3" => 3,
@@ -124,14 +106,23 @@ namespace Marine.Commands.Patches.Generic
                     _ => 5
                 };
 
-                if (_usings[Round.UptimeRounds][player.UserId] > max)
+                if (!_usings.ContainsKey(player.UserId))
+                {
+                    _usings.Add(player.UserId, 0);
+                }
+
+                if (_usings[player.UserId] > max)
                 {
                     response = "Ты уже максимальное кол-во раз использовал донат!";
                     return false;
                 }
+
+                _usings[player.UserId]++;
             }
 
             return true;
         }
+
+        public static void Reset() => _usings.Clear();
     }
 }

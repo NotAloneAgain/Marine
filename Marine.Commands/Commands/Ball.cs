@@ -62,11 +62,14 @@ namespace Marine.Commands.Commands
 
                 var projectile = pickup as Scp018Projectile;
 
-                float d = 1 - Mathf.Abs(Vector3.Dot(player.CameraTransform.forward, Vector3.up));
-                Vector3 forward = player.CameraTransform.forward;
-                Vector3 a2 = forward * d;
+                Vector3 a2 = player.CameraTransform.forward * (1 - Mathf.Abs(Vector3.Dot(player.CameraTransform.forward, Vector3.up)));
 
                 var rigidbody = projectile.GameObject.GetComponent<Rigidbody>();
+
+                if (rigidbody == null)
+                {
+                    continue;
+                }
 
                 rigidbody.velocity = InventorySystem.Items.ThrowableProjectiles.ThrowableNetworkHandler.GetLimitedVelocity(pickup.Position) + a2 * projectile.VelocityPerBounce;
             }

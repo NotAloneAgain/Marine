@@ -20,6 +20,7 @@ namespace Marine.Misc.Patches
             instructions.Clear();
 
             var listConstructor = typeof(List<AmmoPickup>).GetConstructor(new Type[1] { typeof(int) });
+
             instructions.InsertRange(index, new CodeInstruction[7]
             {
                 new CodeInstruction(OpCodes.Ldc_I4_0),

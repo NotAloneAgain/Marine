@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
-using MapGeneration.Distributors;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
@@ -14,19 +13,16 @@ namespace Marine.Commands.Commands
 {
     public class Teleport : CommandBase
     {
-        private static readonly IEnumerable<Type> _teleportObjects;
+        private static readonly Type[] _teleportObjects;
 
-        static Teleport() => _teleportObjects = new List<Type>(10)
+        static Teleport() => _teleportObjects = new Type[6]
         {
-            typeof(Camera),
             typeof(Door),
             typeof(Room),
             typeof(Player),
             typeof(Pickup),
-            typeof(Locker),
             typeof(TeslaGate),
             typeof(Window),
-            typeof(Generator)
         };
 
         public override string Command { get; set; } = "tp";

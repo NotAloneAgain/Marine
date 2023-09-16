@@ -57,6 +57,7 @@ namespace Marine.Misc.Handlers
         public void OnEndedRound(RoundEndedEventArgs ev)
         {
             Server.FriendlyFire = true;
+
             Timing.CallDelayed(5, AudioExtensions.StopAudio);
         }
         #endregion
@@ -71,15 +72,15 @@ namespace Marine.Misc.Handlers
                 {
                     var duration = Random.Range(10, 240);
 
-                    var zonesCount = Random.Range(0, 5);
+                    var zonesCount = Random.Range(1, 5);
 
                     HashSet<ZoneType> zones = zonesCount switch
                     {
-                        4 or 5 => new(1),
+                        5 => new(1),
                         _ => new(zonesCount)
                     };
 
-                    while (zonesCount > 0)
+                    for (int i = 0; i >= zonesCount; i++)
                     {
                         zones.Add(_zones[Random.Range(0, _zones.Count)]);
                     }
@@ -130,6 +131,16 @@ namespace Marine.Misc.Handlers
 
                 foreach (var item in Pickup.List)
                 {
+                    if (item == null)
+                    {
+                        if (toClear.Contains(item))
+                        {
+                            toClear.Remove(item);
+                        }
+
+                        continue;
+                    }
+
                     if (!item.IsSpawned || item.Room == null)
                     {
                         continue;

@@ -3,7 +3,10 @@ using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Keycards;
+using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Marine.Misc.API
@@ -72,10 +75,10 @@ namespace Marine.Misc.API
 
         public static bool IsHumanDamage(this Exiled.API.Enums.DamageType type) => type switch
         {
-            Exiled.API.Enums.DamageType.Firearm or Exiled.API.Enums.DamageType.Revolver or Exiled.API.Enums.DamageType.Crossvec or 
-            Exiled.API.Enums.DamageType.AK or Exiled.API.Enums.DamageType.E11Sr or Exiled.API.Enums.DamageType.Fsp9 or 
-            Exiled.API.Enums.DamageType.Logicer or Exiled.API.Enums.DamageType.Shotgun or Exiled.API.Enums.DamageType.Com45 or 
-            Exiled.API.Enums.DamageType.Com18 => true,
+            Exiled.API.Enums.DamageType.Firearm or Exiled.API.Enums.DamageType.Revolver or Exiled.API.Enums.DamageType.Crossvec or
+            Exiled.API.Enums.DamageType.AK or Exiled.API.Enums.DamageType.E11Sr or Exiled.API.Enums.DamageType.Fsp9 or
+            Exiled.API.Enums.DamageType.Logicer or Exiled.API.Enums.DamageType.Shotgun or Exiled.API.Enums.DamageType.Com45 or
+            Exiled.API.Enums.DamageType.Com18 or Exiled.API.Enums.DamageType.A7 or Exiled.API.Enums.DamageType.Fsp9 => true,
             _ => false
         };
 
@@ -88,5 +91,14 @@ namespace Marine.Misc.API
         public static bool InClosedLcz(this Pickup pickup) => pickup.Room.Zone == Exiled.API.Enums.ZoneType.LightContainment && Map.IsLczDecontaminated;
 
         public static bool InDetonatedComplex(this Pickup pickup) => pickup.Room.Zone != Exiled.API.Enums.ZoneType.Surface && Warhead.IsDetonated;
+
+        public static void AddLog(this string str)
+        {
+            string path = Path.Combine(Paths.Exiled, "Logs", "Debug.txt");
+
+            string print = $"{(File.Exists(path) ? "\n" : string.Empty)}[{DateTime.Now:G}] [{Assembly.GetCallingAssembly().FullName}] {str}";
+
+            File.AppendAllText(path, print);
+        }
     }
 }

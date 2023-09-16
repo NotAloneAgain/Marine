@@ -198,57 +198,35 @@ namespace Marine.Misc.Handlers
 
             bool isHuman = ev.DamageHandler.Type.IsHumanDamage();
 
-            Log.Info($"IsHuman: {isHuman}");
-
-            if (isHuman && ev.Amount > 0)
+            if ((isHuman || ev.Attacker.IsScp && ev.DamageHandler.Type is not DamageType.PocketDimension and DamageType.Poison) && ev.Amount > 0)
             {
                 if (ev.Player.Health - ev.Amount <= 0)
                 {
-                    Log.Info("Death");
-
-                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>Убит!</color></size></voffset>", 1);
+                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5em><size=90%><color=#E55807>Убит!</color></size></voffset>", 1);
                 }
                 else
                 {
-                    Log.Info("Calculate amount");
-
-                    int amount = Mathf.RoundToInt(ev.Amount);
-
-                    Log.Info($"Amount: {amount}");
-
-                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5.5em><size=90%><color=#E55807>{amount}</color></size></voffset>", 1);
+                    ev.Attacker.ShowHint($"<line-height=95%><voffset=5em><size=90%><color=#E55807>{Mathf.RoundToInt(ev.Amount)}</color></size></voffset>", 1);
                 }
             }
 
-            Log.Info("HitMarker sended");
-
-            if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || !_realisticEffects.IsEnabled)
+            if (!ev.Player.IsHuman || (ev.Player.CurrentArmor?.Type ?? ItemType.None) == ItemType.ArmorHeavy || !_realisticEffects.IsEnabled || ev.Player.Health - ev.Amount <= 0)
             {
-                Log.Info("Skip...");
-
                 return;
             }
 
-            Log.Info(ev.DamageHandler.Type);
-
             if (isHuman)
             {
-                Log.Info("Bleeding Human");
-
                 ev.Player.EnableEffect(EffectType.Bleeding, _realisticEffects.BleedingShot, _realisticEffects.AddDuration);
             }
             else if (ev.DamageHandler.Type == DamageType.Scp0492)
             {
-                Log.Info("Poisoned");
-
                 ev.Player.EnableEffect(EffectType.Poisoned, _realisticEffects.ZombiePoison, _realisticEffects.AddDuration);
 
                 return;
             }
             else if (ev.DamageHandler.Type == DamageType.Scp939)
             {
-                Log.Info("Bleeding 939");
-
                 ev.Player.EnableEffect(EffectType.Bleeding, _realisticEffects.Bleeding939, _realisticEffects.AddDuration);
 
                 return;
@@ -264,17 +242,16 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            if ((ev.DamageHandler.Type == DamageType.Poison || ev.Attacker != null && ev.Attacker.Role.Type == RoleTypeId.Scp0492)
-                && Random.Range(0, 101) >= 88)
+            if (ev.DamageHandler.Type != DamageType.Poison && (ev.Attacker == null || ev.Attacker.Role.Type != RoleTypeId.Scp0492) || Random.Range(0, 101) < 88)
             {
-                ev.IsAllowed = false;
-
-                ev.Player.DropAllWithoutKeycard();
-
-                ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived, RoleSpawnFlags.None);
-
                 return;
             }
+
+            ev.IsAllowed = false;
+
+            ev.Player.DropAllWithoutKeycard();
+
+            ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.Revived, RoleSpawnFlags.None);
         }
         #endregion
         #region Others
@@ -325,6 +302,11 @@ namespace Marine.Misc.Handlers
                 if (!ev.Player.RemoteAdminAccess || ev.Player.Group == null)
                 {
                     ev.Player.Group = _discordGroup;
+                }
+                else if (ev.Player.RankColor == "none")
+                {
+                    ev.Player.RankName = _discordGroup.BadgeText;
+                    ev.Player.RankColor = _discordGroup.BadgeColor;
                 }
 
                 MySqlManager.Sync.Update(sync);

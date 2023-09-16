@@ -15,6 +15,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
+            ShowInfo = true,
             Message = new("Ты - Информатор!\nТы владеешь информацией о том, какие SCP сбежали (проверь консоль).", 12, true),
             Inventory = new()
             {
@@ -25,7 +26,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
 
-        public override int Chance { get; set; } = 11;
+        public override int Chance { get; set; } = 12;
 
         protected override void OnAssigned(Player player)
         {

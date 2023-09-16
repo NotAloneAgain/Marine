@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using Exiled.Events.Handlers;
+using HarmonyLib;
+using Marine.Commands.Patches.Generic;
 using System;
 
 namespace Marine.Commands
@@ -24,12 +26,18 @@ namespace Marine.Commands
                 command.Subscribe();
             }
 
+            Server.RestartingRound += ForceclassPatch.Reset;
+            Server.RestartingRound += GiveItemPatch.Reset;
+
             _harmony.PatchAll(Assembly);
         }
 
         public override void OnUnregisteringCommands()
         {
             _harmony.UnpatchAll("swear.to.god");
+
+            Server.RestartingRound -= GiveItemPatch.Reset;
+            Server.RestartingRound -= ForceclassPatch.Reset;
 
             foreach (var command in Config.Commands.All)
             {
