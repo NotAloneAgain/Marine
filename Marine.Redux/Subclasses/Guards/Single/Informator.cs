@@ -30,18 +30,18 @@ namespace Marine.Redux.Subclasses.Guards.Single
 
         protected override void OnAssigned(Player player)
         {
-            string scps = "Сбежали: ";
+            var scps = "Сбежали: ";
 
-            bool first = true;
+            var first = true;
 
-            foreach (var ply in Player.List)
+            foreach (Player ply in Player.List)
             {
                 if (!ply.IsScp)
                 {
                     continue;
                 }
 
-                string suffix = first switch
+                var suffix = first switch
                 {
                     true => string.Empty,
                     false => ", "

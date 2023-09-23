@@ -38,7 +38,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            player.EnableEffect<Invisible>(15);
+            _ = player.EnableEffect<Invisible>(15);
 
             return CommandResultType.Success;
         }
@@ -50,6 +50,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Hidden>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Hidden>(player);
+        }
     }
 }

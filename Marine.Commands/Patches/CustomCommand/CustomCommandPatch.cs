@@ -10,17 +10,14 @@ namespace Marine.Commands.Patches
     {
         private protected readonly Regex _regex;
 
-        private protected CustomCommandPatch()
-        {
-            _regex = new Regex(@"(\d+)([smhdw])");
-        }
+        private protected CustomCommandPatch() => _regex = new Regex(@"(\d+)([smhdw])");
 
         public abstract List<object> ParseArguments(List<string> args, Player sender);
 
         public virtual List<Player> ParsePlayers(string input, Player sender)
         {
-            var result = new List<Player>(Server.MaxPlayerCount);
-
+            _ = new List<Player>(Server.MaxPlayerCount);
+            List<Player> result;
             switch (input)
             {
                 case "all":
@@ -46,7 +43,7 @@ namespace Marine.Commands.Patches
 
                             foreach (var data in splitted)
                             {
-                                if (!Player.TryGet(data, out var player))
+                                if (!Player.TryGet(data, out Player player))
                                 {
                                     continue;
                                 }
@@ -58,7 +55,7 @@ namespace Marine.Commands.Patches
                         {
                             result = new(1);
 
-                            if (!Player.TryGet(input, out var player))
+                            if (!Player.TryGet(input, out Player player))
                             {
                                 return result;
                             }
@@ -81,7 +78,7 @@ namespace Marine.Commands.Patches
             }
 
             TimeSpan result = TimeSpan.Zero;
-            var matches = _regex.Matches(input);
+            MatchCollection matches = _regex.Matches(input);
 
             foreach (Match match in matches)
             {
@@ -90,27 +87,16 @@ namespace Marine.Commands.Patches
                     throw new ArgumentException("Invalid input format. Duration must be a number followed by 's', 'm', 'h', 'd', or 'w'.");
                 }
 
-                char unit = match.Groups[2].Value[0];
-                switch (unit)
+                var unit = match.Groups[2].Value[0];
+                result += unit switch
                 {
-                    case 's':
-                        result += TimeSpan.FromSeconds(duration);
-                        break;
-                    case 'm':
-                        result += TimeSpan.FromMinutes(duration);
-                        break;
-                    case 'h':
-                        result += TimeSpan.FromHours(duration);
-                        break;
-                    case 'd':
-                        result += TimeSpan.FromDays(duration);
-                        break;
-                    case 'w':
-                        result += TimeSpan.FromDays(duration * 7);
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid input format. Duration unit must be 's', 'm', 'h', 'd', or 'w'.");
-                }
+                    's' => TimeSpan.FromSeconds(duration),
+                    'm' => TimeSpan.FromMinutes(duration),
+                    'h' => TimeSpan.FromHours(duration),
+                    'd' => TimeSpan.FromDays(duration),
+                    'w' => TimeSpan.FromDays(duration * 7),
+                    _ => throw new ArgumentException("Invalid input format. Duration unit must be 's', 'm', 'h', 'd', or 'w'."),
+                };
             }
 
             return result;

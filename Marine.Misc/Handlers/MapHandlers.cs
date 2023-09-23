@@ -14,7 +14,7 @@ namespace Marine.Misc.Handlers
     {
         public void OnGenerated()
         {
-            var door = Door.Get(DoorType.NukeSurface).As<BreakableDoor>();
+            BreakableDoor door = Door.Get(DoorType.NukeSurface).As<BreakableDoor>();
 
             door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Scp096;
             door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
@@ -24,27 +24,30 @@ namespace Marine.Misc.Handlers
             door.IgnoredDamage |= Interactables.Interobjects.DoorUtils.DoorDamageType.Grenade;
         }
 
-        public void OnPlacingBulletHole(PlacingBulletHoleEventArgs ev) => ev.IsAllowed = false;
+        public void OnPlacingBulletHole(PlacingBulletHoleEventArgs ev)
+        {
+            ev.IsAllowed = false;
+        }
 
         public void OnGeneratorActivated(GeneratorActivatingEventArgs ev)
         {
-            var computers = Player.Get(RoleTypeId.Scp079);
+            System.Collections.Generic.IEnumerable<Player> computers = Player.Get(RoleTypeId.Scp079);
 
             if (!ev.IsAllowed || computers.Count() == 0)
             {
                 return;
             }
 
-            int generators = Generator.List.Count(x => x.IsEngaged) + 1;
-            int xp = 50 * generators;
+            var generators = Generator.List.Count(x => x.IsEngaged) + 1;
+            var xp = 50 * generators;
 
-            foreach (var ply in computers)
+            foreach (Player ply in computers)
             {
                 var scp = ply.Role.Base as Scp079Role;
 
                 if (scp == null
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079TierManager>(out var tier)
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079LostSignalHandler>(out var lost))
+                    || !scp.SubroutineModule.TryGetSubroutine<Scp079TierManager>(out Scp079TierManager tier)
+                    || !scp.SubroutineModule.TryGetSubroutine<Scp079LostSignalHandler>(out Scp079LostSignalHandler lost))
                 {
                     continue;
                 }
@@ -68,7 +71,7 @@ namespace Marine.Misc.Handlers
             {
                 ev.IsAllowed = false;
 
-                Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
+                _ = Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
 
                 ev.Pickup.Destroy();
             }
@@ -89,7 +92,7 @@ namespace Marine.Misc.Handlers
 
                 ev.Item.Destroy();
 
-                ev.Player.AddItem(ItemType.Jailbird);
+                _ = ev.Player.AddItem(ItemType.Jailbird);
             }
 
             if (ev.Item.Type is ItemType.ParticleDisruptor or ItemType.Jailbird)

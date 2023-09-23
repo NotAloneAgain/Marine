@@ -45,7 +45,10 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Unsubscribe();
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
+        }
 
         protected override void OnAssigned(Player player)
         {
@@ -59,7 +62,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 return;
             }
 
-            bool isScp = ev.Attacker.IsScp;
+            var isScp = ev.Attacker.IsScp;
 
             var amount = isScp switch
             {

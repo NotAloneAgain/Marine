@@ -26,9 +26,9 @@ namespace Marine.Misc
         public override void OnEnabled()
         {
             _warhead = new();
-            _server  = new();
-            _player  = new(Config);
-            _map     = new();
+            _server = new();
+            _player = new(Config);
+            _map = new();
 
             _harmony = new(HarmonyId);
 
@@ -99,9 +99,9 @@ namespace Marine.Misc
 
             _harmony = null;
 
-            _map     = null;
-            _player  = null;
-            _server  = null;
+            _map = null;
+            _player = null;
+            _server = null;
             _warhead = null;
 
             base.OnDisabled();

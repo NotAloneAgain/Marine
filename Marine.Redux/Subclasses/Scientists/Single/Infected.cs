@@ -52,7 +52,10 @@ namespace Marine.Redux.Subclasses.Scientists.Single
             base.Unsubscribe();
         }
 
-        public override bool Can(in Player player) => base.Can(player) && Player.List.Count(x => x.Role.Type == RoleTypeId.Scp049) > 0;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && Player.List.Count(x => x.Role.Type == RoleTypeId.Scp049) > 0;
+        }
 
         private void OnDying(DyingEventArgs ev)
         {

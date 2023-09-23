@@ -29,6 +29,9 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override int Chance { get; set; } = 15;
 
-        public override bool Can(in Player player) => base.Can(player) && AnyHas<Gang>();
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && AnyHas<Gang>();
+        }
     }
 }

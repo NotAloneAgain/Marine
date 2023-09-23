@@ -40,7 +40,7 @@ namespace Marine.Commands.Commands
 
             Door door = player.GetDoorFromView(5);
 
-            if (door == null || !door.Is<BreakableDoor>(out var breakable) || breakable.IsDestroyed || door.IsElevator)
+            if (door == null || !door.Is<BreakableDoor>(out BreakableDoor breakable) || breakable.IsDestroyed || door.IsElevator)
             {
                 response = "Цель нераспознана (возможно, дверь нельзя сломать или она уже сломана).";
 
@@ -67,6 +67,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Engineer>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Engineer>(player);
+        }
     }
 }

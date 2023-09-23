@@ -3,7 +3,6 @@ using MEC;
 using Mirror;
 using SCPSLAudioApi;
 using SCPSLAudioApi.AudioCore;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -28,15 +27,15 @@ namespace Marine.Misc.API
                 _initialized = true;
             }
 
-            var prefab = Object.Instantiate(NetworkManager.singleton.playerPrefab);
+            GameObject prefab = Object.Instantiate(NetworkManager.singleton.playerPrefab);
 
             var conn = new FakeAudioConn(0);
 
-            var hub = prefab.GetComponent<ReferenceHub>();
+            ReferenceHub hub = prefab.GetComponent<ReferenceHub>();
 
             _dummy = hub;
 
-            NetworkServer.AddPlayerForConnection(conn, prefab);
+            _ = NetworkServer.AddPlayerForConnection(conn, prefab);
 
             hub.characterClassManager.InstanceMode = ClientInstanceMode.Unverified;
 
@@ -66,7 +65,7 @@ namespace Marine.Misc.API
                 return;
             }
 
-            Timing.CallDelayed(0.5f, delegate()
+            _ = Timing.CallDelayed(0.5f, delegate ()
             {
                 NetworkServer.Destroy(_dummy.gameObject);
 
@@ -74,6 +73,9 @@ namespace Marine.Misc.API
             });
         }
 
-        public static bool HasAudio() => _dummy != null;
+        public static bool HasAudio()
+        {
+            return _dummy != null;
+        }
     }
 }

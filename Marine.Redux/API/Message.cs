@@ -19,10 +19,7 @@ namespace Marine.Redux.API
             Show = show;
         }
 
-        public Message(string text, ushort duration, bool show, string color) : this(text, duration, show)
-        {
-            Color = color;
-        }
+        public Message(string text, ushort duration, bool show, string color) : this(text, duration, show) => Color = color;
 
         [YamlMember(Alias = "text")]
         public string Text { get; set; } = string.Empty;
@@ -48,7 +45,7 @@ namespace Marine.Redux.API
 
         public string Formate(in string text, RoleTypeId role)
         {
-            string color = string.IsNullOrEmpty(Color) || Color == default ? role.GetColor().ToHex() : Color;
+            var color = string.IsNullOrEmpty(Color) || Color == default ? role.GetColor().ToHex() : Color;
 
             return $"<line-height=95%><size=95%><voffset=-18em><color={color}>{text}</color></size></voffset>";
         }

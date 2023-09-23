@@ -45,8 +45,14 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override int Chance { get; set; } = 15;
 
-        protected override void OnAssigned(Player player) => player.IsUsingStamina = false;
+        protected override void OnAssigned(Player player)
+        {
+            player.IsUsingStamina = false;
+        }
 
-        protected override void OnRevoked(Player player, in RevokeReason reason) => player.IsUsingStamina = true;
+        protected override void OnRevoked(Player player, in RevokeReason reason)
+        {
+            player.IsUsingStamina = true;
+        }
     }
 }

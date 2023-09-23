@@ -31,7 +31,7 @@ namespace Marine.Commands.Commands
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
-            var level = MySqlManager.Levels.Select(player.UserId);
+            MySQL.API.Models.Statistics level = MySqlManager.Levels.Select(player.UserId);
 
             if (level == null)
             {

@@ -32,7 +32,7 @@ namespace Marine.MySQL.API.Models
         {
             exp *= ExpMultiplayer;
 
-            var time = DateTime.Now;
+            DateTime time = DateTime.Now;
 
             if (time.Hour is >= 8 and < 10 or >= 22)
             {

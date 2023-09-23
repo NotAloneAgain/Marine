@@ -27,14 +27,14 @@ namespace Marine.Redux.Patches.Sounds
                     return false;
                 }
 
-                BasicDoor basicDoor = dv as BasicDoor;
+                var basicDoor = dv as BasicDoor;
 
                 if (basicDoor == null)
                 {
                     return false;
                 }
 
-                if (hub == null || hub.gameObject == null || !Player.Dictionary.TryGetValue(hub.gameObject, out var player))
+                if (hub == null || hub.gameObject == null || !Player.Dictionary.TryGetValue(hub.gameObject, out Player player))
                 {
                     return false;
                 }
@@ -63,9 +63,9 @@ namespace Marine.Redux.Patches.Sounds
 
                 if (Subclass.HasAny(player))
                 {
-                    var subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
+                    Subclass subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
 
-                    if (subclass == null || subclass is Scp343)
+                    if (subclass is null or Scp343)
                     {
                         return false;
                     }

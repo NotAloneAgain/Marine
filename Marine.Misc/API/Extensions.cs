@@ -17,7 +17,7 @@ namespace Marine.Misc.API
         {
             for (var i = 0; i < player.Items.Distinct().Count(); i++)
             {
-                var item = player.Items.Select(x => x.Base).ElementAt(i);
+                InventorySystem.Items.ItemBase item = player.Items.Select(x => x.Base).ElementAt(i);
 
                 if (item.Category != ItemCategory.Keycard || item is not KeycardItem card || !card.Permissions.HasFlagFast(perms))
                 {
@@ -39,14 +39,14 @@ namespace Marine.Misc.API
 
             var items = player.Items.ToList();
 
-            foreach (var item in items)
+            foreach (Exiled.API.Features.Items.Item item in items)
             {
                 if (item.IsKeycard)
                 {
                     continue;
                 }
 
-                player.DropItem(item);
+                _ = player.DropItem(item);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Marine.Misc.API
             }
             else
             {
-                Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+                var bounds = new Bounds(Vector3.zero, Vector3.zero);
 
                 Renderer[] childRenderers = gameObject.GetComponentsInChildren<Renderer>();
 
@@ -73,30 +73,48 @@ namespace Marine.Misc.API
             }
         }
 
-        public static bool IsHumanDamage(this Exiled.API.Enums.DamageType type) => type switch
+        public static bool IsHumanDamage(this Exiled.API.Enums.DamageType type)
         {
-            Exiled.API.Enums.DamageType.Firearm or Exiled.API.Enums.DamageType.Revolver or Exiled.API.Enums.DamageType.Crossvec or
-            Exiled.API.Enums.DamageType.AK or Exiled.API.Enums.DamageType.E11Sr or Exiled.API.Enums.DamageType.Fsp9 or
-            Exiled.API.Enums.DamageType.Logicer or Exiled.API.Enums.DamageType.Shotgun or Exiled.API.Enums.DamageType.Com45 or
-            Exiled.API.Enums.DamageType.Com18 or Exiled.API.Enums.DamageType.A7 or Exiled.API.Enums.DamageType.Fsp9 => true,
-            _ => false
-        };
+            return type switch
+            {
+                Exiled.API.Enums.DamageType.Firearm or Exiled.API.Enums.DamageType.Revolver or Exiled.API.Enums.DamageType.Crossvec or
+                Exiled.API.Enums.DamageType.AK or Exiled.API.Enums.DamageType.E11Sr or Exiled.API.Enums.DamageType.Fsp9 or
+                Exiled.API.Enums.DamageType.Logicer or Exiled.API.Enums.DamageType.Shotgun or Exiled.API.Enums.DamageType.Com45 or
+                Exiled.API.Enums.DamageType.Com18 or Exiled.API.Enums.DamageType.A7 or Exiled.API.Enums.DamageType.Fsp9 => true,
+                _ => false
+            };
+        }
 
-        public static bool HasEffect<TEffect>(this Player player) where TEffect : StatusEffectBase => player.TryGetEffect<TEffect>(out var effect) && effect.IsEnabled;
+        public static bool HasEffect<TEffect>(this Player player) where TEffect : StatusEffectBase
+        {
+            return player.TryGetEffect<TEffect>(out TEffect effect) && effect.IsEnabled;
+        }
 
-        public static bool HasFlagFast(this KeycardPermissions perm, KeycardPermissions perm2) => (perm & perm2) == perm2;
+        public static bool HasFlagFast(this KeycardPermissions perm, KeycardPermissions perm2)
+        {
+            return (perm & perm2) == perm2;
+        }
 
-        public static bool IsCloseToChambers(this Vector3 pos) => Map.Lockers.Select(locker => locker.Chambers).Any(chambers => chambers.Any(chamber => chamber.gameObject.FindBounds().Contains(pos)));
+        public static bool IsCloseToChambers(this Vector3 pos)
+        {
+            return Map.Lockers.Select(locker => locker.Chambers).Any(chambers => chambers.Any(chamber => chamber.gameObject.FindBounds().Contains(pos)));
+        }
 
-        public static bool InClosedLcz(this Pickup pickup) => pickup.Room.Zone == Exiled.API.Enums.ZoneType.LightContainment && Map.IsLczDecontaminated;
+        public static bool InClosedLcz(this Pickup pickup)
+        {
+            return pickup.Room.Zone == Exiled.API.Enums.ZoneType.LightContainment && Map.IsLczDecontaminated;
+        }
 
-        public static bool InDetonatedComplex(this Pickup pickup) => pickup.Room.Zone != Exiled.API.Enums.ZoneType.Surface && Warhead.IsDetonated;
+        public static bool InDetonatedComplex(this Pickup pickup)
+        {
+            return pickup.Room.Zone != Exiled.API.Enums.ZoneType.Surface && Warhead.IsDetonated;
+        }
 
         public static void AddLog(this string str)
         {
-            string path = Path.Combine(Paths.Exiled, "Logs", "Debug.txt");
+            var path = Path.Combine(Paths.Exiled, "Logs", "Debug.txt");
 
-            string print = $"{(File.Exists(path) ? "\n" : string.Empty)}[{DateTime.Now:G}] [{Assembly.GetCallingAssembly().FullName}] {str}";
+            var print = $"{(File.Exists(path) ? "\n" : string.Empty)}[{DateTime.Now:G}] [{Assembly.GetCallingAssembly().FullName}] {str}";
 
             File.AppendAllText(path, print);
         }

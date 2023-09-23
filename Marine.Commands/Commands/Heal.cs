@@ -101,7 +101,7 @@ namespace Marine.Commands.Commands
                     }
             }
 
-            player.RemoveHeldItem();
+            _ = player.RemoveHeldItem();
             target.ShowHint($"<b>Вас подлатал {player.CustomName}</b>", 4);
 
             return CommandResultType.Success;
@@ -114,6 +114,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Medic>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Medic>(player);
+        }
     }
 }

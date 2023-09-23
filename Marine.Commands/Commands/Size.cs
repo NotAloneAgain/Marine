@@ -66,7 +66,7 @@ namespace Marine.Commands.Commands
                     list.Add(player);
                 }
 
-                foreach (var ply in list)
+                foreach (Player ply in list)
                 {
                     ply.Scale = (Vector3)arguments[1];
                 }
@@ -96,7 +96,7 @@ namespace Marine.Commands.Commands
             }
             else if (count == 2)
             {
-                if (!TryParsePlayers(input[0], out var players) || !float.TryParse(input[1], out var value))
+                if (!TryParsePlayers(input[0], out List<Player> players) || !float.TryParse(input[1], out var value))
                 {
                     return false;
                 }
@@ -119,7 +119,7 @@ namespace Marine.Commands.Commands
             }
             else if (count == 4)
             {
-                if (!TryParsePlayers(input[0], out var players) || !float.TryParse(input[1], out var x) || !float.TryParse(input[2], out var y) || !float.TryParse(input[3], out var z))
+                if (!TryParsePlayers(input[0], out List<Player> players) || !float.TryParse(input[1], out var x) || !float.TryParse(input[2], out var y) || !float.TryParse(input[3], out var z))
                 {
                     return false;
                 }

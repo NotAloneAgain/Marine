@@ -7,7 +7,6 @@ using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.Guards.Single;
 using PlayerRoles;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Marine.Commands.Commands
 {
@@ -39,11 +38,11 @@ namespace Marine.Commands.Commands
 
             if (player.IsInventoryFull)
             {
-                Pickup.CreateAndSpawn(ItemType.GunAK, player.Position, player.Rotation, player);
+                _ = Pickup.CreateAndSpawn(ItemType.GunAK, player.Position, player.Rotation, player);
             }
             else
             {
-                player.AddItem(ItemType.GunAK);
+                _ = player.AddItem(ItemType.GunAK);
             }
 
             return CommandResultType.Success;
@@ -56,6 +55,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.Role.Type == RoleTypeId.FacilityGuard && Subclass.Has<Imposter>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || player.Role.Type == RoleTypeId.FacilityGuard && Subclass.Has<Imposter>(player);
+        }
     }
 }

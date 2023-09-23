@@ -40,14 +40,12 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override bool Has(in Player player)
         {
-            if (player == null)
-            {
-                return false;
-            }
-
-            return Player?.UserId == player.UserId;
+            return player != null && Player?.UserId == player.UserId;
         }
 
-        public override bool Can(in Player player) => base.Can(player) && Player == null;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && Player == null;
+        }
     }
 }

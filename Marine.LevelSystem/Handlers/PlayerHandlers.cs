@@ -10,9 +10,15 @@ namespace Marine.LevelSystem.Handlers
 {
     internal sealed class PlayerHandlers
     {
-        public void OnVerified(VerifiedEventArgs ev) => ev.Player.Track();
+        public void OnVerified(VerifiedEventArgs ev)
+        {
+            ev.Player.Track();
+        }
 
-        public void OnDestroying(DestroyingEventArgs ev) => ev.Player.Remove();
+        public void OnDestroying(DestroyingEventArgs ev)
+        {
+            ev.Player.Remove();
+        }
 
         public void OnDied(DiedEventArgs ev)
         {
@@ -50,8 +56,14 @@ namespace Marine.LevelSystem.Handlers
             ev.Player.Cuffer?.Reward(50, "вывод связанного противника");
         }
 
-        public void OnGainingExperience(GainingExperienceEventArgs ev) => ev.Player.Reward(ev.Amount, "полезное действие за SCP-079");
+        public void OnGainingExperience(GainingExperienceEventArgs ev)
+        {
+            ev.Player.Reward(ev.Amount, "полезное действие за SCP-079");
+        }
 
-        public void OnFinishingRecall(FinishingRecallEventArgs ev) => ev.Player.Reward(25, "поднятие зомби");
+        public void OnFinishingRecall(FinishingRecallEventArgs ev)
+        {
+            ev.Player.Reward(25, "поднятие зомби");
+        }
     }
 }

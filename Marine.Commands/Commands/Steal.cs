@@ -17,9 +17,7 @@ namespace Marine.Commands.Commands
         private const string StealFailed = "<line-height=95%><size=95%><voffset=-20em><color=#BC5D58>Вы услышали как что-то шуршит в ваших карманах... {0} выглядит подозрительным...</color></size></voffset>";
         private static readonly IReadOnlyList<ItemType> _banned;
 
-        static Steal()
-        {
-            _banned = new List<ItemType>
+        static Steal() => _banned = new List<ItemType>
             {
                  ItemType.ParticleDisruptor,
                  ItemType.MicroHID,
@@ -35,7 +33,6 @@ namespace Marine.Commands.Commands
                  ItemType.SCP244a,
                  ItemType.SCP244b,
             };
-        }
         #endregion
 
         public override string Command { get; set; } = "steal";
@@ -95,7 +92,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            var items = target.Items.Where(item => item != null && item != target.CurrentItem && !_banned.Contains(item.Type)).Select(x => x.Type).Distinct();
+            IEnumerable<ItemType> items = target.Items.Where(item => item != null && item != target.CurrentItem && !_banned.Contains(item.Type)).Select(x => x.Type).Distinct();
 
             if (items.Count() == 0)
             {
@@ -113,8 +110,8 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            player.AddItem(targetItem);
-            target.RemoveItem(target.Items.First(item => item.Type == targetItem));
+            _ = player.AddItem(targetItem);
+            _ = target.RemoveItem(target.Items.First(item => item.Type == targetItem));
 
             if (Random.Range(0, 101) >= 60)
             {
@@ -133,6 +130,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Thief>(player) || Subclass.Has<Pickpocket>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Thief>(player) || Subclass.Has<Pickpocket>(player);
+        }
     }
 }

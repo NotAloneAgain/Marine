@@ -52,7 +52,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"INSERT INTO {Name} ({string.Join(", ", Columns.Select(column => column.Name))}) VALUES ('{stats.UserId}', {stats.Level}, {stats.Experience}, {stats.ExpMultiplayer});"
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override void Update(Statistics stats)
@@ -68,7 +68,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"UPDATE {Name} SET level={stats.Level}, experience={stats.Experience}, multiplayer={stats.ExpMultiplayer} WHERE user_id='{stats.UserId}';"
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override void Delete(Statistics stats)
@@ -84,7 +84,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"DELETE FROM {Name} WHERE user_id='{stats.UserId}';"
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override Statistics Select(string key)
@@ -102,7 +102,7 @@ namespace Marine.MySQL.API.Tables
 
             Statistics level = null;
 
-            using (var reader = command.ExecuteReader())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {

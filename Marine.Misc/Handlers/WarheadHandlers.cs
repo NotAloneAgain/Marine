@@ -4,7 +4,6 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Warhead;
 using Marine.Misc.API;
-using MEC;
 using Mirror;
 using System.IO;
 using System.Linq;
@@ -65,7 +64,10 @@ namespace Marine.Misc.Handlers
             AudioExtensions.PlayAudio(path);
         }
 
-        public void OnStopping(StoppingEventArgs ev) => AudioExtensions.StopAudio();
+        public void OnStopping(StoppingEventArgs ev)
+        {
+            AudioExtensions.StopAudio();
+        }
 
         public void OnDetonated()
         {
@@ -73,7 +75,7 @@ namespace Marine.Misc.Handlers
             OnDetonatedDoorAction(Door.Get(DoorType.EscapePrimary));
             OnDetonatedDoorAction(Door.Get(DoorType.EscapeSecondary));
 
-            foreach (var item in Pickup.List)
+            foreach (Pickup item in Pickup.List)
             {
                 if (item.Room != null && item.Room.Zone == ZoneType.Surface)
                 {
@@ -83,7 +85,7 @@ namespace Marine.Misc.Handlers
                 item.Destroy();
             }
 
-            foreach (var ragdoll in Ragdoll.List)
+            foreach (Ragdoll ragdoll in Ragdoll.List)
             {
                 if (ragdoll.Room == null || ragdoll.Room.Zone == ZoneType.Surface)
                 {
@@ -115,7 +117,7 @@ namespace Marine.Misc.Handlers
                 {
                     gameObject.SetActive(false);
 
-                    var identity = gameObject.GetComponent<NetworkIdentity>();
+                    NetworkIdentity identity = gameObject.GetComponent<NetworkIdentity>();
 
                     if (identity == null)
                     {
@@ -136,7 +138,7 @@ namespace Marine.Misc.Handlers
                 {
                     gameObject.SetActive(false);
 
-                    var identity = gameObject.GetComponent<NetworkIdentity>();
+                    NetworkIdentity identity = gameObject.GetComponent<NetworkIdentity>();
 
                     if (identity == null)
                     {
@@ -152,18 +154,14 @@ namespace Marine.Misc.Handlers
 
         private static bool IsGameObjectCanBeInactive(GameObject gameObject)
         {
-            if (gameObject.tag is "GeneratorSpawn" or "Finish" or "AnticheatIgnore" or "LiftTarget" || gameObject.tag.Contains("Door") || gameObject.tag.Contains("Button"))
-            {
-                return true;
-            }
-
-            return _optionalObjects.Contains(gameObject.name) || gameObject.name.Contains("Button") || gameObject.name.Contains("Door") || gameObject.name.Contains("Intercom");
+            return gameObject.tag is "GeneratorSpawn" or "Finish" or "AnticheatIgnore" or "LiftTarget" || gameObject.tag.Contains("Door") || gameObject.tag.Contains("Button")
+|| _optionalObjects.Contains(gameObject.name) || gameObject.name.Contains("Button") || gameObject.name.Contains("Door") || gameObject.name.Contains("Intercom");
         }
 
         [System.Obsolete]
         private static bool IsGameObjectCanBeDestroyed(GameObject gameObject)
         {
-            var position = gameObject.transform.position;
+            Vector3 position = gameObject.transform.position;
 
             return position.y is > 1050 or < -50 && (position.y is > 2 or < -2 || position.x is > 10 or < -10 || position.z is > 10 or < -10);
         }

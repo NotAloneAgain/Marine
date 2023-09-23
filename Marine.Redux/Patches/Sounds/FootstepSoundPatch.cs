@@ -26,7 +26,7 @@ namespace Marine.Redux.Patches.Sounds
                     return false;
                 }
 
-                if (model.OwnerHub == null || model.OwnerHub.gameObject == null || !Player.Dictionary.TryGetValue(model.OwnerHub.gameObject, out var player))
+                if (model.OwnerHub == null || model.OwnerHub.gameObject == null || !Player.Dictionary.TryGetValue(model.OwnerHub.gameObject, out Player player))
                 {
                     return false;
                 }
@@ -53,7 +53,7 @@ namespace Marine.Redux.Patches.Sounds
 
                 if (Subclass.HasAny(player))
                 {
-                    var subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
+                    Subclass subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
 
                     if (subclass == null || !subclass.CanSoundFootstep)
                     {

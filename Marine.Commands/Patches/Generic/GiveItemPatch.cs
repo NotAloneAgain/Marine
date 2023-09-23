@@ -13,7 +13,7 @@ namespace Marine.Commands.Patches.Generic
     [HarmonyPatch(typeof(GiveCommand), nameof(GiveCommand.Execute))]
     public static class GiveItemPatch
     {
-        private static Dictionary<string, int> _usings;
+        private static readonly Dictionary<string, int> _usings;
 
         static GiveItemPatch() => _usings = new();
 
@@ -48,9 +48,9 @@ namespace Marine.Commands.Patches.Generic
                 return false;
             }
 
-            int errors = 0;
-            int handled = 0;
-            string text = string.Empty;
+            var errors = 0;
+            var handled = 0;
+            var text = string.Empty;
             if (targets != null)
             {
                 var player = Player.Get(sender);
@@ -69,7 +69,7 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    var item = items.First();
+                    ItemType item = items.First();
 
                     if (Round.ElapsedTime.TotalMinutes < 5 && (item.IsWeapon() || item is ItemType.GrenadeHE or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018))
                     {
@@ -83,7 +83,7 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    int max = player.GroupName switch
+                    var max = player.GroupName switch
                     {
                         "don3" or "don2" or "don1" => 3,
                         _ => 5
@@ -145,6 +145,9 @@ namespace Marine.Commands.Patches.Generic
             return false;
         }
 
-        public static void Reset() => _usings.Clear();
+        public static void Reset()
+        {
+            _usings.Clear();
+        }
     }
 }

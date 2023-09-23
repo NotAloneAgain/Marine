@@ -51,7 +51,7 @@ namespace Marine.LevelSystem.API
 
             player.Update();
 
-            _stats.Remove(player.UserId);
+            _ = _stats.Remove(player.UserId);
         }
 
         public static void Reward(this Player player, int amount, string action)
@@ -61,7 +61,7 @@ namespace Marine.LevelSystem.API
                 return;
             }
 
-            var stats = _stats[player.UserId];
+            Statistics stats = _stats[player.UserId];
 
             stats.ApplyModifiers(ref amount);
 

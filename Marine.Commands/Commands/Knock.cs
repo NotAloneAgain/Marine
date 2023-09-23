@@ -59,14 +59,14 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            if (!door.Is<BreakableDoor>(out var breakable) || breakable.IsDestroyed || door.IsElevator || door.IsLocked && door.DoorLockType is DoorLockType.Lockdown2176 or DoorLockType.Regular079 || door.IsGate || IsBlocked(door.Type))
+            if (!door.Is<BreakableDoor>(out BreakableDoor breakable) || breakable.IsDestroyed || door.IsElevator || door.IsLocked && door.DoorLockType is DoorLockType.Lockdown2176 or DoorLockType.Regular079 || door.IsGate || IsBlocked(door.Type))
             {
                 response = "Эту дверь нельзя сломать.";
 
                 return CommandResultType.Fail;
             }
 
-            breakable.Damage(250, DoorDamageType.Grenade);
+            _ = breakable.Damage(250, DoorDamageType.Grenade);
 
             return CommandResultType.Success;
         }
@@ -78,15 +78,21 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.Role.Team is Team.FoundationForces or Team.ChaosInsurgency && (player.Role.Type != RoleTypeId.FacilityGuard || Subclass.Has<Assault>(player)) || Subclass.Has<Gang>(player) || Subclass.Has<Scp073>(player) || Subclass.Has<GigaChad>(player);
-
-        private bool IsBlocked(DoorType door) => door switch
+        public override bool CheckPermissions(Player player)
         {
-            DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB
-            or DoorType.HczArmory or DoorType.LczArmory
-            or DoorType.Scp049Armory or DoorType.Scp173Armory
-            or DoorType.HID or DoorType.Intercom => true,
-            _ => false,
-        };
+            return base.CheckPermissions(player) || player.Role.Team is Team.FoundationForces or Team.ChaosInsurgency && (player.Role.Type != RoleTypeId.FacilityGuard || Subclass.Has<Assault>(player)) || Subclass.Has<Gang>(player) || Subclass.Has<Scp073>(player) || Subclass.Has<GigaChad>(player);
+        }
+
+        private bool IsBlocked(DoorType door)
+        {
+            return door switch
+            {
+                DoorType.CheckpointArmoryA or DoorType.CheckpointArmoryB
+                or DoorType.HczArmory or DoorType.LczArmory
+                or DoorType.Scp049Armory or DoorType.Scp173Armory
+                or DoorType.HID or DoorType.Intercom => true,
+                _ => false,
+            };
+        }
     }
 }

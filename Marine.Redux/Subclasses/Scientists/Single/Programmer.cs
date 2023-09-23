@@ -62,7 +62,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         {
             player.Teleport(DoorType.LczCafe);
 
-            Timing.RunCoroutine(_ShowData(player));
+            _ = Timing.RunCoroutine(_ShowData(player));
         }
 
         private void OnRespawningTeam(RespawningTeamEventArgs ev)
@@ -81,11 +81,11 @@ namespace Marine.Redux.Subclasses.Scientists.Single
             {
                 yield return Timing.WaitForSeconds(60);
 
-                var list = Player.List.Where(x => x.IsAlive && x.UserId != player.UserId && x.LeadingTeam == player.LeadingTeam && !x.IsTutorial);
+                IEnumerable<Player> list = Player.List.Where(x => x.IsAlive && x.UserId != player.UserId && x.LeadingTeam == player.LeadingTeam && !x.IsTutorial);
 
                 if (list.Any())
                 {
-                    foreach (var ply in list)
+                    foreach (Player ply in list)
                     {
                         player.SendConsoleMessage($"{ply.CustomName} - {ply.Role.Type.Translate()}: {ParseState(ply)} {ParseDistance(player, ply)}", ply.Role.Team switch
                         {
@@ -102,19 +102,16 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         private string ParseDistance(Player player, Player ply)
         {
-            if (player.Zone != ply.Zone)
-            {
-                return "находиться " + ply.Zone switch
+            return player.Zone != ply.Zone
+                ? "находиться " + ply.Zone switch
                 {
                     ZoneType.LightContainment => "в лёгкой зоне содержания",
                     ZoneType.HeavyContainment => "в тяжёлой зоне содержания",
                     ZoneType.Entrance => "в офисной зоне",
                     ZoneType.Surface => "на поверхности",
                     _ => "в неизвестной зоне",
-                };
-            }
-
-            return $"находиться в {GetSuffix(Vector3.Distance(player.Position, ply.Position))}";
+                }
+                : $"находиться в {GetSuffix(Vector3.Distance(player.Position, ply.Position))}";
         }
 
         private string ParseState(Player ply)
@@ -126,37 +123,27 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
             var percent = ply.Health / ply.MaxHealth * 100;
 
-            if (ply.IsScp)
-            {
-                return "состояние неизвестно";
-            }
-
-            return percent switch
-            {
-                > 75 => "в норме",
-                > 50 => "потрепан",
-                > 25 => "ранен",
-                > 0 => "при смерти",
-                _ => "ты че бля еже какой нахуй, ArgumentOutOfRangeException бы выкинуть, но тогда абилка крашнется нахуй"
-            };
+            return ply.IsScp
+                ? "состояние неизвестно"
+                : percent switch
+                {
+                    > 75 => "в норме",
+                    > 50 => "потрепан",
+                    > 25 => "ранен",
+                    > 0 => "при смерти",
+                    _ => "ты че бля еже какой нахуй, ArgumentOutOfRangeException бы выкинуть, но тогда абилка крашнется нахуй"
+                };
         }
 
         private string GetSuffix(float value)
         {
-            int distance = Mathf.RoundToInt(value);
+            var distance = Mathf.RoundToInt(value);
 
-            if (distance % 10 == 1 && distance % 100 != 11)
-            {
-                return $"{value} метр";
-            }
-            else if (new List<int> { 2, 3, 4 }.Contains(distance % 10) && !new List<int> { 12, 13, 14 }.Contains(distance % 100))
-            {
-                return $"{value} метра";
-            }
-            else
-            {
-                return $"{value} метров";
-            }
+            return distance % 10 == 1 && distance % 100 != 11
+                ? $"{value} метр"
+                : new List<int> { 2, 3, 4 }.Contains(distance % 10) && !new List<int> { 12, 13, 14 }.Contains(distance % 100)
+                    ? $"{value} метра"
+                    : $"{value} метров";
         }
     }
 }

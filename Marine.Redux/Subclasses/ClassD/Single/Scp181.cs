@@ -80,16 +80,16 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.IsAllowed || ev.Door == null || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
+            if (!Has(ev.Player) || ev.IsAllowed || ev.Door == null || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out BreakableDoor breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
             {
                 return;
             }
 
             if (Random.Range(0, 101) >= 100 - DoorChance)
             {
-                var otherDoors = ev.Door.Room.Doors.Where(door => door != ev.Door);
+                IEnumerable<Door> otherDoors = ev.Door.Room.Doors.Where(door => door != ev.Door);
 
-                foreach (var door in otherDoors)
+                foreach (Door door in otherDoors)
                 {
                     door.IsOpen = false;
                     door.Lock(1.2f, DoorLockType.NoPower);
@@ -108,6 +108,9 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count() >= 5;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp343>() && Player.List.Count() >= 5;
+        }
     }
 }

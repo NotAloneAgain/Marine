@@ -18,8 +18,8 @@ namespace Marine.Misc.Handlers
     internal sealed class ServerHandlers
     {
         #region Initialize
-        private List<ZoneType> _zones;
-        private List<CoroutineHandle> _coroutines;
+        private readonly List<ZoneType> _zones;
+        private readonly List<CoroutineHandle> _coroutines;
 
         internal ServerHandlers()
         {
@@ -31,7 +31,7 @@ namespace Marine.Misc.Handlers
                 ZoneType.HeavyContainment,
             };
 
-            _coroutines = new (10);
+            _coroutines = new(10);
         }
         #endregion
         #region Handlers
@@ -49,7 +49,7 @@ namespace Marine.Misc.Handlers
 
         public void OnRestartingRound()
         {
-            Timing.KillCoroutines(_coroutines.ToArray());
+            _ = Timing.KillCoroutines(_coroutines.ToArray());
 
             Server.FriendlyFire = false;
         }
@@ -58,7 +58,7 @@ namespace Marine.Misc.Handlers
         {
             Server.FriendlyFire = true;
 
-            Timing.CallDelayed(5, AudioExtensions.StopAudio);
+            _ = Timing.CallDelayed(5, AudioExtensions.StopAudio);
         }
         #endregion
         #region Coroutines
@@ -80,9 +80,9 @@ namespace Marine.Misc.Handlers
                         _ => new(zonesCount)
                     };
 
-                    for (int i = 0; i >= zonesCount; i++)
+                    for (var i = 0; i >= zonesCount; i++)
                     {
-                        zones.Add(_zones[Random.Range(0, _zones.Count)]);
+                        _ = zones.Add(_zones[Random.Range(0, _zones.Count)]);
                     }
 
                     Map.TurnOffAllLights(duration, zones);
@@ -100,7 +100,7 @@ namespace Marine.Misc.Handlers
                 {
                     var duration = Random.Range(5, 20);
 
-                    foreach (var door in Door.List)
+                    foreach (Door door in Door.List)
                     {
                         door.IsOpen = false;
                         door.Lock(duration, DoorLockType.Isolation);
@@ -118,13 +118,13 @@ namespace Marine.Misc.Handlers
             {
                 yield return Timing.WaitForSeconds(300);
 
-                foreach (var item in Pickup.List)
+                foreach (Pickup item in Pickup.List)
                 {
                     if (item == null)
                     {
                         if (toClear.Contains(item))
                         {
-                            toClear.Remove(item);
+                            _ = toClear.Remove(item);
                         }
 
                         continue;
@@ -139,7 +139,7 @@ namespace Marine.Misc.Handlers
                     {
                         if (toClear.Contains(item))
                         {
-                            toClear.Remove(item);
+                            _ = toClear.Remove(item);
                         }
 
                         item.Destroy();
@@ -159,7 +159,7 @@ namespace Marine.Misc.Handlers
                         continue;
                     }
 
-                    toClear.Remove(item);
+                    _ = toClear.Remove(item);
 
                     item.Destroy();
                 }
@@ -175,24 +175,24 @@ namespace Marine.Misc.Handlers
             {
                 yield return Timing.WaitForSeconds(120);
 
-                foreach (var player in Player.List)
+                foreach (Player player in Player.List)
                 {
                     if (player.Role.Type != RoleTypeId.Scp049)
                     {
                         continue;
                     }
 
-                    var role = player.Role.As<Scp049Role>();
+                    Scp049Role role = player.Role.As<Scp049Role>();
 
                     if (role != null && role.RecallingRagdoll != null)
                     {
                         continue;
                     }
 
-                    recalling.Add(role.RecallingRagdoll);
+                    _ = recalling.Add(role.RecallingRagdoll);
                 }
 
-                foreach (var ragdoll in Ragdoll.List)
+                foreach (Ragdoll ragdoll in Ragdoll.List)
                 {
                     if (recalling.Contains(ragdoll) || !ragdoll.Role.IsHuman())
                     {
@@ -201,7 +201,7 @@ namespace Marine.Misc.Handlers
 
                     if (!toClear.Contains(ragdoll) && (ragdoll.IsExpired || ragdoll.IsConsumed) && ragdoll.CanBeCleanedUp && ragdoll.AllowCleanUp)
                     {
-                        toClear.Add(ragdoll);
+                        _ = toClear.Add(ragdoll);
 
                         continue;
                     }

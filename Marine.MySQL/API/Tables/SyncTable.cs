@@ -60,7 +60,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"INSERT INTO {Name} ({string.Join(", ", Columns.Skip(1).Select(column => column.Name))}) VALUES ({sync.DiscordId}, '{sync.UserId}', {sync.InGame.AsNumber()});"
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override void Update(Sync sync)
@@ -82,7 +82,7 @@ namespace Marine.MySQL.API.Tables
 
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override void Delete(Sync sync)
@@ -103,7 +103,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"DELETE FROM {Name} WHERE id={sync.Id};"
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public override Sync Select(string userId)
@@ -124,10 +124,9 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"SELECT * FROM {Name} WHERE user_id='{userId}';"
             };
 
-
             Sync sync = null!;
 
-            using (var reader = command.ExecuteReader())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {

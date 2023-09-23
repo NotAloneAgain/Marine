@@ -47,7 +47,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            player.AddItem(id);
+            _ = player.AddItem(id);
 
             return CommandResultType.Success;
         }
@@ -66,6 +66,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Scp343>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Scp343>(player);
+        }
     }
 }

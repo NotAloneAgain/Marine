@@ -55,7 +55,7 @@ namespace Marine.Commands.Commands
                 list.Add(player);
             }
 
-            foreach (var ply in list)
+            foreach (Player ply in list)
             {
                 var grenade = ExplosiveGrenade.Create(ItemType.GrenadeHE, ply) as ExplosiveGrenade;
 
@@ -64,7 +64,7 @@ namespace Marine.Commands.Commands
                     grenade.FuseTime = (float)arguments[1];
                 }
 
-                grenade.SpawnActive(ply.Position, ply);
+                _ = grenade.SpawnActive(ply.Position, ply);
             }
 
             return CommandResultType.Success;
@@ -74,7 +74,7 @@ namespace Marine.Commands.Commands
         {
             output = new();
 
-            if (!TryParsePlayers(input[0], out var players))
+            if (!TryParsePlayers(input[0], out List<Player> players))
             {
                 return false;
             }

@@ -47,8 +47,14 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override int Chance { get; set; } = 10;
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Head>();
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && !AnyHas<Head>();
+        }
 
-        protected override void OnAssigned(Player player) => player.Teleport(DoorType.NukeArmory);
+        protected override void OnAssigned(Player player)
+        {
+            player.Teleport(DoorType.NukeArmory);
+        }
     }
 }

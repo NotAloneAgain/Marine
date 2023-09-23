@@ -88,10 +88,10 @@ namespace Marine.Redux.Subclasses.Scientists.Group
             }
             else if (ev.Item.Type == ItemType.Painkillers)
             {
-                var animation = (ev.Item.Base as Painkillers)._healProgress;
-                var handler = UsableItemsController.GetHandler(ev.Player.ReferenceHub);
+                UnityEngine.AnimationCurve animation = (ev.Item.Base as Painkillers)._healProgress;
+                PlayerHandler handler = UsableItemsController.GetHandler(ev.Player.ReferenceHub);
 
-                handler.ActiveRegenerations.Remove(handler.ActiveRegenerations.Last());
+                _ = handler.ActiveRegenerations.Remove(handler.ActiveRegenerations.Last());
 
                 handler.ActiveRegenerations.Add(new RegenerationProcess(animation, 0.06666667f, 100));
             }

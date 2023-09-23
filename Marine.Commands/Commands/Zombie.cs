@@ -52,6 +52,9 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.Role.Type == RoleTypeId.Scientist && Subclass.Has<Infected>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || player.Role.Type == RoleTypeId.Scientist && Subclass.Has<Infected>(player);
+        }
     }
 }

@@ -8,8 +8,14 @@ namespace Marine.MySQL.API.Events
 
         public static event CustomEventHandler<ChangedLevelEventArgs> ChangedLevel;
 
-        public static void Invoke(ChangedExpEventArgs ev) => ChangedExp?.Invoke(ev);
+        public static void Invoke(ChangedExpEventArgs ev)
+        {
+            ChangedExp?.Invoke(ev);
+        }
 
-        public static void Invoke(ChangedLevelEventArgs ev) => ChangedLevel?.Invoke(ev);
+        public static void Invoke(ChangedLevelEventArgs ev)
+        {
+            ChangedLevel?.Invoke(ev);
+        }
     }
 }

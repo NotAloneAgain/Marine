@@ -7,9 +7,7 @@ namespace Marine.Redux.API
     {
         public static readonly IReadOnlyDictionary<RoleTypeId, string> _rolesTranslation;
 
-        static Extensions()
-        {
-            _rolesTranslation = new Dictionary<RoleTypeId, string>()
+        static Extensions() => _rolesTranslation = new Dictionary<RoleTypeId, string>()
             {
                 { RoleTypeId.None, "Пустая роль" },
                 { RoleTypeId.Scp173, "SCP-173" },
@@ -35,8 +33,10 @@ namespace Marine.Redux.API
                 { RoleTypeId.Overwatch, "Надзиратель" },
                 { RoleTypeId.Filmmaker, "Контентмейкер" },
             };
-        }
 
-        public static string Translate(this RoleTypeId role) => _rolesTranslation[role];
+        public static string Translate(this RoleTypeId role)
+        {
+            return _rolesTranslation[role];
+        }
     }
 }

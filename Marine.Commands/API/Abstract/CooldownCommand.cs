@@ -13,14 +13,14 @@ namespace Marine.Commands.API.Abstract
         {
             response = string.Empty;
 
-            var use = History.GetLastSuccessfulUse(player);
+            CommandUse use = History.GetLastSuccessfulUse(player);
 
             if (use == null)
             {
                 return CommandResultType.Success;
             }
 
-            var time = DateTime.Now - use.Time;
+            TimeSpan time = DateTime.Now - use.Time;
 
             if (time.TotalSeconds < Cooldown)
             {

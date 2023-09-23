@@ -21,7 +21,7 @@ namespace Marine.LevelSystem.Handlers
 
         public void OnChangedExp(ChangedExpEventArgs ev)
         {
-            ShowHint(ev.Player, string.Format(_changedExpText, ev.New - ev.Old, ev.Reason), 4);
+            _ = ShowHint(ev.Player, string.Format(_changedExpText, ev.New - ev.Old, ev.Reason), 4);
 
             ev.Player.Update();
         }
@@ -30,11 +30,11 @@ namespace Marine.LevelSystem.Handlers
         {
             if (ev.Old < ev.New)
             {
-                ShowHint(ev.Player, string.Format(_levelUpText, ev.Old, ev.New), 6);
+                _ = ShowHint(ev.Player, string.Format(_levelUpText, ev.Old, ev.New), 6);
             }
             else
             {
-                ShowHint(ev.Player, string.Format(_levelDownText, ev.Old, ev.New), 6);
+                _ = ShowHint(ev.Player, string.Format(_levelDownText, ev.Old, ev.New), 6);
             }
 
             ev.Player.Update();

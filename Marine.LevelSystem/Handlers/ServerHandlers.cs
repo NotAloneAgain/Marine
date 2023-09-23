@@ -13,7 +13,7 @@ namespace Marine.LevelSystem.Handlers
                 return;
             }
 
-            foreach (var player in Player.List)
+            foreach (Player player in Player.List)
             {
                 if (player.LeadingTeam != ev.LeadingTeam)
                 {

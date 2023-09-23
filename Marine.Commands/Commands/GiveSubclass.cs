@@ -1,6 +1,4 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using JetBrains.Annotations;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
@@ -34,7 +32,6 @@ namespace Marine.Commands.Commands
                 "modt",
             }
         };
-
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
@@ -70,7 +67,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            foreach (var ply in list)
+            foreach (Player ply in list)
             {
                 subclass.Assign(ply);
             }
@@ -82,7 +79,7 @@ namespace Marine.Commands.Commands
         {
             output = new();
 
-            if (!TryParsePlayers(input[0], out var players))
+            if (!TryParsePlayers(input[0], out List<Player> players))
             {
                 return false;
             }

@@ -7,7 +7,7 @@ namespace Marine.Redux.API.Inventory
 {
     public class SubclassInventory : IHasRandom
     {
-        private List<ItemType> _items;
+        private readonly List<ItemType> _items;
 
         public SubclassInventory()
         {
@@ -16,10 +16,7 @@ namespace Marine.Redux.API.Inventory
             Slots = new(8);
         }
 
-        public SubclassInventory(IEnumerable<Slot> slots) : this()
-        {
-            Slots.AddRange(slots);
-        }
+        public SubclassInventory(IEnumerable<Slot> slots) : this() => Slots.AddRange(slots);
 
         public SubclassInventory(IEnumerable<Slot> slots, IEnumerable<ItemType> items, bool isRandomable) : this(slots)
         {
@@ -45,7 +42,7 @@ namespace Marine.Redux.API.Inventory
 
             _items.Clear();
 
-            foreach (var slot in Slots)
+            foreach (Slot slot in Slots)
             {
                 slot.Randomize();
 

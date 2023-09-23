@@ -89,7 +89,10 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Unsubscribe();
         }
 
-        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
+        }
 
         protected override void OnAssigned(Player player)
         {
@@ -131,7 +134,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            bool isPlayer = Has(ev.Player);
+            var isPlayer = Has(ev.Player);
 
             if (!isPlayer && !Has(ev.Attacker))
             {
@@ -204,13 +207,13 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 return;
             }
 
-            var id = ev.Pickup.Info.ItemId;
+            ItemType id = ev.Pickup.Info.ItemId;
 
             if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018)
             {
                 ev.Pickup.Destroy();
                 ev.IsAllowed = false;
-                ev.Player.AddItem(ItemType.Medkit);
+                _ = ev.Player.AddItem(ItemType.Medkit);
             }
         }
 

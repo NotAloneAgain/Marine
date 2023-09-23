@@ -13,13 +13,13 @@ namespace Marine.Misc.Patches
     {
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            var instructions = ListPool<CodeInstruction>.Shared.Rent(instr);
+            List<CodeInstruction> instructions = ListPool<CodeInstruction>.Shared.Rent(instr);
 
             const int index = 0;
 
             instructions.Clear();
 
-            var listConstructor = typeof(List<AmmoPickup>).GetConstructor(new Type[1] { typeof(int) });
+            System.Reflection.ConstructorInfo listConstructor = typeof(List<AmmoPickup>).GetConstructor(new Type[1] { typeof(int) });
 
             instructions.InsertRange(index, new CodeInstruction[7]
             {
@@ -32,7 +32,7 @@ namespace Marine.Misc.Patches
                 new CodeInstruction(OpCodes.Ret)
             });
 
-            for (int i = 0; i < instructions.Count; i++)
+            for (var i = 0; i < instructions.Count; i++)
             {
                 yield return instructions[i];
             }

@@ -30,7 +30,7 @@ namespace Marine.Redux.Patches.Sounds
                     return false;
                 }
 
-                if (__instance._syncPlayer == null || __instance._syncPlayer.gameObject == null || !Player.Dictionary.TryGetValue(__instance._syncPlayer.gameObject, out var player))
+                if (__instance._syncPlayer == null || __instance._syncPlayer.gameObject == null || !Player.Dictionary.TryGetValue(__instance._syncPlayer.gameObject, out Player player))
                 {
                     return false;
                 }
@@ -47,7 +47,7 @@ namespace Marine.Redux.Patches.Sounds
                     return false;
                 }
 
-                AnimatedCharacterModel model = role.FpcModule.CharacterModelInstance as AnimatedCharacterModel;
+                var model = role.FpcModule.CharacterModelInstance as AnimatedCharacterModel;
 
                 if (model == null)
                 {
@@ -56,7 +56,7 @@ namespace Marine.Redux.Patches.Sounds
 
                 if (Subclass.HasAny(player))
                 {
-                    var subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
+                    Subclass subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
 
                     if (subclass == null || !subclass.CanSoundFootstep)
                     {
@@ -67,7 +67,7 @@ namespace Marine.Redux.Patches.Sounds
                 __instance._syncPos = reader.ReadRelativePosition();
                 __instance._syncDistance = reader.ReadByte();
                 __instance.Player.Play(__instance._syncPos.Position, role.RoleColor);
-                AudioSourcePoolManager.PlaySound(model.RandomFootstep, __instance._syncPos.Position, (float)__instance._syncDistance, 1, FalloffType.Exponential, AudioMixerChannelType.DefaultSfx, 1, false);
+                _ = AudioSourcePoolManager.PlaySound(model.RandomFootstep, __instance._syncPos.Position, __instance._syncDistance, 1, FalloffType.Exponential, AudioMixerChannelType.DefaultSfx, 1, false);
                 __instance.OnPlayedRipple(__instance._syncPlayer);
 
                 return false;

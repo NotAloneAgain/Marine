@@ -9,10 +9,7 @@ namespace Marine.Redux.API.Inventory
         [YamlMember(Alias = "item")]
         private ItemType _item;
 
-        public Slot()
-        {
-            _item = ItemType.None;
-        }
+        public Slot() => _item = ItemType.None;
 
         public Slot(ItemChances items, bool isRandomable) : this()
         {
@@ -37,7 +34,7 @@ namespace Marine.Redux.API.Inventory
 
             _item = ItemType.None;
 
-            foreach (var chances in Items)
+            foreach (System.Collections.Generic.KeyValuePair<ItemType, int> chances in Items)
             {
                 if (Random.Range(0, 101) >= 100 - chances.Value)
                 {

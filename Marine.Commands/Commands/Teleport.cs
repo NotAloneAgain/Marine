@@ -1,5 +1,4 @@
-﻿using CustomPlayerEffects;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
@@ -58,7 +57,7 @@ namespace Marine.Commands.Commands
         {
             response = string.Empty;
 
-            var type = arguments.Count == 0 ? _teleportObjects.GetRandomValue() : arguments[0] as Type;
+            Type type = arguments.Count == 0 ? _teleportObjects.GetRandomValue() : arguments[0] as Type;
 
             TryTeleport(player, type);
 
@@ -97,14 +96,16 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Scp343>(player);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || Subclass.Has<Scp343>(player);
+        }
 
         private void TryTeleport(Player player, Type type)
         {
             if (type.Name == "Room")
             {
-                Room room = null!;
-
+                Room room;
                 do
                 {
                     room = Room.List.GetRandomValue();
@@ -117,7 +118,7 @@ namespace Marine.Commands.Commands
 
                 Vector3 position = room.Position;
 
-                var role = player.Role.As<FpcRole>();
+                FpcRole role = player.Role.As<FpcRole>();
 
                 if (room.Identifier == null || role == null)
                 {

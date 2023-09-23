@@ -4,7 +4,6 @@ using HarmonyLib;
 using InventorySystem.Items.Firearms;
 using Marine.Misc.API;
 using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.ClassD.Single;
 using Mirror;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp939.Ripples;
@@ -29,7 +28,7 @@ namespace Marine.Redux.Patches.Sounds
                     return false;
                 }
 
-                if (firearm.Owner == null || firearm.Owner.gameObject == null || !Player.Dictionary.TryGetValue(firearm.Owner.gameObject, out var player))
+                if (firearm.Owner == null || firearm.Owner.gameObject == null || !Player.Dictionary.TryGetValue(firearm.Owner.gameObject, out Player player))
                 {
                     return false;
                 }
@@ -56,7 +55,7 @@ namespace Marine.Redux.Patches.Sounds
 
                 if (Subclass.HasAny(player))
                 {
-                    var subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
+                    Subclass subclass = Subclass.ReadOnlyCollection.FirstOrDefault(sub => sub.Has(player));
 
                     if (subclass == null || !subclass.CanSoundFootstep)
                     {

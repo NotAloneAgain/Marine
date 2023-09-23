@@ -6,7 +6,6 @@ using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Marine.Commands.Commands
 {
@@ -52,7 +51,7 @@ namespace Marine.Commands.Commands
 
             if (arguments.Count == 2)
             {
-                Timing.RunCoroutine(_SpawnRagdolls(player, (RoleTypeId)arguments[1], (int)arguments[2]));
+                _ = Timing.RunCoroutine(_SpawnRagdolls(player, (RoleTypeId)arguments[1], (int)arguments[2]));
 
                 return CommandResultType.Success;
             }
@@ -65,9 +64,9 @@ namespace Marine.Commands.Commands
                     list.Add(player);
                 }
 
-                foreach (var ply in list)
+                foreach (Player ply in list)
                 {
-                    Timing.RunCoroutine(_SpawnRagdolls(ply, (RoleTypeId)arguments[1], (int)arguments[2]));
+                    _ = Timing.RunCoroutine(_SpawnRagdolls(ply, (RoleTypeId)arguments[1], (int)arguments[2]));
                 }
 
                 return CommandResultType.Success;
@@ -96,7 +95,7 @@ namespace Marine.Commands.Commands
             }
             else if (count == 3)
             {
-                if (!TryParsePlayers(input[0], out var players) || !int.TryParse(input[1], out var role) || !int.TryParse(input[2], out var itemCount) || role > 20 || role < 0)
+                if (!TryParsePlayers(input[0], out List<Player> players) || !int.TryParse(input[1], out var role) || !int.TryParse(input[2], out var itemCount) || role > 20 || role < 0)
                 {
                     return false;
                 }
@@ -115,9 +114,9 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnRagdolls(Player player, RoleTypeId role, int count)
         {
-            for (int index = 0; index < count - 1; index++)
+            for (var index = 0; index < count - 1; index++)
             {
-                Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, player.Rotation);
+                _ = Ragdoll.CreateAndSpawn(role, player.CustomName, "Ебал козу?", player.Position, player.Rotation);
 
                 yield return Timing.WaitForSeconds(0.25f);
             }

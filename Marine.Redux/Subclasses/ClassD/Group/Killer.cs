@@ -70,7 +70,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 return;
             }
 
-            foreach (var pickup in Pickup.List)
+            foreach (Pickup pickup in Pickup.List)
             {
                 if (pickup == null || pickup.Room == null || pickup.Room.Zone != ZoneType.LightContainment || pickup.Type != ItemType.GunCOM15)
                 {
@@ -91,14 +91,17 @@ namespace Marine.Redux.Subclasses.ClassD.Group
             ev.Amount = Mathf.Clamp(ev.Amount * 1.1f, 0, float.MaxValue);
         }
 
-        private string Translate(RoomType type) => type switch
+        private string Translate(RoomType type)
         {
-            RoomType.LczCafe => "комнате с компьютерами",
-            RoomType.Lcz173 => "оружейке К.С. SCP-173.",
-            RoomType.LczToilets => "туалетах",
-            RoomType.LczGlassBox => "К.С. SCP-372",
-            RoomType.Lcz330 => "К.С. SCP-330",
-            _ => "неизвестно..."
-        };
+            return type switch
+            {
+                RoomType.LczCafe => "комнате с компьютерами",
+                RoomType.Lcz173 => "оружейке К.С. SCP-173.",
+                RoomType.LczToilets => "туалетах",
+                RoomType.LczGlassBox => "К.С. SCP-372",
+                RoomType.Lcz330 => "К.С. SCP-330",
+                _ => "неизвестно..."
+            };
+        }
     }
 }

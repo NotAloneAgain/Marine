@@ -18,9 +18,15 @@ namespace Marine.MySQL.API.Tables
 
         public bool IsClosed => _connection.State is not ConnectionState.Open and not ConnectionState.Connecting;
 
-        public void Open() => _connection.Open();
+        public void Open()
+        {
+            _connection.Open();
+        }
 
-        public void Close() => _connection.Close();
+        public void Close()
+        {
+            _connection.Close();
+        }
 
         public virtual void Create()
         {
@@ -28,17 +34,17 @@ namespace Marine.MySQL.API.Tables
 
             for (var index = 0; index < Columns.Count; index++)
             {
-                var column = Columns[index];
+                Column column = Columns[index];
 
-                builder.Append(column.ToString());
+                _ = builder.Append(column.ToString());
 
                 if (index != Columns.Count - 1)
                 {
-                    builder.Append(", ");
+                    _ = builder.Append(", ");
                 }
             }
 
-            builder.Append(");");
+            _ = builder.Append(");");
 
             MySqlCommand command = new()
             {
@@ -46,7 +52,7 @@ namespace Marine.MySQL.API.Tables
                 CommandText = builder.ToString()
             };
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
         }
 
         public abstract void Insert(TClass arg);
@@ -63,9 +69,9 @@ namespace Marine.MySQL.API.Tables
                 CommandText = $"SELECT * FROM {Name};"
             };
 
-            int count = 0;
+            var count = 0;
 
-            using (var reader = command.ExecuteReader())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {

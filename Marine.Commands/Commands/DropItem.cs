@@ -6,7 +6,6 @@ using Marine.Commands.API.Enums;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Marine.Commands.Commands
 {
@@ -52,7 +51,7 @@ namespace Marine.Commands.Commands
 
             if (arguments.Count == 2)
             {
-                Timing.RunCoroutine(_SpawnItems(player, (ItemType)arguments[0], (int)arguments[1]));
+                _ = Timing.RunCoroutine(_SpawnItems(player, (ItemType)arguments[0], (int)arguments[1]));
 
                 return CommandResultType.Success;
             }
@@ -65,9 +64,9 @@ namespace Marine.Commands.Commands
                     list.Add(player);
                 }
 
-                foreach (var ply in list)
+                foreach (Player ply in list)
                 {
-                    Timing.RunCoroutine(_SpawnItems(ply, (ItemType)arguments[1], (int)arguments[2]));
+                    _ = Timing.RunCoroutine(_SpawnItems(ply, (ItemType)arguments[1], (int)arguments[2]));
                 }
 
                 return CommandResultType.Success;
@@ -96,7 +95,7 @@ namespace Marine.Commands.Commands
             }
             else if (count == 3)
             {
-                if (!TryParsePlayers(input[0], out var players) || !int.TryParse(input[1], out var item) || !int.TryParse(input[2], out var itemCount) || item > 51 || item < 0)
+                if (!TryParsePlayers(input[0], out List<Player> players) || !int.TryParse(input[1], out var item) || !int.TryParse(input[2], out var itemCount) || item > 51 || item < 0)
                 {
                     return false;
                 }
@@ -115,9 +114,9 @@ namespace Marine.Commands.Commands
 
         private IEnumerator<float> _SpawnItems(Player player, ItemType item, int count)
         {
-            for (int index = 0; index < count - 1; index++)
+            for (var index = 0; index < count - 1; index++)
             {
-                Pickup.CreateAndSpawn(item, player.Position, player.Rotation, player);
+                _ = Pickup.CreateAndSpawn(item, player.Position, player.Rotation, player);
 
                 yield return Timing.WaitForSeconds(0.1f);
             }

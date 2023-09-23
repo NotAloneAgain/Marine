@@ -24,22 +24,22 @@ namespace Marine.MySQL.API.Models
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder(Name);
+            var builder = new StringBuilder(Name);
 
-            builder.Append(" ");
+            _ = builder.Append(" ");
 
-            builder.Append(Type.AsString());
+            _ = builder.Append(Type.AsString());
 
-            foreach (var flag in Flags)
+            foreach (MySqlDataFlags flag in Flags)
             {
-                builder.Append(" ");
+                _ = builder.Append(" ");
 
-                builder.Append(flag.AsString());
+                _ = builder.Append(flag.AsString());
             }
 
             if (Default != null)
             {
-                builder.Append($" DEFAULT {(Default is string ? $"'{Default}'" : Default)}");
+                _ = builder.Append($" DEFAULT {(Default is string ? $"'{Default}'" : Default)}");
             }
 
             return builder.ToString();

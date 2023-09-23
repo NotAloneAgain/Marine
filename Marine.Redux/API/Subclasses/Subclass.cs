@@ -15,12 +15,9 @@ namespace Marine.Redux.API.Subclasses
 {
     public abstract class Subclass : IHasName, IHasHandlers
     {
-        private static List<Subclass> _list;
+        private static readonly List<Subclass> _list;
 
-        static Subclass()
-        {
-            _list = new(100);
-        }
+        static Subclass() => _list = new(100);
 
         public Subclass()
         {
@@ -60,7 +57,10 @@ namespace Marine.Redux.API.Subclasses
         [YamlMember(Alias = "spawn_info")]
         public virtual SpawnInfo SpawnInfo { get; set; } = new SpawnInfo();
 
-        public static bool HasAny(Player player) => ReadOnlyCollection.Any(sub => sub.Has(player));
+        public static bool HasAny(Player player)
+        {
+            return ReadOnlyCollection.Any(sub => sub.Has(player));
+        }
 
         public static bool Has<TSubclass>(in Player player) where TSubclass : Subclass
         {
@@ -69,7 +69,7 @@ namespace Marine.Redux.API.Subclasses
                 return false;
             }
 
-            foreach (var subclass in _list)
+            foreach (Subclass subclass in _list)
             {
                 if (subclass.Is<TSubclass>())
                 {
@@ -82,14 +82,14 @@ namespace Marine.Redux.API.Subclasses
 
         public static bool AnyHas<TSubclass>() where TSubclass : Subclass
         {
-            var subclass = _list.Find(sub => sub.Is<TSubclass>());
+            Subclass subclass = _list.Find(sub => sub.Is<TSubclass>());
 
             if (subclass == null)
             {
                 return false;
             }
 
-            foreach (var player in Player.List.Where(ply => ply.Role == (subclass.GameRole == RoleTypeId.None ? subclass.Role : subclass.GameRole)))
+            foreach (Player player in Player.List.Where(ply => ply.Role == (subclass.GameRole == RoleTypeId.None ? subclass.Role : subclass.GameRole)))
             {
                 if (subclass.Has(player))
                 {
@@ -100,9 +100,15 @@ namespace Marine.Redux.API.Subclasses
             return false;
         }
 
-        public bool Is<TSubclass>() where TSubclass : Subclass => As<TSubclass>() != null;
+        public bool Is<TSubclass>() where TSubclass : Subclass
+        {
+            return As<TSubclass>() != null;
+        }
 
-        public TSubclass As<TSubclass>() where TSubclass : Subclass => this as TSubclass;
+        public TSubclass As<TSubclass>() where TSubclass : Subclass
+        {
+            return this as TSubclass;
+        }
 
         public virtual void Subscribe()
         {
@@ -120,7 +126,7 @@ namespace Marine.Redux.API.Subclasses
         {
             $"Assign {Name} to {player.Nickname} ({player.UserId})".AddLog();
 
-            Timing.CallDelayed(0.00005f, delegate ()
+            _ = Timing.CallDelayed(0.00005f, delegate ()
             {
                 SpawnInfo.Message.Send(player);
 
@@ -150,9 +156,9 @@ namespace Marine.Redux.API.Subclasses
 
                     SpawnInfo.Inventory.Randomize();
 
-                    foreach (var item in SpawnInfo.Inventory.Items)
+                    foreach (ItemType item in SpawnInfo.Inventory.Items)
                     {
-                        player.AddItem(item);
+                        _ = player.AddItem(item);
                     }
                 }
 
@@ -178,15 +184,13 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual bool Can(in Player player)
         {
-            if (player == null)
-            {
-                return false;
-            }
-
-            return Random.Range(0, 101) >= 100 - Chance;
+            return player != null && Random.Range(0, 101) >= 100 - Chance;
         }
 
-        public sealed override string ToString() => $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
+        public sealed override string ToString()
+        {
+            return $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
+        }
 
         protected virtual void OnAssigned(Player player) { }
 
@@ -216,7 +220,7 @@ namespace Marine.Redux.API.Subclasses
         {
             if (KeepAfterEscape)
             {
-                Timing.CallDelayed(0.00005f, delegate ()
+                _ = Timing.CallDelayed(0.00005f, delegate ()
                 {
                     player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 

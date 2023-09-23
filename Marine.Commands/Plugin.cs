@@ -21,7 +21,7 @@ namespace Marine.Commands
         {
             _harmony = new("swear.to.god");
 
-            foreach (var command in Config.Commands.All)
+            foreach (API.Abstract.CommandBase command in Config.Commands.All)
             {
                 command.Subscribe();
             }
@@ -39,7 +39,7 @@ namespace Marine.Commands
             Server.RestartingRound -= GiveItemPatch.Reset;
             Server.RestartingRound -= ForceclassPatch.Reset;
 
-            foreach (var command in Config.Commands.All)
+            foreach (API.Abstract.CommandBase command in Config.Commands.All)
             {
                 command.Unsubscribe();
             }

@@ -65,7 +65,7 @@ namespace Marine.Misc.Handlers
         #region RemoteKeycard
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!_remoteKeycard.IsEnabled || ev.Player.IsHost || ev.Player.IsNPC || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.Is<BreakableDoor>(out var breakable) && breakable.IsDestroyed || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
+            if (!_remoteKeycard.IsEnabled || ev.Player.IsHost || ev.Player.IsNPC || ev.IsAllowed && ev.Player.IsHuman || !ev.Door.IsKeycardDoor || ev.Door.Is<BreakableDoor>(out BreakableDoor breakable) && breakable.IsDestroyed || ev.Door.IsMoving || _remoteKeycard.CheckAmnesia && ev.Player.HasEffect<AmnesiaItems>())
             {
                 return;
             }
@@ -93,9 +93,9 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            bool hasAccess = ev.Player.CheckPermissions(ev.Chamber.RequiredPermissions);
-            bool hasCheckpoints = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints);
-            bool hasContainment = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo);
+            var hasAccess = ev.Player.CheckPermissions(ev.Chamber.RequiredPermissions);
+            var hasCheckpoints = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints);
+            var hasContainment = ev.Player.CheckPermissions(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo);
 
             ev.IsAllowed = hasAccess || ev.Locker.Loot.All(x => !x.TargetItem.IsWeapon()) && hasCheckpoints && hasContainment;
         }
@@ -132,12 +132,12 @@ namespace Marine.Misc.Handlers
 
             if (ev.NewRole == RoleTypeId.Scp079)
             {
-                Timing.RunCoroutine(_ChangeLostValue(ev.Player, _betterRoles.Scp079Ghostlight));
+                _ = Timing.RunCoroutine(_ChangeLostValue(ev.Player, _betterRoles.Scp079Ghostlight));
 
                 return;
             }
 
-            var team = RoleExtensions.GetTeam(ev.NewRole);
+            Team team = RoleExtensions.GetTeam(ev.NewRole);
 
             if (team is not Team.FoundationForces or Team.ChaosInsurgency || ev.NewRole != RoleTypeId.NtfPrivate && team == Team.FoundationForces)
             {
@@ -173,7 +173,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            var weapon = ev.Player.CurrentItem.As<Firearm>();
+            Firearm weapon = ev.Player.CurrentItem.As<Firearm>();
 
             if (weapon == null || weapon.Ammo >= Mathf.RoundToInt(weapon.MaxAmmo * 0.6f))
             {
@@ -196,7 +196,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            bool isHuman = ev.DamageHandler.Type.IsHumanDamage();
+            var isHuman = ev.DamageHandler.Type.IsHumanDamage();
 
             if ((isHuman || ev.Attacker.IsScp && ev.DamageHandler.Type is not DamageType.PocketDimension and DamageType.Poison) && ev.Amount > 0)
             {
@@ -293,7 +293,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            var sync = MySqlManager.Sync.Select(ev.Player.UserId);
+            MySQL.API.Models.Sync sync = MySqlManager.Sync.Select(ev.Player.UserId);
 
             if (sync != null && ev.Player.UserId != "76561199011540209@steam")
             {
@@ -315,7 +315,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            var sync = MySqlManager.Sync.Select(ev.Player.UserId);
+            MySQL.API.Models.Sync sync = MySqlManager.Sync.Select(ev.Player.UserId);
 
             if (sync != null)
             {

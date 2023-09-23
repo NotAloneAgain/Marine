@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
 using Marine.Commands.API;
@@ -56,7 +55,7 @@ namespace Marine.Commands.Commands
                 list.Add(player);
             }
 
-            foreach (var ply in list)
+            foreach (Player ply in list)
             {
                 var pickup = Pickup.CreateAndSpawn(ItemType.SCP018, ply.Position, ply.Rotation, ply);
 
@@ -64,7 +63,7 @@ namespace Marine.Commands.Commands
 
                 Vector3 a2 = player.CameraTransform.forward * (1 - Mathf.Abs(Vector3.Dot(player.CameraTransform.forward, Vector3.up)));
 
-                var rigidbody = projectile.GameObject.GetComponent<Rigidbody>();
+                Rigidbody rigidbody = projectile.GameObject.GetComponent<Rigidbody>();
 
                 if (rigidbody == null)
                 {
@@ -83,7 +82,7 @@ namespace Marine.Commands.Commands
 
             if (count == 1)
             {
-                if (!TryParsePlayers(input[0], out var players))
+                if (!TryParsePlayers(input[0], out List<Player> players))
                 {
                     return false;
                 }

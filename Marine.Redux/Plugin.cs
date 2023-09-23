@@ -33,7 +33,7 @@ namespace Marine.Redux
             Player.ChangingRole += OnChangingRole;
             Player.TriggeringTesla += OnTriggeringTesla;
 
-            foreach (var subclass in Config.Subclasses.All)
+            foreach (Subclass subclass in Config.Subclasses.All)
             {
                 subclass.Subscribe();
             }
@@ -46,7 +46,7 @@ namespace Marine.Redux
             Player.TriggeringTesla -= OnTriggeringTesla;
             Player.ChangingRole -= OnChangingRole;
 
-            foreach (var subclass in Config.Subclasses.All)
+            foreach (Subclass subclass in Config.Subclasses.All)
             {
                 subclass.Unsubscribe();
             }
@@ -71,7 +71,7 @@ namespace Marine.Redux
                 return;
             }
 
-            var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+            Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
 
             if (subclass == null || subclass.CanTriggerTesla)
             {
@@ -95,7 +95,7 @@ namespace Marine.Redux
             {
                 if (Subclass.HasAny(ev.Player))
                 {
-                    var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+                    Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
 
                     if (ev.Reason == SpawnReason.Escaped)
                     {
@@ -118,7 +118,7 @@ namespace Marine.Redux
 
             if (Subclass.HasAny(ev.Player))
             {
-                var subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+                Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
 
                 if (ev.Reason == SpawnReason.Escaped)
                 {
@@ -137,7 +137,7 @@ namespace Marine.Redux
             }
             else
             {
-                foreach (var subclass in Subclass.ReadOnlyCollection)
+                foreach (Subclass subclass in Subclass.ReadOnlyCollection)
                 {
                     if (subclass.Role != ev.NewRole)
                     {

@@ -3,7 +3,6 @@ using CommandSystem.Commands.RemoteAdmin;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Roles;
 using HarmonyLib;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
@@ -22,7 +21,7 @@ namespace Marine.Commands.Patches.Generic
     [HarmonyPatch(typeof(ForceRoleCommand), nameof(ForceRoleCommand.Execute))]
     public static class ForceclassPatch
     {
-        private static Dictionary<string, int> _usings;
+        private static readonly Dictionary<string, int> _usings;
 
         static ForceclassPatch() => _usings = new();
 
@@ -42,12 +41,12 @@ namespace Marine.Commands.Patches.Generic
                 return false;
             }
 
-            var senderHub = (sender as PlayerCommandSender).ReferenceHub;
+            ReferenceHub senderHub = (sender as PlayerCommandSender).ReferenceHub;
 
             List<ReferenceHub> list = RAUtils.ProcessPlayerIdOrNamesList(arguments, 0, out var array, false);
-            bool self = list.Count == 1 && senderHub == list[0];
+            var self = list.Count == 1 && senderHub == list[0];
 
-            if (!__instance.TryParseRole(array[0], out var roleBase))
+            if (!__instance.TryParseRole(array[0], out PlayerRoleBase roleBase))
             {
                 response = "Invalid role ID / name.";
                 return false;
@@ -58,26 +57,17 @@ namespace Marine.Commands.Patches.Generic
                 return false;
             }
 
-            __instance.ProvideRoleFlag(array, out var flags);
-            var role = roleBase.RoleTypeId;
+            __instance.ProvideRoleFlag(array, out RoleSpawnFlags flags);
+            RoleTypeId role = roleBase.RoleTypeId;
 
-            if (!Player.TryGet(senderHub, out var player))
+            if (!Player.TryGet(senderHub, out Player player))
             {
                 return true;
             }
 
-            string overrideName = GetNameByGroup(player.Group);
-            bool isOverride = false;
-            bool isDonator = IsDonator(player.GroupName) || (isOverride = !string.IsNullOrEmpty(overrideName) && IsDonator(overrideName));
-            var team = RoleExtensions.GetTeam(role);
-            var leading = team.GetLeadingTeam();
-
-            int max = (isOverride ? overrideName : player.GroupName) switch
-            {
-                "don3" => 3,
-                "don2" or "don1" => 2,
-                _ => 5
-            };
+            var overrideName = GetNameByGroup(player.Group);
+            var isOverride = false;
+            var isDonator = IsDonator(player.GroupName) || (isOverride = IsDonator(overrideName));
 
             if (isDonator)
             {
@@ -99,8 +89,11 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
+                Team team = RoleExtensions.GetTeam(role);
+                LeadingTeam leading = team.GetLeadingTeam();
+
                 var ntfOrChaos = team is Team.FoundationForces or Team.ChaosInsurgency && role != RoleTypeId.FacilityGuard;
-                var players = Player.List.Where(x => x.IsAlive && !x.IsNPC && x.LeadingTeam != leading && x.UserId != player.UserId && x.Role.Base is FpcStandardRoleBase fpcRole && !fpcRole.IsAFK);
+                IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC && x.LeadingTeam != leading && x.UserId != player.UserId && x.Role.Base is FpcStandardRoleBase fpcRole && !fpcRole.IsAFK);
 
                 if (ntfOrChaos)
                 {
@@ -163,6 +156,13 @@ namespace Marine.Commands.Patches.Generic
                     _usings.Add(player.UserId, 0);
                 }
 
+                var max = (isOverride ? overrideName : player.GroupName) switch
+                {
+                    "don3" => 3,
+                    "don2" or "don1" => 2,
+                    _ => 5
+                };
+
                 if (_usings[player.UserId] > max)
                 {
                     response = "Ты уже максимальное кол-во раз использовал донат!";
@@ -170,75 +170,75 @@ namespace Marine.Commands.Patches.Generic
                 }
 
                 _usings[player.UserId]++;
-            }
 
-            __result = true;
+                var remaining = max - _usings[player.UserId];
 
-            int forced = 0;
+                response = string.Format("Вы успешно стали: {0}! {1}", role.Translate(), remaining > 0 ? $"Осталось {remaining} использований" : "Вы использовали максимальное кол-во раз!");
 
-            foreach (ReferenceHub target in list)
-            {
-                if (target != null && role != RoleTypeId.Overwatch)
+                __result = true;
+
+                foreach (ReferenceHub target in list)
                 {
-                    target.roleManager.ServerSetRole(role, RoleChangeReason.RemoteAdmin, flags);
-
-                    try
+                    if (target != null && role != RoleTypeId.Overwatch)
                     {
-                        AddLog(2, string.Format("{0} changed role of player {1} to {2}.", sender.LogName, target.LoggedNameFromRefHub(), role), 1, false);
-                    }
-                    catch (Exception err)
-                    {
-                        Log.Error(err);
-                    }
+                        target.roleManager.ServerSetRole(role, RoleChangeReason.RemoteAdmin, flags);
 
-                    forced++;
+                        try
+                        {
+                            AddLog(2, string.Format("{0} changed role of player {1} to {2}.", sender.LogName, target.LoggedNameFromRefHub(), role), 1, false);
+                        }
+                        catch (Exception err)
+                        {
+                            Log.Error(err);
+                        }
+                    }
                 }
-            }
 
-            var remaining = max - _usings[player.UserId];
-
-            response = isDonator switch
-            {
-                true => string.Format("Вы успешно стали: {0}! {1}", role.Translate(), remaining > 0 ? $"Осталось {remaining} использований" : "Вы использовали максимальное кол-во раз!"),
-                false => string.Format("Done! Changed role of {0} player{1} to {2}!", forced, (forced == 1) ? "" : "s", role)
-            };
-
-            if (Swap.AllowedScps.Contains(role))
-            {
-                Swap.StartScps[role]++;
-
-                foreach (var informator in Player.List)
+                if (Swap.AllowedScps.Contains(role))
                 {
-                    if (!Subclass.Has<Informator>(informator))
+                    Swap.StartScps[role]++;
+
+                    foreach (Player informator in Player.List)
                     {
-                        continue;
+                        if (!Subclass.Has<Informator>(informator))
+                        {
+                            continue;
+                        }
+
+                        var text = $"Донатер стал {role.Translate()}";
+
+                        informator.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>{text}</color></b></voffset></size>", 3);
+                        informator.SendConsoleMessage(text, "yellow");
                     }
-
-                    var text = $"Донатер стал {role.Translate()}";
-
-                    informator.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>{text}</color></b></voffset></size>", 3);
-                    informator.SendConsoleMessage(text, "yellow");
                 }
+
+                return false;
             }
 
-            return false;
+            return true;
         }
 
-        public static void Reset() => _usings.Clear();
+        public static void Reset()
+        {
+            _usings.Clear();
+        }
 
-        private static bool IsDonator(string group) => group != "don4" && (group.Contains("don") || group.Contains("cons"));
+        private static bool IsDonator(string group)
+        {
+            return !string.IsNullOrEmpty(group) && group != "don4" && (group.Contains("don") || group.Contains("cons"));
+        }
 
         private static string GetNameByGroup(UserGroup group)
         {
-            var handler = ServerStatic.GetPermissionsHandler();
+            PermissionsHandler handler = ServerStatic.GetPermissionsHandler();
 
-            var groups = handler.GetAllGroups();
+            Dictionary<string, UserGroup> groups = handler.GetAllGroups();
 
             KeyValuePair<string, UserGroup>? pair = null!;
 
-            foreach (var gru in groups)
+            foreach (KeyValuePair<string, UserGroup> gru in groups)
             {
-                (string key, UserGroup g) = (gru.Key, gru.Value);
+                (var key, UserGroup g) = (gru.Key, gru.Value);
 
                 if (g.Permissions == group.Permissions && g.RequiredKickPower == group.RequiredKickPower && g.KickPower == group.KickPower && g.BadgeText == group.BadgeText && g.BadgeColor == group.BadgeColor)
                 {
@@ -248,23 +248,18 @@ namespace Marine.Commands.Patches.Generic
                 }
             }
 
-            if (pair is null)
-            {
-                return string.Empty;
-            }
-
-            return pair.Value.Key;
+            return pair is null ? string.Empty : pair.Value.Key;
         }
 
         private static void AddLog(int module, string msg, int type, bool init = false)
         {
-            string text = TimeBehaviour.Rfc3339Time();
+            var text = TimeBehaviour.Rfc3339Time();
 
-            object lockObject = ServerLogs.LockObject;
+            var lockObject = ServerLogs.LockObject;
 
             lock (lockObject)
             {
-                ServerLogs.Queue.Enqueue(new (msg, ServerLogs.Txt[type], ServerLogs.Modulestxt[module], text));
+                ServerLogs.Queue.Enqueue(new(msg, ServerLogs.Txt[type], ServerLogs.Modulestxt[module], text));
             }
 
             if (init)

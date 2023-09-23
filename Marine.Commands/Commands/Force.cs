@@ -75,7 +75,7 @@ namespace Marine.Commands.Commands
             }
 
             RoleTypeId oldRole = player.Role.Type;
-            RoleTypeId role = (RoleTypeId)arguments[0];
+            var role = (RoleTypeId)arguments[0];
 
             if (role == player.Role.Type)
             {
@@ -110,11 +110,11 @@ namespace Marine.Commands.Commands
 
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);
 
-            string scp = $"SCP-{role.Translate()}";
+            var scp = $"SCP-{role.Translate()}";
 
             player.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Желаем удачной игры за {scp}!</color></b></voffset></size>", 6);
 
-            foreach (var informator in Player.List)
+            foreach (Player informator in Player.List)
             {
                 if (!Subclass.Has<Informator>(informator))
                 {
@@ -130,6 +130,9 @@ namespace Marine.Commands.Commands
             return CommandResultType.Success;
         }
 
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.IsScp && Swap.AllowedScps.Contains(player.Role);
+        public override bool CheckPermissions(Player player)
+        {
+            return base.CheckPermissions(player) || player.IsScp && Swap.AllowedScps.Contains(player.Role);
+        }
     }
 }

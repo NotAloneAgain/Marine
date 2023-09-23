@@ -21,12 +21,24 @@ namespace Marine.Commands.API
             Uses[player].Add(use);
         }
 
-        public bool IsUsedBy(Player player) => Uses != null && Uses.ContainsKey(player);
+        public bool IsUsedBy(Player player)
+        {
+            return Uses != null && Uses.ContainsKey(player);
+        }
 
-        public bool HasSuccessfulUse(Player player) => GetLastSuccessfulUse(player) != null;
+        public bool HasSuccessfulUse(Player player)
+        {
+            return GetLastSuccessfulUse(player) != null;
+        }
 
-        public CommandUse GetLastUse(Player player) => IsUsedBy(player) ? Uses[player].Last() : null;
+        public CommandUse GetLastUse(Player player)
+        {
+            return IsUsedBy(player) ? Uses[player].Last() : null;
+        }
 
-        public CommandUse GetLastSuccessfulUse(Player player) => IsUsedBy(player) && Uses[player].Any(use => use.Result == CommandResultType.Success) ? Uses[player].Last(use => use.Result == CommandResultType.Success) : null;
+        public CommandUse GetLastSuccessfulUse(Player player)
+        {
+            return IsUsedBy(player) && Uses[player].Any(use => use.Result == CommandResultType.Success) ? Uses[player].Last(use => use.Result == CommandResultType.Success) : null;
+        }
     }
 }

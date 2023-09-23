@@ -18,7 +18,7 @@ namespace Marine.Redux.API
         public virtual Vector3 Size { get; set; } = Vector3.one;
 
         [YamlMember(Alias = "shield")]
-        public virtual Shield Shield { get; set; } = new (0, 75, 1.2f, 0.7f, 0, false);
+        public virtual Shield Shield { get; set; } = new(0, 75, 1.2f, 0.7f, 0, false);
 
         [YamlMember(Alias = "inventory")]
         public virtual SubclassInventory Inventory { get; set; } = new SubclassInventory();

@@ -8,10 +8,7 @@ namespace Marine.Redux.API.Subclasses
 {
     public abstract class GroupSubclass : Subclass, IGroupPlayer
     {
-        public GroupSubclass() : base()
-        {
-            Players = new(Max);
-        }
+        public GroupSubclass() : base() => Players = new(Max);
 
         public sealed override SubclassType Type { get; } = SubclassType.Group;
 
@@ -27,7 +24,7 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
-            Players.Add(player);
+            _ = Players.Add(player);
 
             base.Assign(player);
         }
@@ -39,21 +36,19 @@ namespace Marine.Redux.API.Subclasses
                 return;
             }
 
-            Players.Remove(player);
+            _ = Players.Remove(player);
 
             base.Revoke(player, reason);
         }
 
         public sealed override bool Has(in Player player)
         {
-            if (player == null)
-            {
-                return false;
-            }
-
-            return Players.Contains(player);
+            return player != null && Players.Contains(player);
         }
 
-        public override bool Can(in Player player) => base.Can(player) && Players.Count + 1 <= Max;
+        public override bool Can(in Player player)
+        {
+            return base.Can(player) && Players.Count + 1 <= Max;
+        }
     }
 }

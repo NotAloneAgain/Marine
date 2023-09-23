@@ -44,11 +44,11 @@ namespace Marine.Commands.API.Abstract
         public abstract CommandPermission Permission { get; set; }
 
         [YamlIgnore]
-        public CommandHistory History { get; set; } = new ();
+        public CommandHistory History { get; set; } = new();
 
         public void Subscribe()
         {
-            foreach (var type in Types)
+            foreach (CommandType type in Types)
             {
                 switch (type)
                 {
@@ -76,7 +76,7 @@ namespace Marine.Commands.API.Abstract
 
         public void Unsubscribe()
         {
-            foreach (var type in Types)
+            foreach (CommandType type in Types)
             {
                 switch (type)
                 {
@@ -115,7 +115,7 @@ namespace Marine.Commands.API.Abstract
 
             var list = arguments.ToList();
 
-            if (!ParseSyntax(list, arguments.Count, out var args))
+            if (!ParseSyntax(list, arguments.Count, out List<object> args))
             {
                 response = string.Format(Messages[CommandResultType.Syntax], Command, Syntax[arguments.Count]);
 
@@ -124,7 +124,7 @@ namespace Marine.Commands.API.Abstract
 
             try
             {
-                Player player = Player.Get(sender);
+                var player = Player.Get(sender);
 
                 if (player == null)
                 {
@@ -167,17 +167,8 @@ namespace Marine.Commands.API.Abstract
 
         public virtual bool CheckPermissions(Player player)
         {
-            if (Permission != null && Permission.IsLimited)
-            {
-                if (Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string group) && Permission.Groups.Contains(group))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return true;
+            return Permission == null || !Permission.IsLimited
+|| Permission.Users.Any() && Permission.Users.Contains(player.UserId) || Permission.Groups.Any() && ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out var group) && Permission.Groups.Contains(group);
         }
 
         public abstract CommandResultType Handle(List<object> arguments, Player player, out string response);
@@ -209,7 +200,7 @@ namespace Marine.Commands.API.Abstract
 
                             foreach (var data in splitted)
                             {
-                                if (!Player.TryGet(data, out var player))
+                                if (!Player.TryGet(data, out Player player))
                                 {
                                     continue;
                                 }
@@ -221,7 +212,7 @@ namespace Marine.Commands.API.Abstract
                         {
                             result = new(1);
 
-                            if (!Player.TryGet(players, out var player))
+                            if (!Player.TryGet(players, out Player player))
                             {
                                 return false;
                             }

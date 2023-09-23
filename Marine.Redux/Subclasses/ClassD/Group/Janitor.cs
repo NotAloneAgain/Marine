@@ -40,7 +40,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         protected override void OnAssigned(Player player)
         {
-            var rooms = Room.List.Where(room => room.Type == RoomType.LczTCross);
+            IEnumerable<Room> rooms = Room.List.Where(room => room.Type == RoomType.LczTCross);
 
             player.Position = rooms.ElementAt(Random.Range(0, rooms.Count())).Position + Vector3.up;
         }
