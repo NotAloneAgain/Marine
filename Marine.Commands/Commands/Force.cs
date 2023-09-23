@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
+using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.Guards.Single;
 using Marine.ScpSwap.API;
@@ -104,9 +105,12 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
+            Swap.StartScps[player.Role.Type]--;
+            Swap.StartScps[role]++;
+
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);
 
-            string scp = $"SCP-{role.ToString().Substring(3)}";
+            string scp = $"SCP-{role.Translate()}";
 
             player.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Желаем удачной игры за {scp}!</color></b></voffset></size>", 6);
 
@@ -117,8 +121,10 @@ namespace Marine.Commands.Commands
                     continue;
                 }
 
-                informator.ShowHint("<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Информация обновлена!</color></b></voffset></size>", 3);
-                informator.SendConsoleMessage($"SCP-{oldRole.ToString().Substring(3)} стал {scp}", "yellow");
+                var text = $"{oldRole.Translate()} стал {scp}";
+
+                informator.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>{text}</color></b></voffset></size>", 3);
+                informator.SendConsoleMessage(text, "yellow");
             }
 
             return CommandResultType.Success;

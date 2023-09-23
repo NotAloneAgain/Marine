@@ -38,11 +38,11 @@ namespace Marine.MySQL.API
             _levels = new(connScp);
             _sync = new(connDiscord);
 
-            Levels.Open();
-            Sync.Open();
+            _levels.Open();
+            _sync.Open();
 
-            Levels.Create();
-            Sync.Create();
+            _levels.Create();
+            _sync.Create();
         }
     }
 }
