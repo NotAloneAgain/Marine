@@ -51,6 +51,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override bool CanTriggerTesla { get; set; } = false;
 
+        public override bool CanSoundFootstep { get; set; } = false;
+
         public override int Chance { get; set; } = 3;
 
         public override void Subscribe()
@@ -230,6 +232,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
 
             ev.IsAllowed = false;
+            ev.Player.Teleport(ev.Player.CurrentRoom.Doors.First().Position + Vector3.up);
         }
 
         private void OnActivatingWarheadPanel(ActivatingWarheadPanelEventArgs ev)

@@ -299,14 +299,9 @@ namespace Marine.Misc.Handlers
             {
                 sync.InGame = true;
 
-                if (!ev.Player.RemoteAdminAccess || ev.Player.Group == null)
+                if (!ev.Player.RemoteAdminAccess || ev.Player.Group == null || ev.Player.Group.BadgeColor == "none")
                 {
                     ev.Player.Group = _discordGroup;
-                }
-                else if (ev.Player.RankColor == "none")
-                {
-                    ev.Player.RankName = _discordGroup.BadgeText;
-                    ev.Player.RankColor = _discordGroup.BadgeColor;
                 }
 
                 MySqlManager.Sync.Update(sync);

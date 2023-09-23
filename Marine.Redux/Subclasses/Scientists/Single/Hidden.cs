@@ -24,6 +24,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
 
+        public override bool CanSoundFootstep { get; set; } = false;
+
         public override int Chance { get; set; } = 15;
     }
 }

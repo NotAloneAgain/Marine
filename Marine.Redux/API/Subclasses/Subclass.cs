@@ -45,6 +45,9 @@ namespace Marine.Redux.API.Subclasses
         [YamlMember(Alias = "can_trigger_tesla")]
         public virtual bool CanTriggerTesla { get; set; } = true;
 
+        [YamlMember(Alias = "can_sound_footstep")]
+        public virtual bool CanSoundFootstep { get; set; } = true;
+
         [YamlMember(Alias = "chance")]
         public abstract int Chance { get; set; }
 

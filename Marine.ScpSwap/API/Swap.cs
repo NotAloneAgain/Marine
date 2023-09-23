@@ -12,5 +12,7 @@ namespace Marine.ScpSwap.API
         public static List<RoleTypeId> AllowedScps { get; set; }
 
         public static Dictionary<RoleTypeId, int> Slots { get; set; }
+
+        public static Dictionary<RoleTypeId, int> StartScps { get; set; }
     }
 }

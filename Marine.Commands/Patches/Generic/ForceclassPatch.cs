@@ -59,6 +59,12 @@ namespace Marine.Commands.Patches.Generic
 
             if (Player.TryGet(senderHub, out var player) && player.GroupName != "don4" && (player.GroupName.Contains("don") || player.GroupName.Contains("cons")))
             {
+                if (!Round.IsStarted)
+                {
+                    response = "Дождитесь начала раунда!";
+                    return false;
+                }
+
                 if (flags != RoleSpawnFlags.All && (int)flags != 3)
                 {
                     response = "Разрешено только с флагами!";
@@ -96,9 +102,9 @@ namespace Marine.Commands.Patches.Generic
 
                 if (team == Team.SCPs)
                 {
-                    if (Round.ElapsedTime.TotalMinutes > 2)
+                    if (Round.ElapsedTime.TotalMinutes > 5)
                     {
-                        response = "Уже прошло более двух минут с начала раунда";
+                        response = "Уже прошло более пяти минут с начала раунда";
                         return false;
                     }
 
@@ -108,7 +114,7 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    if (players.Count(x => x.Role.Type == role) >= Swap.Slots[role])
+                    if (Swap.StartScps[role] >= Swap.Slots[role])
                     {
                         response = "Все слоты за данный объект заняты!";
                         return false;

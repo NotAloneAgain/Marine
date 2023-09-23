@@ -13,7 +13,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         private const string ConsoleMessage = "\n\t+ Помимо этого:" +
                 "\n\t\t- Возможность выбивать двери командой .knock (наведись на дверь)." +
                 "\n\t\t- Треть получаемого вами урона отражается на противника." +
-                "\n\t\t- Вы получаете на 50% меньше урона.";
+                "\n\t\t- Вы получаете на 40% меньше урона.";
 
         public Scp073() : base() { }
 
@@ -70,7 +70,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ev.Amount = isScp switch
             {
                 true => 40,
-                _ => ev.Amount / 2
+                _ => ev.Amount * 0.6f
             };
 
             if (ev.Player.UserId == ev.Attacker.UserId || ev.Attacker.IsGodModeEnabled || ev.DamageHandler.Type is DamageType.PocketDimension)

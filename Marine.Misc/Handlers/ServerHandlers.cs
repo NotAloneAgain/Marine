@@ -85,18 +85,7 @@ namespace Marine.Misc.Handlers
                         zones.Add(_zones[Random.Range(0, _zones.Count)]);
                     }
 
-                    foreach (RoomLightController instance in RoomLightController.Instances)
-                    {
-                        if (instance == null)
-                            continue;
-
-                        Room room = instance.GetComponentInParent<Room>();
-
-                        if (room != null && (zones.Contains(ZoneType.Unspecified) || zones.Contains(room.Zone)))
-                        {
-                            instance.ServerFlickerLights(duration);
-                        }
-                    }
+                    Map.TurnOffAllLights(duration, zones);
                 }
             }
         }

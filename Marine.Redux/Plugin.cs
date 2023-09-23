@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Handlers;
+using HarmonyLib;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Subclasses;
 using System;
@@ -11,6 +12,10 @@ namespace Marine.Redux
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
+        private const string HarmonyId = "NotAloneAgain.Redux";
+
+        private Harmony _harmony;
+
         public override string Name => "Marine.Redux";
 
         public override string Prefix => "marine.redux";
@@ -21,6 +26,10 @@ namespace Marine.Redux
 
         public override void OnEnabled()
         {
+            _harmony = new(HarmonyId);
+
+            _harmony.PatchAll(Assembly);
+
             Player.ChangingRole += OnChangingRole;
             Player.TriggeringTesla += OnTriggeringTesla;
 
@@ -41,6 +50,10 @@ namespace Marine.Redux
             {
                 subclass.Unsubscribe();
             }
+
+            _harmony.UnpatchAll(HarmonyId);
+
+            _harmony = null;
 
             base.OnDisabled();
         }

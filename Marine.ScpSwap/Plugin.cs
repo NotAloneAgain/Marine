@@ -8,7 +8,7 @@ namespace Marine.ScpSwap
 {
     public sealed class Plugin : Exiled.API.Features.Plugin<Config>
     {
-        private PlayerHandlers _handlers;
+        private PlayerHandlers _player;
 
         public override string Name => "Marine.ScpSwap";
 
@@ -20,23 +20,27 @@ namespace Marine.ScpSwap
 
         public override void OnEnabled()
         {
-            _handlers = new(Config.InfoText, Config.InfoDuration);
+            _player = new(Config.InfoText, Config.InfoDuration);
 
             Swap.Slots = Config.Slots;
             Swap.Prevent = Config.PreventMultipleSwaps;
             Swap.AllowedScps = Config.AllowedScps;
             Swap.SwapDuration = Config.SwapDuration;
 
-            Player.ChangingRole += _handlers.OnChangingRole;
+            Server.RestartingRound += _player.Reset;
+            Player.ChangingRole += _player.OnChangingRole;
+            Player.Destroying += _player.OnDestroying;
 
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            Player.ChangingRole -= _handlers.OnChangingRole;
+            Player.Destroying -= _player.OnDestroying;
+            Player.ChangingRole -= _player.OnChangingRole;
+            Server.RestartingRound -= _player.Reset;
 
-            _handlers = null;
+            _player = null;
 
             base.OnDisabled();
         }
