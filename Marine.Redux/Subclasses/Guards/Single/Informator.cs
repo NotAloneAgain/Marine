@@ -9,9 +9,11 @@ namespace Marine.Redux.Subclasses.Guards.Single
 {
     public class Informator : SingleSubclass
     {
-        public Informator() : base() { }
-
         public override string Name { get; set; } = "Информатор";
+
+        public override string Desc { get; set; } = "Ты владеешь информацией о том, какие SCP сбежали (нажми на Ё).";
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {

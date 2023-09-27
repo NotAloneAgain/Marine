@@ -38,12 +38,15 @@ namespace Marine.Commands.Commands
 
             if (player.IsInventoryFull)
             {
-                _ = Pickup.CreateAndSpawn(ItemType.GunAK, player.Position, player.Rotation, player);
+                _ = Pickup.CreateAndSpawn(ItemType.GunA7, player.Position, player.Rotation, player);
             }
             else
             {
                 _ = player.AddItem(ItemType.GunAK);
             }
+
+            player.CustomInfo = $"{player.CustomName}{(string.IsNullOrEmpty(player.CustomInfo) ? string.Empty : $"\n{player.CustomInfo}")}\nПовстанец Хаоса — Агент";
+            player.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
 
             return CommandResultType.Success;
         }

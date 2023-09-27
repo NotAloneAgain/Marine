@@ -15,6 +15,18 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Вор";
 
+        public override string Desc { get; set; } = "Ты крайне давно увлекаешься воровством, когда-то ты ограбил банк.";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Украсть случайный предмет командой [.steal].",
+            "Подбирание предметов на 10% быстрее.",
+            "Перемещение на 5% быстрее остальных.",
+            "Набор полезных предметов.",
+        };
+
+        public override bool ConsoleRemark { get; } = true;
+
         public override int Max { get; set; } = 4;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

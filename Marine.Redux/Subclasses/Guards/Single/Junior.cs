@@ -8,13 +8,13 @@ namespace Marine.Redux.Subclasses.Guards.Single
 {
     public class Junior : SingleSubclass
     {
-        public Junior() : base() { }
-
         public override string Name { get; set; } = "Младший сотрудник";
+
+        public override string Desc { get; set; } = "Ты недавно устроился в фонд и тебе не доверили светошумовую гранату";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            ShowInfo = true,
+            ShowInfo = false,
             Message = new("Ты - Младший сотрудник!\nТы недавно устроился в фонд и тебе не доверили светошумовую гранату.", 12, true),
             Inventory = new()
             {

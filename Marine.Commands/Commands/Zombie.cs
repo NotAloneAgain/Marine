@@ -40,6 +40,7 @@ namespace Marine.Commands.Commands
             }
 
             player.DropAllWithoutKeycard();
+            player.CurrentItem = null;
             player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
 
             return CommandResultType.Success;

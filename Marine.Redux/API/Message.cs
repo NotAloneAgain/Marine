@@ -33,6 +33,16 @@ namespace Marine.Redux.API
         [YamlMember(Alias = "show")]
         public bool Show { get; set; } = false;
 
+        public void FormateWithSend(in string text, in Player player)
+        {
+            if (!Show || Duration == 0 || string.IsNullOrEmpty(Text))
+            {
+                return;
+            }
+
+            player.ShowHint(Formate(text, player.Role.Type), Duration);
+        }
+
         public void Send(in Player player)
         {
             if (!Show || Duration == 0 || string.IsNullOrEmpty(Text))

@@ -110,7 +110,7 @@ namespace Marine.Commands.Commands
 
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);
 
-            var scp = $"SCP-{role.Translate()}";
+            var scp = role.Translate();
 
             player.ShowHint($"<line-height=95%><size=95%><voffset=-20em><b><color=#FF9500>Желаем удачной игры за {scp}!</color></b></voffset></size>", 6);
 

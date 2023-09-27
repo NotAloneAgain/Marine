@@ -16,6 +16,8 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Уборщик";
 
+        public override string Desc { get; set; } = "Ты убирался в комплексе, но теперь похоже не можешь продолжить свое дело";
+
         public override int Max { get; set; } = 3;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

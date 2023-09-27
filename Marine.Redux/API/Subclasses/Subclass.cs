@@ -15,6 +15,8 @@ namespace Marine.Redux.API.Subclasses
 {
     public abstract class Subclass : IHasName, IHasHandlers
     {
+        private const string RemarkText = "<size=75%>Для более подробной информации обратись в консоль.</size>";
+
         private static readonly List<Subclass> _list;
 
         static Subclass() => _list = new(100);
@@ -33,8 +35,15 @@ namespace Marine.Redux.API.Subclasses
 
         public abstract string Name { get; set; }
 
+        public abstract string Desc { get; set; }
+
+        public virtual List<string> Abilities { get; set; } = new List<string>();
+
         [YamlIgnore]
         public int Id { get; }
+
+        [YamlIgnore]
+        public virtual bool ConsoleRemark { get; } = false;
 
         [YamlMember(Alias = "keep_after_escape")]
         public virtual bool KeepAfterEscape { get; set; } = true;
@@ -44,6 +53,12 @@ namespace Marine.Redux.API.Subclasses
 
         [YamlMember(Alias = "can_sound_footstep")]
         public virtual bool CanSoundFootstep { get; set; } = true;
+
+        [YamlMember(Alias = "damage_multiplayer")]
+        public virtual float DamageMultiplayer { get; set; } = 1;
+
+        [YamlMember(Alias = "hurt_multiplayer")]
+        public virtual float HurtMultiplayer { get; set; } = 1;
 
         [YamlMember(Alias = "chance")]
         public abstract int Chance { get; set; }
@@ -113,22 +128,45 @@ namespace Marine.Redux.API.Subclasses
         public virtual void Subscribe()
         {
             Exiled.Events.Handlers.Player.Destroying += OnDestroying;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Died += OnDied;
         }
 
         public virtual void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
+        }
+
+        public virtual void OnEscaping(Player player)
+        {
+            if (KeepAfterEscape)
+            {
+                Timing.CallDelayed(0.00005f, delegate ()
+                {
+                    player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
+
+                    player.MaxHealth = SpawnInfo.Health;
+                    player.Health = SpawnInfo.Health;
+
+                    if (SpawnInfo.ShowInfo)
+                    {
+                        DestroyInfo(player);
+                    }
+                });
+            }
         }
 
         public virtual void Assign(Player player)
         {
-            $"Assign {Name} to {player.Nickname} ({player.UserId})".AddLog();
+            $"Assign {Name} ({GetType().Name}) to {player.Nickname} ({player.UserId})".AddLog();
 
-            _ = Timing.CallDelayed(0.00005f, delegate ()
+            Timing.CallDelayed(0.00005f, delegate ()
             {
-                SpawnInfo.Message.Send(player);
+                SpawnInfo.Message.FormateWithSend($"Ты - {Name.ToLower()}!\n{Desc}.{(ConsoleRemark ? "\n" + RemarkText : string.Empty)}", player);
+
+                player.SendConsoleMessage($"\nНазвание: {Name}.\nОписание: {Desc}.\nШанс получения: {Chance}.{GetAbilitiesText()}", "yellow");
 
                 player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 
@@ -158,7 +196,7 @@ namespace Marine.Redux.API.Subclasses
 
                     foreach (ItemType item in SpawnInfo.Inventory.Items)
                     {
-                        _ = player.AddItem(item);
+                        player.AddItem(item);
                     }
                 }
 
@@ -196,6 +234,10 @@ namespace Marine.Redux.API.Subclasses
 
         protected virtual void OnRevoked(Player player, in RevokeReason reason) { }
 
+        protected virtual void OnDamage(HurtingEventArgs ev) { }
+
+        protected virtual void OnHurt(HurtingEventArgs ev) { }
+
         protected virtual void OnDestroying(DestroyingEventArgs ev)
         {
             if (!Has(ev.Player))
@@ -216,25 +258,6 @@ namespace Marine.Redux.API.Subclasses
             Revoke(ev.Player, RevokeReason.Died);
         }
 
-        public virtual void OnEscaping(Player player)
-        {
-            if (KeepAfterEscape)
-            {
-                _ = Timing.CallDelayed(0.00005f, delegate ()
-                {
-                    player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
-
-                    player.MaxHealth = SpawnInfo.Health;
-                    player.Health = SpawnInfo.Health;
-
-                    if (SpawnInfo.ShowInfo)
-                    {
-                        DestroyInfo(player);
-                    }
-                });
-            }
-        }
-
         protected void CreateInfo(Player ply)
         {
             ply.CustomInfo = $"{ply.CustomName}{(string.IsNullOrEmpty(ply.CustomInfo) ? string.Empty : $"\n{ply.CustomInfo}")}\n{Name}";
@@ -245,6 +268,53 @@ namespace Marine.Redux.API.Subclasses
         {
             ply.CustomInfo = ply.CustomInfo.Replace(ply.CustomName, string.Empty).Replace("\n", string.Empty).Replace(Name, string.Empty);
             ply.InfoArea |= PlayerInfoArea.Role | PlayerInfoArea.Nickname;
+        }
+
+        private protected string GetAbilitiesText()
+        {
+            if (Abilities.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            string result = "\nСпособности: \n";
+
+            for (int i = 0; i < Abilities.Count; i++)
+            {
+                result += $"{i + 1}.\t {Abilities[i]}{(i + 1 == Abilities.Count ? string.Empty : "\n")}";
+            }
+
+            return result;
+        }
+
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsGodModeEnabled || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !ev.IsAllowed)
+            {
+                return;
+            }
+
+            bool isPlayer = Has(ev.Player);
+            bool isAttacker = Has(ev.Attacker);
+
+            if (!isPlayer && !isAttacker || ev.Player.UserId == ev.Attacker.UserId)
+            {
+                return;
+            }
+
+            if (isPlayer)
+            {
+                ev.Amount *= HurtMultiplayer;
+
+                OnHurt(ev);
+            }
+
+            if (isAttacker)
+            {
+                ev.Amount *= DamageMultiplayer;
+
+                OnDamage(ev);
+            }
         }
     }
 }

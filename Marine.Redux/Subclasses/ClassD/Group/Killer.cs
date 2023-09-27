@@ -17,11 +17,21 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Убийца";
 
+        public override string Desc { get; set; } = "Всегда готов кого-либо убить и знаешь много методов для этого.";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Пистолет или информацию о его нахождении.",
+            "Повышенный до 110% наносимый урон.",
+        };
+
+        public override bool ConsoleRemark { get; } = true;
+
         public override int Max { get; set; } = 2;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
-            Message = new("Ты - Убийца!\nУ тебя есть информацию о пистолете (проверь консоль) и +5% к наносимому вами урону.", 12, true),
+            Message = new("Ты - Убийца!\nУ тебя есть информацию о пистолете (проверь консоль) и +10% к наносимому вами урону.", 12, true),
             Inventory = new()
             {
                 IsRandomable = true,
@@ -46,6 +56,8 @@ namespace Marine.Redux.Subclasses.ClassD.Group
         };
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
+
+        public override float DamageMultiplayer { get; set; } = 1.1f;
 
         public override int Chance { get; set; } = 6;
 

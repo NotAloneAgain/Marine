@@ -15,13 +15,22 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Карлик";
 
+        public override string Desc { get; set; } = "Несмотря на твое слабое тело и маленький рост ты смог выжить тут";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Пониженное количество здоровья.",
+            "Бесконечная выносливость.",
+            "Маленький рост."
+        };
+
         public override int Max { get; set; } = 3;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
             Message = new("Ты - карлик!\nНесмотря на твое слабое тело и маленький рост ты смог выжить тут.", 12, true, "#D6AE01"),
-            Size = Vector3.one * 0.62f,
+            Size = Vector3.one * 0.64f,
             Health = 50,
             Inventory = new()
             {

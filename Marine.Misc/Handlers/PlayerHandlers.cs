@@ -198,7 +198,7 @@ namespace Marine.Misc.Handlers
 
             var isHuman = ev.DamageHandler.Type.IsHumanDamage();
 
-            if ((isHuman || ev.Attacker.IsScp && ev.DamageHandler.Type is not DamageType.PocketDimension and DamageType.Poison) && ev.Amount > 0)
+            if (ev.DamageHandler.Type is not DamageType.PocketDimension and not DamageType.Poison and not DamageType.Bleeding && (isHuman || ev.Attacker.IsScp) && ev.Amount > 0)
             {
                 if (ev.Player.Health - ev.Amount <= 0)
                 {

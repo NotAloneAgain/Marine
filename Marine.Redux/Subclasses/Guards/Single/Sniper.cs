@@ -8,9 +8,9 @@ namespace Marine.Redux.Subclasses.Guards.Single
 {
     public class Sniper : SingleSubclass
     {
-        public Sniper() : base() { }
-
         public override string Name { get; set; } = "Снайпер";
+
+        public override string Desc { get; set; } = "Ты очень точно стреляешь и тебе доверяет Фонд";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {

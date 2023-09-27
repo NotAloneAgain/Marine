@@ -9,9 +9,14 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Letting : SingleSubclass
     {
-        public Letting() : base() { }
-
         public override string Name { get; set; } = "Попущенный";
+
+        public override string Desc { get; set; } = "Ты был попущен блатным ранее, этот статус сохранился за тобой по сей день";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Пониженное количество здоровья.",
+        };
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {

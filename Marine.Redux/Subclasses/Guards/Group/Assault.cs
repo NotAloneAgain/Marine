@@ -8,16 +8,24 @@ namespace Marine.Redux.Subclasses.Guards.Group
 {
     public class Assault : GroupSubclass
     {
-        public Assault() : base() { }
-
         public override string Name { get; set; } = "Штурмовик";
+
+        public override string Desc { get; set; } = "Ты проверенный в боях сотрудник, готовый ко всем ситуациям";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Выбить некоторые двери с помощью [.knock].",
+            "Повышенное количество здоровья."
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override int Max { get; set; } = 2;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             Health = 125,
-            Message = new("Ты - Штурмовик!\nТы проверенный в боях сотрудник, готовый ко всем ситуациям. Используй .knock чтобы выбивать двери.", 12, true),
+            Message = new("Ты - Штурмовик!\nТы проверенный в боях сотрудник, готовый ко всем ситуациям.", 12, true),
             Inventory = new()
             {
                 IsRandomable = false,

@@ -17,6 +17,17 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override string Name { get; set; } = "Зараженный";
 
+        public override string Desc { get; set; } = "Ты заражен зомби-вирусом.";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Сохранение ключ-карты при обращении.",
+            "Возможность стать зомби [.zombie].",
+            "Становление зомби после смерти."
+        };
+
+        public override bool ConsoleRemark { get; } = true;
+
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             Message = new("Ты - Зараженный!\nТы заражен зомби-вирусом и станешь зомби после смерти или использовав команду .zombie.", 12, true),
@@ -66,6 +77,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
             ev.IsAllowed = false;
             ev.Player.DropAllWithoutKeycard();
+            ev.Player.CurrentItem = null;
             ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.ForceClass);
         }
     }

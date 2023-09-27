@@ -8,9 +8,17 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Gang : SingleSubclass
     {
-        public Gang() : base() { }
-
         public override string Name { get; set; } = "Блатной";
+
+        public override string Desc { get; set; } = "Тебя уважают все в тюрьме, это уважение завоевано силой";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Выбить некоторые двери с помощью [.knock].",
+            "Повышенное количество здоровья."
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {

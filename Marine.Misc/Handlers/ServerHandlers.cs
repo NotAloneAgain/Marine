@@ -18,19 +18,10 @@ namespace Marine.Misc.Handlers
     internal sealed class ServerHandlers
     {
         #region Initialize
-        private readonly List<ZoneType> _zones;
         private readonly List<CoroutineHandle> _coroutines;
 
         internal ServerHandlers()
         {
-            _zones = new List<ZoneType>(4)
-            {
-                ZoneType.Surface,
-                ZoneType.Entrance,
-                ZoneType.LightContainment,
-                ZoneType.HeavyContainment,
-            };
-
             _coroutines = new(10);
         }
         #endregion
@@ -72,20 +63,16 @@ namespace Marine.Misc.Handlers
                 {
                     var duration = Random.Range(10, 240);
 
-                    var zonesCount = Random.Range(1, 5);
-
-                    HashSet<ZoneType> zones = zonesCount switch
+                    ZoneType zone = Random.Range(0, 101) switch
                     {
-                        5 => new(1),
-                        _ => new(zonesCount)
+                        100 => ZoneType.Unspecified,
+                        >= 74 => ZoneType.LightContainment,
+                        >= 49 => ZoneType.HeavyContainment,
+                        >= 24 => ZoneType.Entrance,
+                        _ => ZoneType.Surface,
                     };
 
-                    for (var i = 0; i >= zonesCount; i++)
-                    {
-                        _ = zones.Add(_zones[Random.Range(0, _zones.Count)]);
-                    }
-
-                    Map.TurnOffAllLights(duration, zones);
+                    Map.TurnOffAllLights(duration, zone);
                 }
             }
         }

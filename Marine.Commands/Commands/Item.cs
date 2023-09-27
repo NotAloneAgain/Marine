@@ -29,7 +29,7 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override int Cooldown { get; set; } = 5;
+        public override int Cooldown { get; set; } = 2;
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
@@ -40,7 +40,7 @@ namespace Marine.Commands.Commands
 
             var id = (ItemType)arguments[0];
 
-            if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018)
+            if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018 or ItemType.SCP330)
             {
                 response = "Атятя плохая штучка хотел получить";
 

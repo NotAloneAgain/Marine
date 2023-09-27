@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
@@ -13,14 +14,21 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         private const string ConsoleMessage = "\n\t+ У тебя есть:" +
                 "\n\t\t- Возможность улучшать дверь, чтобы её было невозможно сломать гранатой или SCP-096 [.upgrade].";
 
-        public Engineer() : base() { }
-
         public override string Name { get; set; } = "Инженер";
+
+        public override string Desc { get; set; } = "Ты чинил старую камеру содержания SCP-173 после поломки.";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Возможность улучшить дверь [.upgrade]."
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
-            Message = new("Ты - Инженер!\nТы ремонтировал камеру содержания SCP-173 чтобы он мог туда вернуться (проверь консоль).", 12, true),
+            Message = new("Ты - Инженер!\nТы ремонтировал камеру содержания SCP-173 чтобы он мог туда вернуться.", 12, true),
             Inventory = new()
             {
                 IsRandomable = false,
@@ -53,6 +61,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
         protected override void OnAssigned(Player player)
         {
             player.Teleport(DoorType.Scp173Gate);
+
+            Door.Get(DoorType.Scp173Gate).Unlock();
 
             player.SendConsoleMessage(ConsoleMessage, "yellow");
         }

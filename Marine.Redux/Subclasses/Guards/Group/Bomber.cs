@@ -8,9 +8,9 @@ namespace Marine.Redux.Subclasses.Guards.Group
 {
     public class Bomber : GroupSubclass
     {
-        public Bomber() : base() { }
-
         public override string Name { get; set; } = "Подрывник";
+
+        public override string Desc { get; set; } = "Ты любишь устраивать взрывы и шоу";
 
         public override int Max { get; set; } = 2;
 

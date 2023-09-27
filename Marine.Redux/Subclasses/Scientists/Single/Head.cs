@@ -14,6 +14,8 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         public override string Name { get; set; } = "Научный Руководитель";
 
+        public override string Desc { get; set; } = "Хороший ученый и управленец, главенствующий над всем научным отделом";
+
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,

@@ -12,20 +12,25 @@ namespace Marine.Redux.Subclasses.Scientists.Group
 {
     public class Medic : GroupSubclass
     {
-        private const string ConsoleMessage = "\n\t+ У тебя есть:" +
-                "\n\t\t- Возможность лечить других держа аптечку/таблетки/SCP-500 в руках [.heal]." +
-                "\n\t\t- Двойной эффект при лечении (аптечка у тебя восстановит 130 здоровья, обезболивающее восстановит 100 здоровья но с той же скоростью).";
-
-        public Medic() : base() { }
-
         public override string Name { get; set; } = "Медик";
+
+        public override string Desc { get; set; } = "Ты имеешь хорошие медицинские познания и можете лечить других";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Лечение других держа аптечку/таблетки/SCP-500 в руках [.heal].",
+            "Повышенное количество здоровья.",
+            "Двойной эффект от лечения."
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override int Max { get; set; } = 2;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
-            Message = new("Вы - Медик!\nВы имеете хорошие медицинские познания и можете лечить других (проверь консоль).", 12, true),
+            Message = new("Ты - Медик!\nТы имеете хорошие медицинские познания и можете лечить других (проверь консоль).", 12, true),
             Health = 125,
             Inventory = new()
             {
@@ -70,11 +75,6 @@ namespace Marine.Redux.Subclasses.Scientists.Group
             base.Unsubscribe();
         }
 
-        protected override void OnAssigned(Player player)
-        {
-            player.SendConsoleMessage(ConsoleMessage, "yellow");
-        }
-
         private void OnUsedItem(UsedItemEventArgs ev)
         {
             if (ev.Item.Type is not ItemType.Medkit and not ItemType.Painkillers || !Has(ev.Player))
@@ -84,7 +84,7 @@ namespace Marine.Redux.Subclasses.Scientists.Group
 
             if (ev.Item.Type == ItemType.Medkit)
             {
-                ev.Player.Heal(65);
+                ev.Player.Heal(130);
             }
             else if (ev.Item.Type == ItemType.Painkillers)
             {

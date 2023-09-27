@@ -17,6 +17,10 @@ namespace Marine.Redux.Subclasses.Scientists.Single
     {
         public override string Name { get; set; } = "Программист";
 
+        public override string Desc { get; set; } = "Система C.A.S.S.I.E периодически сообщает тебе данные о комплексе";
+
+        public override bool ConsoleRemark { get; } = true;
+
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
@@ -72,7 +76,7 @@ namespace Marine.Redux.Subclasses.Scientists.Single
                 return;
             }
 
-            Player.PlayCassieAnnouncement("Warning . Unauthorized Personnel Detected in Entrance Zone");
+            Player.PlayCassieAnnouncement("Warning . Unauthorized Personnel Detected in Surface Zone");
         }
 
         private IEnumerator<float> _ShowData(Player player)

@@ -4,20 +4,25 @@ using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Scp073 : SingleSubclass
     {
-        private const string ConsoleMessage = "\n\t+ Помимо этого:" +
-                "\n\t\t- Возможность выбивать двери командой .knock (наведись на дверь)." +
-                "\n\t\t- Треть получаемого вами урона отражается на противника." +
-                "\n\t\t- Вы получаете на 40% меньше урона.";
-
-        public Scp073() : base() { }
-
         public override string Name { get; set; } = "SCP-073";
+
+        public override string Desc { get; set; } = "У тебя очень крепкое тело и неплохая регенерация";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Отражение трети получаемого урона в противника.",
+            "Выбить некоторые двери с помощью [.knock].",
+            "Пониженный до 60% получаемый урон.",
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
@@ -29,39 +34,14 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
+        public override float HurtMultiplayer { get; set; } = 0.6f;
+
         public override int Chance { get; set; } = 5;
 
-        public override void Subscribe()
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
+
+        protected override void OnHurt(HurtingEventArgs ev)
         {
-            base.Subscribe();
-
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
-        }
-
-        public override void Unsubscribe()
-        {
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-
-            base.Unsubscribe();
-        }
-
-        public override bool Can(in Player player)
-        {
-            return base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
-        }
-
-        protected override void OnAssigned(Player player)
-        {
-            player.SendConsoleMessage(ConsoleMessage, "yellow");
-        }
-
-        private void OnHurting(HurtingEventArgs ev)
-        {
-            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsNPC || !ev.IsAllowed || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !Has(ev.Player))
-            {
-                return;
-            }
-
             var isScp = ev.Attacker.IsScp;
 
             var amount = isScp switch
@@ -70,13 +50,12 @@ namespace Marine.Redux.Subclasses.ClassD.Single
                 _ => ev.Amount / 3
             };
 
-            ev.Amount = isScp switch
+            if (isScp)
             {
-                true => 40,
-                _ => ev.Amount * 0.6f
-            };
+                ev.Amount = 40;
+            }
 
-            if (ev.Player.UserId == ev.Attacker.UserId || ev.Attacker.IsGodModeEnabled || ev.DamageHandler.Type is DamageType.PocketDimension)
+            if (ev.Attacker.IsGodModeEnabled || ev.DamageHandler.Type is DamageType.PocketDimension)
             {
                 return;
             }

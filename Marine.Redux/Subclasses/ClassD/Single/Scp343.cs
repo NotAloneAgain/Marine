@@ -24,9 +24,20 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private RoleTypeId _model = RoleTypeId.Tutorial;
 
-        public Scp343() : base() { }
-
         public override string Name { get; set; } = "SCP-343";
+
+        public override string Desc { get; set; } = "Ты пиздатый, ахуенный, современный, невъебенный";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Преобразование опасных предметов в аптечки",
+            "Выдача безопасных предметов [.item].",
+            "Открытие любых дверей кроме опасных.",
+            "Смена модельки монеткой",
+            "Телепортация [.tp].",
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
@@ -60,7 +71,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Subscribe();
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
@@ -83,16 +93,12 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             base.Unsubscribe();
         }
 
-        public override bool Can(in Player player)
-        {
-            return base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
-        }
+        public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp073>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
 
         protected override void OnAssigned(Player player)
         {
@@ -132,30 +138,28 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive && ply.Role.Type != RoleTypeId.Scp079 && ply.UserId != Player.UserId), true);
         }
 
-        private void OnHurting(HurtingEventArgs ev)
+        protected override void OnHurt(HurtingEventArgs ev)
         {
-            var isPlayer = Has(ev.Player);
-
-            if (!isPlayer && !Has(ev.Attacker))
-            {
-                return;
-            }
-
             ev.IsAllowed = false;
 
-            if (Player != null && isPlayer && ev.DamageHandler.Type == DamageType.Warhead)
-            {
-                ev.Player.Teleport(Room.Get(RoomType.Surface).Position + Vector3.up * 3);
-
-                return;
-            }
-
-            if (Player != null && isPlayer && ev.DamageHandler.Type == DamageType.Decontamination)
+            if (ev.DamageHandler.Type == DamageType.Decontamination)
             {
                 ev.Player.Teleport(Room.Get(RoomType.HczServers).Position + Vector3.up * 3);
 
                 return;
             }
+
+            if (ev.DamageHandler.Type == DamageType.Warhead)
+            {
+                ev.Player.Teleport(Room.Get(RoomType.Surface).Position + Vector3.up * 3);
+
+                return;
+            }
+        }
+
+        protected override void OnDamage(HurtingEventArgs ev)
+        {
+            ev.IsAllowed = false;
         }
 
         private void OnDying(DyingEventArgs ev)

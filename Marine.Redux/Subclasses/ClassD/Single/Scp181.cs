@@ -14,18 +14,18 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Scp181 : SingleSubclass
     {
-        private const string ConsoleMessage = "\n\t+ У тебя есть:" +
-                "\n\t\t- Шанс в 3% открыть дверь, к которой доступа не имеешь из-за сбоев в комплексе." +
-                "\n\t\t- На 10% меньше урона от любых источников, ведь все травмы приходятся в менее важные места." +
-                "\n\t\t- Шанс 5% избежать смертельный урон.";
-
-        public Scp181() : base() { }
-
-        public int DoorChance { get; set; } = 3;
-
-        public int SurviveChance { get; set; } = 5;
-
         public override string Name { get; set; } = "SCP-181";
+
+        public override string Desc { get; set; } = "Тебе настолько сильно везет, что тебя записали как аномальный SCP-объект";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Вероятность в 3% открыть дверь, к которой нет доступа.",
+            "Вероятность в 6% избежать смертельную атаку.",
+            "Пониженный до 90% получаемый урон.",
+        };
+
+        public override bool ConsoleRemark { get; } = true;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
@@ -40,7 +40,13 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
+        public override float HurtMultiplayer { get; set; } = 0.9f;
+
         public override int Chance { get; set; } = 3;
+
+        public int SurviveChance { get; set; } = 6;
+
+        public int DoorChance { get; set; } = 3;
 
         public override void Subscribe()
         {
@@ -58,21 +64,14 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Unsubscribe();
         }
 
-        protected override void OnAssigned(Player player)
-        {
-            player.GetEffect(EffectType.DamageReduction)?.ServerSetState(20, 0, false);
-
-            player.SendConsoleMessage(ConsoleMessage, "yellow");
-        }
-
         private void OnDying(DyingEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.Attacker == null || ev.Player == ev.Attacker)
+            if (!Has(ev.Player) || ev.Attacker == null || ev.Player.UserId == ev.Attacker.UserId)
             {
                 return;
             }
 
-            if (Random.Range(0, 101) >= 100 - SurviveChance)
+            if (Random.Range(0, 101) >= 100 - SurviveChance && ev.DamageHandler.Type is not DamageType.Warhead)
             {
                 ev.IsAllowed = false;
             }
@@ -80,7 +79,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!Has(ev.Player) || ev.IsAllowed || ev.Door == null || ev.Door.IsMoving || ev.Door.Is<BreakableDoor>(out BreakableDoor breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
+            if (!Has(ev.Player) || ev.IsAllowed || ev.Door == null || ev.Door.IsMoving || ev.Door.Is(out BreakableDoor breakable) && breakable.IsDestroyed || ev.Door.IsLocked || ev.Door.IsGate && ev.Door.Type is DoorType.Scp914Gate or DoorType.GR18Gate || ev.Door.IsOpen)
             {
                 return;
             }

@@ -13,6 +13,14 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         public override string Name { get; set; } = "Гигант";
 
+        public override string Desc { get; set; } = "У тебя крепкое тело и большой рост";
+
+        public override List<string> Abilities { get; set; } = new List<string>()
+        {
+            "Повышенное количество здоровья.",
+            "Высокий рост."
+        };
+
         public override int Max { get; set; } = 3;
 
         public override SpawnInfo SpawnInfo { get; set; } = new()

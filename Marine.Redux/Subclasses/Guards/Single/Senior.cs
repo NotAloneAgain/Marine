@@ -8,9 +8,9 @@ namespace Marine.Redux.Subclasses.Guards.Single
 {
     public class Senior : SingleSubclass
     {
-        public Senior() : base() { }
-
         public override string Name { get; set; } = "Глава охраны";
+
+        public override string Desc { get; set; } = "Ты руководишь всей охраной комплекса и имеешь повышенный уровень доступа";
 
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
