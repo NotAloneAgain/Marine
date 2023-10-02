@@ -34,9 +34,14 @@ namespace Marine.Commands.API
 
         public static Ragdoll GetRagdollFromView(this Player owner, float distance)
         {
-            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out RaycastHit hit, distance) || !hit.transform.TryGetComponent<BasicRagdoll>(out var basic) && (basic = Ragdoll.List.FirstOrDefault(r => r.GameObject == hit.transform.gameObject).Base) == null)
+            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out RaycastHit hit, distance))
             {
                 return null;
+            }
+
+            if (!hit.transform.TryGetComponent<BasicRagdoll>(out var basic) && (basic = Ragdoll.List.FirstOrDefault(r => r.GameObject == hit.transform.gameObject)?.Base) == null)
+            {
+                return Ragdoll.List.OrderBy(r => Vector3.Distance(r.Position, owner.Position)).FirstOrDefault();
             }
 
             var ragdoll = Ragdoll.Get(basic);

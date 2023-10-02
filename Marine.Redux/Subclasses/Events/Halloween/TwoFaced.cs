@@ -33,7 +33,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
                 {
                     new Slot(new ItemChances()
                     {
-                        { ItemType.KeycardGuard, 100 },
+                        { ItemType.KeycardZoneManager, 100 },
                     }, false),
                 }
             }

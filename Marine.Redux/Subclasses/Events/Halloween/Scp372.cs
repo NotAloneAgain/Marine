@@ -27,7 +27,8 @@ namespace Marine.Redux.Subclasses.Events.Halloween
         {
             "Особая роль, доступная только в октябре в честь Хеллоуина.",
             "Вы можете проявиться и наблюдатели будут получать урон:",
-            "Команда для проявления [.scp372]."
+            "Команда для проявления [.scp372].",
+            "Если не работает .suicide в помощь"
         };
 
         public override bool ConsoleRemark { get; } = true;
@@ -35,6 +36,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
         public override SpawnInfo SpawnInfo { get; set; } = new()
         {
             ShowInfo = true,
+            Health = 150,
             Message = new("###", 15, true, "#480607"),
             Inventory = new()
             {
@@ -49,23 +51,6 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override int Chance { get; set; } = 10;
 
-        [YamlIgnore]
-        public bool IsSpawned
-        {
-            get => Player != null && !Player.HasEffect<Invisible>();
-            set
-            {
-                if (value)
-                {
-                    Player.DisableEffect(Exiled.API.Enums.EffectType.Invisible);
-                }
-                else
-                {
-                    Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
-                }
-            }
-        }
-
         public override bool Can(in Player player) => base.Can(player) && DateTime.Now.Month == 10;
 
         public void Run() => Timing.RunCoroutine(_Damage());
@@ -77,16 +62,16 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         protected override void OnDamage(HurtingEventArgs ev)
         {
-            ev.IsAllowed = false;
+            ev.IsAllowed = !Player.HasEffect<Invisible>();
         }
 
         private IEnumerator<float> _Damage()
         {
             DateTime start = DateTime.Now;
 
-            IsSpawned = true;
+            Player.DisableEffect(Exiled.API.Enums.EffectType.Invisible);
 
-            while (IsSpawned && Player != null && (DateTime.Now - start).TotalSeconds <= 40)
+            while (Player != null && (DateTime.Now - start).TotalSeconds <= 40)
             {
                 var room = Player.CurrentRoom;
 
@@ -108,18 +93,20 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
                     VisionInformation vision = VisionInformation.GetVisionInformation(ply.ReferenceHub, ply.ReferenceHub.PlayerCameraReference, Player.CameraTransform.position, radius, 30, true, true, 0, true);
 
-                    if (!vision.IsLooking)
+                    if (!vision.IsLooking || ply.IsScp || ply.IsTutorial || ply.IsGodModeEnabled)
                     {
                         continue;
                     }
 
                     ply.Hurt(1, Exiled.API.Enums.DamageType.CardiacArrest);
+
+                    room.TurnOffLights(5);
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
-            IsSpawned = false;
+            Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
         }
     }
 }

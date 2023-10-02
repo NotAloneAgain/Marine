@@ -8,11 +8,15 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace Marine.Redux.Subclasses.Events.Halloween
 {
     public class Vampire : SingleSubclass
     {
+        [YamlIgnore]
+        private float _multiplayer = 0;
+
         public override string Name { get; set; } = "Вампир";
 
         public override string Desc { get; set; } = "Ты подпитываешься кровью раненных тобой игроков";
@@ -54,6 +58,8 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override int Chance { get; set; } = 20;
 
+        public float Multiplayer => DateTime.Now.Day == 31 ? 0.4f : 0.25f;
+
         public override void Subscribe()
         {
             base.Subscribe();
@@ -84,7 +90,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         protected override void OnDamage(HurtingEventArgs ev)
         {
-            ev.Attacker.Heal(ev.Amount * 0.2f);
+            ev.Attacker.Heal(ev.Amount * Multiplayer);
         }
 
         private void OnUsingItem(UsingItemEventArgs ev)
@@ -101,7 +107,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             {
                 Player.Heal(0.5f);
 
-                yield return Timing.WaitForSeconds(1.5f);
+                yield return Timing.WaitForSeconds(DateTime.Now.Day == 31 ? 0.95f : 1.5f);
             }
         }
     }

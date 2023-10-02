@@ -19,7 +19,7 @@ namespace Marine.Commands.Commands
 
         public override string Description { get; set; } = "Команда для суицида.";
 
-        public override List<int> Counts { get; set; } = new List<int>(1) { 1 };
+        public override List<int> Counts { get; set; } = new List<int>(1) { 0 };
 
         public override Dictionary<int, string> Syntax { get; set; } = new Dictionary<int, string>()
         {
@@ -30,7 +30,7 @@ namespace Marine.Commands.Commands
 
         public override CommandPermission Permission { get; set; } = new()
         {
-            IsLimited = true,
+            IsLimited = false,
         };
 
         public override bool ParseSyntax(List<string> input, int count, out List<object> output)
@@ -44,6 +44,13 @@ namespace Marine.Commands.Commands
         {
             response = string.Empty;
 
+            if (!player.IsAlive || !player.IsHuman || player.IsTutorial)
+            {
+                response = "Суицид - не выход.";
+
+                return CommandResultType.Fail;
+            }
+
             if (Subclass.HasAny(player))
             {
                 var sub = Subclass.ReadOnlyCollection.First(x => x.Has(player));
@@ -55,7 +62,5 @@ namespace Marine.Commands.Commands
 
             return CommandResultType.Success;
         }
-
-        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || player.IsAlive && !player.IsGodModeEnabled && !player.IsScp && !player.IsTutorial;
     }
 }

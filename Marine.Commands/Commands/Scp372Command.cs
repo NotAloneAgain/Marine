@@ -10,6 +10,7 @@ using Marine.Redux.Subclasses.Events.Halloween;
 using Marine.Redux.Subclasses.Scientists.Group;
 using MEC;
 using PlayerStatsSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,7 +36,14 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
-        public override int Cooldown { get; set; } = 90;
+        public override int Cooldown
+        {
+            get => DateTime.Now.Day == 31 ? 60 : 90;
+            set
+            {
+
+            }
+        }
 
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
