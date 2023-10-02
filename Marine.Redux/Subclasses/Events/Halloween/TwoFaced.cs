@@ -1,6 +1,4 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Features;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
@@ -14,7 +12,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
     {
         public override string Name { get; set; } = "Двуликий";
 
-        public override string Desc { get; set; } = "Ты живешь сменой лиц и маскировкой.";
+        public override string Desc { get; set; } = "Ты живешь сменой лиц и маскировкой";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -43,34 +41,8 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
-        public RoleTypeId Model { get; set; } = RoleTypeId.ClassD;
-
         public override int Chance { get; set; } = 15;
 
-        public override void Subscribe()
-        {
-            base.Subscribe();
-
-            Exiled.Events.Handlers.Player.Verified += OnVerified;
-        }
-
-        public override void Unsubscribe()
-        {
-            Exiled.Events.Handlers.Player.Verified -= OnVerified;
-
-            base.Unsubscribe();
-        }
-
         public override bool Can(in Player player) => base.Can(player) && DateTime.Now.Month == 10;
-
-        private void OnVerified(VerifiedEventArgs ev)
-        {
-            if (Player == null && Model != Role)
-            {
-                return;
-            }
-
-            Player.ChangeAppearance(Model, new List<Player>(1) { ev.Player }, true);
-        }
     }
 }

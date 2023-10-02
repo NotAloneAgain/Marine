@@ -15,7 +15,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
     {
         public override string Name { get; set; } = "Вампир";
 
-        public override string Desc { get; set; } = "Ты подпитываешься кровью раненных тобой игроков.";
+        public override string Desc { get; set; } = "Ты подпитываешься кровью раненных тобой игроков";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -23,6 +23,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             "Повышенное количество здоровья.",
             "Восстановление вампиризмом.",
             "Бесконечная выносливость.",
+            "Регенерация здоровья.",
         };
 
         public override bool ConsoleRemark { get; } = true;
@@ -83,7 +84,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         protected override void OnDamage(HurtingEventArgs ev)
         {
-            ev.Attacker.Heal(ev.Amount * 0.25f);
+            ev.Attacker.Heal(ev.Amount * 0.2f);
         }
 
         private void OnUsingItem(UsingItemEventArgs ev)
@@ -100,7 +101,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             {
                 Player.Heal(0.5f);
 
-                yield return Timing.WaitForSeconds(1);
+                yield return Timing.WaitForSeconds(1.5f);
             }
         }
     }

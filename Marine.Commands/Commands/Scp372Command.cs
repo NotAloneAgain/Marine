@@ -46,7 +46,6 @@ namespace Marine.Commands.Commands
 
             Scp372 sub = Subclass.ReadOnlyCollection.First(x => x.Has(player)) as Scp372;
 
-            sub.IsSpawned = true;
             sub.Run();
 
             return CommandResultType.Success;

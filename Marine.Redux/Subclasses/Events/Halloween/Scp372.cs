@@ -1,6 +1,5 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Features;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using Marine.Misc.API;
@@ -14,6 +13,7 @@ using PlayerRoles.PlayableScps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace Marine.Redux.Subclasses.Events.Halloween
 {
@@ -21,7 +21,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
     {
         public override string Name { get; set; } = "SCP-372";
 
-        public override string Desc { get; set; } = "Ты наносишь серъезный психологический и моральный урон своим проявлением.";
+        public override string Desc { get; set; } = "Ты наносишь серъезный психологический и моральный урон своим проявлением";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -49,18 +49,19 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override int Chance { get; set; } = 10;
 
+        [YamlIgnore]
         public bool IsSpawned
         {
-            get => !Player.HasEffect<Invisible>();
+            get => Player != null && !Player.HasEffect<Invisible>();
             set
             {
-                if (!value)
+                if (value)
                 {
-                    Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
+                    Player.DisableEffect(Exiled.API.Enums.EffectType.Invisible);
                 }
                 else
                 {
-                    Player.DisableEffect(Exiled.API.Enums.EffectType.Invisible);
+                    Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
                 }
             }
         }
@@ -68,6 +69,11 @@ namespace Marine.Redux.Subclasses.Events.Halloween
         public override bool Can(in Player player) => base.Can(player) && DateTime.Now.Month == 10;
 
         public void Run() => Timing.RunCoroutine(_Damage());
+
+        protected override void OnAssigned(Player player)
+        {
+            Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
+        }
 
         protected override void OnDamage(HurtingEventArgs ev)
         {
@@ -78,9 +84,18 @@ namespace Marine.Redux.Subclasses.Events.Halloween
         {
             DateTime start = DateTime.Now;
 
-            while (IsSpawned && Player != null && (DateTime.Now - start).TotalSeconds > 40)
+            IsSpawned = true;
+
+            while (IsSpawned && Player != null && (DateTime.Now - start).TotalSeconds <= 40)
             {
                 var room = Player.CurrentRoom;
+
+                if (room == null)
+                {
+                    yield return Timing.WaitForSeconds(1);
+
+                    continue;
+                }
 
                 if (room.Players.Count(p => p.IsHuman && p.IsAlive && !Has<Scp343>(p)) > 1)
                 {

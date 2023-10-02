@@ -87,7 +87,7 @@ namespace Marine.Misc.API
 
         public static bool HasEffect<TEffect>(this Player player) where TEffect : StatusEffectBase
         {
-            return player.TryGetEffect<TEffect>(out TEffect effect) && effect.IsEnabled;
+            return player != null && player.TryGetEffect(out TEffect effect) && effect.IsEnabled;
         }
 
         public static bool HasFlagFast(this KeycardPermissions perm, KeycardPermissions perm2)

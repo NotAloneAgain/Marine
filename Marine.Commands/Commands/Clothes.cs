@@ -45,19 +45,19 @@ namespace Marine.Commands.Commands
 
             var target = player.GetRagdollFromView(6);
 
+            if (target == null)
+            {
+                response = "Цель нераспознана";
+                return CommandResultType.Fail;
+            }
+
             if (target.Role is PlayerRoles.RoleTypeId.Scp173 or PlayerRoles.RoleTypeId.Scp106 or PlayerRoles.RoleTypeId.Scp0492 or PlayerRoles.RoleTypeId.Tutorial)
             {
                 response = "Ты не можешь переодеться в этот труп.";
                 return CommandResultType.Fail;
             }
 
-            TwoFaced sub = Subclass.ReadOnlyCollection.First(x => x.Has(player)) as TwoFaced;
-
-            sub.Model = target.Role;
-
-            bool isScp = sub.Model.GetSide() == Exiled.API.Enums.Side.Scp;
-
-            player.ChangeAppearance(sub.Model, Player.List.Where(ply => !isScp || ply.UserId != player.UserId), true);
+            player.Role.Set(target.Role, PlayerRoles.RoleSpawnFlags.None);
 
             return CommandResultType.Success;
         }
