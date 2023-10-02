@@ -84,6 +84,13 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
+            if (player.Health != player.MaxHealth)
+            {
+                response = "Вы уже успели получить урон!";
+
+                return CommandResultType.Fail;
+            }
+
             if (Swap.Prevent && History.HasSuccessfulUse(player))
             {
                 response = "Сменить роль можно лишь один раз.";
@@ -98,14 +105,14 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            if (Swap.StartScps[role] >= Swap.Slots[role])
+            if (Swap.StartScps[role] >= Swap.Slots[role] || Player.List.Count(ply => ply.Role.Type == role) >= Swap.Slots[role])
             {
                 response = "Все слоты за данный объект заняты.";
 
                 return CommandResultType.Fail;
             }
 
-            Swap.StartScps[player.Role.Type]--;
+            Swap.StartScps[oldRole]--;
             Swap.StartScps[role]++;
 
             player.Role.Set(role, SpawnReason.ForceClass, RoleSpawnFlags.All);

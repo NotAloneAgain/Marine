@@ -63,11 +63,9 @@ namespace Marine.ScpSwap.Handlers
 
         public void Reset()
         {
-            var startScp = Swap.StartScps.ToHashSet();
-
-            foreach (KeyValuePair<PlayerRoles.RoleTypeId, int> starts in startScp)
+            foreach (PlayerRoles.RoleTypeId role in Swap.StartScps.Keys.ToHashSet())
             {
-                Swap.StartScps[starts.Key] = 0;
+                Swap.StartScps[role] = 0;
             }
         }
     }

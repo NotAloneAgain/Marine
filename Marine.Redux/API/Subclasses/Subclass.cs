@@ -160,13 +160,13 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Assign(Player player)
         {
-            $"Assign {Name} ({GetType().Name}) to {player.Nickname} ({player.UserId})".AddLog();
+            Log.Info($"Assign {Name} ({GetType().Name}) to {player.Nickname} ({player.UserId})");
 
             Timing.CallDelayed(0.00005f, delegate ()
             {
-                SpawnInfo.Message.FormateWithSend($"Ты - {Name.ToLower()}!\n{Desc}.{(ConsoleRemark ? "\n" + RemarkText : string.Empty)}", player);
+                SpawnInfo.Message.FormateWithSend($"Ты - {Name}!\n{Desc}.{(ConsoleRemark ? "\n" + RemarkText : string.Empty)}", player);
 
-                player.SendConsoleMessage($"\nНазвание: {Name}.\nОписание: {Desc}.\nШанс получения: {Chance}.{GetAbilitiesText()}", "yellow");
+                player.SendConsoleMessage($"\nНазвание: {Name}.\nОписание: {Desc}.\nШанс получения: {Chance}%.{GetAbilitiesText()}", "yellow");
 
                 player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 
@@ -277,7 +277,7 @@ namespace Marine.Redux.API.Subclasses
                 return string.Empty;
             }
 
-            string result = "\nСпособности: \n";
+            string result = "\nОсобенности: \n";
 
             for (int i = 0; i < Abilities.Count; i++)
             {

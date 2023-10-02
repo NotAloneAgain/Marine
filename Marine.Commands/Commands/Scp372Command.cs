@@ -1,20 +1,25 @@
-﻿using Exiled.API.Features;
-using Exiled.API.Features.Pickups;
+﻿using Achievements;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using InventorySystem.Items.Usables;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Guards.Single;
-using PlayerRoles;
+using Marine.Redux.Subclasses.Events.Halloween;
+using Marine.Redux.Subclasses.Scientists.Group;
+using MEC;
+using PlayerStatsSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Marine.Commands.Commands
 {
-    public class Sus : CommandBase
+    public sealed class Scp372Command : CooldownCommand
     {
-        public override string Command { get; set; } = "sus";
+        public override string Command { get; set; } = "scp372";
 
-        public override string Description { get; set; } = "Команда чтобы переодеться в хаос.";
+        public override string Description { get; set; } = "Команда для проявления SCP-372.";
 
         public override List<CommandType> Types { get; set; } = new List<CommandType>(1) { CommandType.PlayerConsole };
 
@@ -30,20 +35,19 @@ namespace Marine.Commands.Commands
             IsLimited = true,
         };
 
+        public override int Cooldown { get; set; } = 90;
+
         public override CommandResultType Handle(List<object> arguments, Player player, out string response)
         {
-            response = string.Empty;
-
-            player.Role.Set(RoleTypeId.ChaosRifleman, RoleSpawnFlags.None);
-
-            if (player.IsInventoryFull)
+            if (base.Handle(arguments, player, out response) == CommandResultType.Fail)
             {
-                _ = Pickup.CreateAndSpawn(ItemType.GunA7, player.Position, player.Rotation, player);
+                return CommandResultType.Fail;
             }
-            else
-            {
-                _ = player.AddItem(ItemType.GunAK);
-            }
+
+            Scp372 sub = Subclass.ReadOnlyCollection.First(x => x.Has(player)) as Scp372;
+
+            sub.IsSpawned = true;
+            sub.Run();
 
             return CommandResultType.Success;
         }
@@ -55,9 +59,6 @@ namespace Marine.Commands.Commands
             return true;
         }
 
-        public override bool CheckPermissions(Player player)
-        {
-            return base.CheckPermissions(player) || player.Role.Type == RoleTypeId.FacilityGuard && Subclass.Has<Imposter>(player);
-        }
+        public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Scp372>(player);
     }
 }

@@ -15,13 +15,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class Scp343 : SingleSubclass
     {
-        private const string ConsoleMessage = "\n\t+ У тебя есть:" +
-                "\n\t\t- телепортация [.tp]." +
-                "\n\t\t- Открытия любых дверей кроме оружеек." +
-                "\n\t\t- Выдача любых предметов кроме опасных [.item]." +
-                "\n\t\t- Преобразование опасных предметов в аптечки путем подбирания." +
-                "\n\t\t- Возможность сменить модельку (не роль) подбрасыванием монетки.";
-
         private RoleTypeId _model = RoleTypeId.Tutorial;
 
         public override string Name { get; set; } = "SCP-343";
@@ -70,8 +63,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         {
             base.Subscribe();
 
-            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
@@ -92,8 +85,8 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
+            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
-            Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             base.Unsubscribe();
         }
@@ -104,8 +97,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
         {
             player.IsUsingStamina = false;
             player.IsGodModeEnabled = true;
-
-            player.SendConsoleMessage(ConsoleMessage, "yellow");
         }
 
         protected override void OnRevoked(Player player, in RevokeReason reason)
@@ -162,19 +153,24 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ev.IsAllowed = false;
         }
 
-        private void OnDying(DyingEventArgs ev)
+        private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (!Has(ev.Attacker) && !Has(ev.Player))
+            if (!Has(ev.Player) && Player != null && ev.IsAllowed)
             {
-                if (Player != null && ev.IsAllowed)
+                if (ev.NewRole is RoleTypeId.Spectator or RoleTypeId.Overwatch && ev.Player.Role.Type is not RoleTypeId.Spectator and not RoleTypeId.Overwatch)
                 {
                     Player.ChangeAppearance(GameRole, new List<Player>(1) { ev.Player }, true);
+
+                    return;
                 }
 
-                return;
-            }
+                if (ev.NewRole is not RoleTypeId.Spectator and not RoleTypeId.Overwatch && ev.Player.Role.Type is RoleTypeId.Spectator or RoleTypeId.Overwatch)
+                {
+                    Player.ChangeAppearance(_model, new List<Player>(1) { ev.Player }, true);
 
-            ev.IsAllowed = false;
+                    return;
+                }
+            }
         }
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)

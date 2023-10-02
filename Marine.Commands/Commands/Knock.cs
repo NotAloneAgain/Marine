@@ -59,7 +59,7 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
-            if (!door.Is<BreakableDoor>(out BreakableDoor breakable) || breakable.IsDestroyed || door.IsElevator || door.IsLocked && door.DoorLockType is DoorLockType.Lockdown2176 or DoorLockType.Regular079 || door.IsGate || IsBlocked(door.Type))
+            if (!door.Is(out BreakableDoor breakable) || breakable.IsDestroyed || door.IsElevator || door.IsLocked && door.DoorLockType is DoorLockType.Lockdown2176 or DoorLockType.Regular079 || door.IsGate || IsBlocked(door.Type))
             {
                 response = "Эту дверь нельзя сломать.";
 

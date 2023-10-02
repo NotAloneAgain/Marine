@@ -64,33 +64,38 @@
     <Compile Include="Patches\Sounds\FootstepSoundPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Subclasses\ClassD\Group\Dwarf.cs" />
-    <Compile Include="Subclasses\ClassD\Group\GigaChad.cs" />
-    <Compile Include="Subclasses\ClassD\Group\Janitor.cs" />
-    <Compile Include="Subclasses\ClassD\Group\Killer.cs" />
-    <Compile Include="Subclasses\ClassD\Group\Pickpocket.cs" />
-    <Compile Include="Subclasses\ClassD\Group\Thief.cs" />
-    <Compile Include="Subclasses\ClassD\Single\Gang.cs" />
-    <Compile Include="Subclasses\ClassD\Single\Letting.cs" />
-    <Compile Include="Subclasses\ClassD\Single\Scp073.cs" />
-    <Compile Include="Subclasses\ClassD\Single\Scp181.cs" />
-    <Compile Include="Subclasses\ClassD\Single\Scp343.cs" />
-    <Compile Include="Subclasses\Guards\Group\Bomber.cs" />
-    <Compile Include="Subclasses\Guards\Single\Informator.cs" />
-    <Compile Include="Subclasses\Guards\Single\Imposter.cs" />
-    <Compile Include="Subclasses\Guards\Single\Senior.cs" />
-    <Compile Include="Subclasses\Guards\Group\Assault.cs" />
-    <Compile Include="Subclasses\Guards\Single\Sniper.cs" />
-    <Compile Include="Subclasses\Guards\Single\Junior.cs" />
-    <Compile Include="Subclasses\Scientists\Group\Medic.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Engineer.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Programmer.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Head.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Hidden.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Infected.cs" />
-    <Compile Include="Subclasses\Scientists\Single\Manager.cs" />
+    <Compile Include="Subclasses\Events\Halloween\Scp372.cs" />
+    <Compile Include="Subclasses\Events\Halloween\TwoFaced.cs" />
+    <Compile Include="Subclasses\Events\Halloween\Vampire.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\Dwarf.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\GigaChad.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\Janitor.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\Killer.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\Pickpocket.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Group\Thief.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\Gang.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\Letting.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\Scp073.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\Scp181.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\Scp343.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Group\Bomber.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Single\Informator.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Single\Imposter.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Single\Senior.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Group\Assault.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Single\Sniper.cs" />
+    <Compile Include="Subclasses\Generic\Guards\Single\Junior.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Group\Medic.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Engineer.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Programmer.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Head.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Hidden.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Infected.cs" />
+    <Compile Include="Subclasses\Generic\Scientists\Single\Manager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Subclasses\Events\Winter\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marine.Misc\Marine.Misc.csproj">
       <Project>{27fdb0b3-9ee6-4be4-9cd0-7febe77798c5}</Project>

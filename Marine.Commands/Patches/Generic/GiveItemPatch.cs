@@ -51,6 +51,7 @@ namespace Marine.Commands.Patches.Generic
             var errors = 0;
             var handled = 0;
             var text = string.Empty;
+
             if (targets != null)
             {
                 var player = Player.Get(sender);

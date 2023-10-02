@@ -31,6 +31,18 @@ namespace Marine.Commands.API
             return door;
         }
 
+        public static Ragdoll GetRagdollFromView(this Player owner, float distance)
+        {
+            if (!Physics.Raycast(owner.Position, owner.Transform.forward, out RaycastHit hit, distance) || hit.transform.TryGetComponentInParent<BasicRagdoll>(out var basic))
+            {
+                return null;
+            }
+
+            var ragdoll = Ragdoll.Get(basic);
+
+            return ragdoll;
+        }
+
         public static string GetSecondsString(this double seconds)
         {
             return Mathf.RoundToInt((float)seconds).GetSecondsString();

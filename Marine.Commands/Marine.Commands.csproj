@@ -51,12 +51,15 @@
     <Compile Include="API\Enums\CommandResultType.cs" />
     <Compile Include="API\Enums\CommandType.cs" />
     <Compile Include="API\Extensions.cs" />
+    <Compile Include="Commands\Suicide.cs" />
+    <Compile Include="Commands\Scp372Command.cs" />
     <Compile Include="Commands\DropItem.cs" />
     <Compile Include="Commands\DropRagdoll.cs" />
     <Compile Include="Commands\Force.cs" />
     <Compile Include="Commands\Ball.cs" />
     <Compile Include="Commands\GiveSubclass.cs" />
     <Compile Include="Commands\Grenade.cs" />
+    <Compile Include="Commands\Clothes.cs" />
     <Compile Include="Commands\Sus.cs" />
     <Compile Include="Commands\Knock.cs" />
     <Compile Include="Commands\Zombie.cs" />

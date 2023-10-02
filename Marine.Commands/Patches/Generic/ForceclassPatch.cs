@@ -89,6 +89,12 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
+                if (role == player.Role.Type)
+                {
+                    response = "Вы и так играете за эту роль!";
+                    return false;
+                }
+
                 Team team = RoleExtensions.GetTeam(role);
                 LeadingTeam leading = team.GetLeadingTeam();
 
@@ -143,7 +149,7 @@ namespace Marine.Commands.Patches.Generic
                             return false;
                         }
 
-                        if (Swap.StartScps[role] >= Swap.Slots[role])
+                        if (Swap.StartScps[role] >= Swap.Slots[role] || Player.List.Count(ply => ply.Role.Type == role) >= Swap.Slots[role])
                         {
                             response = "Все слоты за данный объект заняты!";
                             return false;
@@ -163,7 +169,9 @@ namespace Marine.Commands.Patches.Generic
                     _ => 5
                 };
 
-                if (_usings[player.UserId] > max)
+                var remaining = max - _usings[player.UserId];
+
+                if (_usings[player.UserId] >= max || remaining < 0)
                 {
                     response = "Ты уже максимальное кол-во раз использовал донат!";
                     return false;
@@ -171,7 +179,7 @@ namespace Marine.Commands.Patches.Generic
 
                 _usings[player.UserId]++;
 
-                var remaining = max - _usings[player.UserId];
+                remaining--;
 
                 response = string.Format("Вы успешно стали: {0}! {1}", role.Translate(), remaining > 0 ? $"Осталось {remaining} использований" : "Вы использовали максимальное кол-во раз!");
 

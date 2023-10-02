@@ -1,6 +1,7 @@
 ﻿using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
 using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Events.Halloween;
 using Marine.Redux.Subclasses.Guards.Group;
 using Marine.Redux.Subclasses.Guards.Single;
 using Marine.Redux.Subclasses.Scientists.Group;
@@ -43,7 +44,10 @@ namespace Marine.Redux.Models
                     Informator,
                     Junior,
                     Senior,
-                    Sniper
+                    Sniper,
+                    Vampire,
+                    TwoFaced,
+                    Scp372
                 };
 
                 return list;
@@ -99,5 +103,11 @@ namespace Marine.Redux.Models
         public Sniper Sniper { get; set; } = new();
 
         public Pickpocket Pickpocket { get; set; } = new();
+
+        public Vampire Vampire { get; set; } = new();
+
+        public TwoFaced TwoFaced { get; set; } = new();
+
+        public Scp372 Scp372 { get; set; } = new();
     }
 }
