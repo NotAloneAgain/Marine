@@ -26,7 +26,7 @@ namespace Marine.Misc.Handlers
         private readonly BetterRolesConfig _betterRoles;
         private readonly DefaultConfig _zombieInfection;
         private readonly DefaultConfig _infinityAmmo;
-        private readonly UserGroup _discordGroup;
+        private UserGroup _discordGroup;
 
         public PlayerHandlers(Config config)
         {
@@ -38,17 +38,7 @@ namespace Marine.Misc.Handlers
             _zombieInfection = config.ZombieInfection;
             _infinityAmmo = config.InfinityAmmo;
 
-            _discordGroup = new()
-            {
-                BadgeText = "Участник Discord",
-                BadgeColor = "cyan",
-                HiddenByDefault = false,
-                Cover = false,
-                KickPower = 0,
-                Permissions = 0,
-                RequiredKickPower = 0,
-                Shared = false
-            };
+            _discordGroup = ServerStatic.GetPermissionsHandler().GetGroup("discord");
         }
         #endregion
         #region InfinityAmmo
@@ -158,6 +148,20 @@ namespace Marine.Misc.Handlers
                 ev.Items.Add(ItemType.GrenadeFlash);
             }
         }
+
+        public void OnEnteringPocketDimension(EnteringPocketDimensionEventArgs ev)
+        {
+            if (!ev.IsAllowed || ev.Player == null)
+            {
+                return;
+            }
+
+            if (Warhead.IsDetonated)
+            {
+                ev.IsAllowed = false;
+                ev.Player.Kill(DamageType.Scp106);
+            }
+        }
         #endregion
         #region BetterFirearms
         public void OnShot(ShotEventArgs ev)
@@ -196,7 +200,7 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            var isHuman = ev.DamageHandler.Type.IsHumanDamage();
+            var isHuman = ev.DamageHandler.Type.IsHumanDamage() || ev.Attacker.CurrentItem != null && ev.Attacker.CurrentItem.IsWeapon && ev.DamageHandler.Type != DamageType.Explosion;
 
             if (ev.DamageHandler.Type is not DamageType.PocketDimension and not DamageType.Poison and not DamageType.Bleeding && (isHuman || ev.Attacker.IsScp) && ev.Amount > 0)
             {
@@ -293,9 +297,14 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            MySQL.API.Models.Sync sync = MySqlManager.Sync.Select(ev.Player.UserId);
+            MySQL.API.Models.Sync sync = ev.Player.AuthenticationType switch
+            {
+                AuthenticationType.Steam => MySqlManager.Sync.Select(ev.Player.UserId),
+                AuthenticationType.Discord => MySqlManager.Sync.SelectByDiscord(ev.Player.UserId),
+                _ => null
+            };
 
-            if (sync != null && ev.Player.UserId != "76561199011540209@steam")
+            if (sync != null)
             {
                 sync.InGame = true;
 

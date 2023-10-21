@@ -40,6 +40,7 @@ namespace Marine.Misc
             Server.RoundStarted += _server.OnRoundStarted;
             Server.RestartingRound += _server.OnRestartingRound;
 
+            Player.EnteringPocketDimension += _player.OnEnteringPocketDimension;
             Player.UnlockingGenerator += _player.OnUnlockingGenerator;
             Player.InteractingLocker += _player.OnInteractingLocker;
             Player.UsingRadioBattery += _player.OnUsingRadioBattery;
@@ -88,6 +89,7 @@ namespace Marine.Misc
             Player.UsingRadioBattery -= _player.OnUsingRadioBattery;
             Player.InteractingLocker -= _player.OnInteractingLocker;
             Player.UnlockingGenerator -= _player.OnUnlockingGenerator;
+            Player.EnteringPocketDimension -= _player.OnEnteringPocketDimension;
 
             Server.RestartingRound -= _server.OnRestartingRound;
             Server.RoundStarted -= _server.OnRoundStarted;

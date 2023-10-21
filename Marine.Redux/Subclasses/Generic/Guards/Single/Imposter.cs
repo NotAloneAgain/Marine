@@ -46,31 +46,28 @@ namespace Marine.Redux.Subclasses.Guards.Single
             player.GetEffect(EffectType.Asphyxiated).ServerSetState(1, 3600, false);
         }
 
-        protected override void OnHurt(HurtingEventArgs ev)
+        internal protected override void OnHurt(HurtingEventArgs ev)
         {
-            if (Player != null && ev.Attacker.LeadingTeam == LeadingTeam.ChaosInsurgency)
+            if (Player != null && ev.Player.Role.Type == RoleTypeId.FacilityGuard && ev.Attacker.LeadingTeam == LeadingTeam.ChaosInsurgency)
             {
                 ev.IsAllowed = false;
 
                 Revoke(Player, RevokeReason.None);
 
-                Player.CustomInfo = $"{Player.CustomName}{(string.IsNullOrEmpty(Player.CustomInfo) ? string.Empty : $"\n{Player.CustomInfo}")}\nПовстанец Хаоса — Агент";
-                Player.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
-
                 if (Player.IsInventoryFull)
                 {
-                    _ = Pickup.CreateAndSpawn(ItemType.GunA7, Player.Position, Player.Rotation, Player);
+                    Pickup.CreateAndSpawn(ItemType.GunA7, Player.Position, Player.Rotation, Player);
                 }
                 else
                 {
-                    _ = Player.AddItem(ItemType.GunA7);
+                    Player.AddItem(ItemType.GunA7);
                 }
             }
         }
 
-        protected override void OnDamage(HurtingEventArgs ev)
+        internal protected override void OnDamage(HurtingEventArgs ev)
         {
-            if (Player != null && ev.Player.LeadingTeam == LeadingTeam.ChaosInsurgency)
+            if (Player != null && Player.Role.Type == RoleTypeId.FacilityGuard && ev.Player.LeadingTeam == LeadingTeam.ChaosInsurgency)
             {
                 ev.IsAllowed = false;
             }

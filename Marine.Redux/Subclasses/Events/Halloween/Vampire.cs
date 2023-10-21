@@ -14,9 +14,6 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 {
     public class Vampire : SingleSubclass
     {
-        [YamlIgnore]
-        private float _multiplayer = 0;
-
         public override string Name { get; set; } = "Вампир";
 
         public override string Desc { get; set; } = "Ты подпитываешься кровью раненных тобой игроков";
@@ -88,7 +85,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             player.IsUsingStamina = true;
         }
 
-        protected override void OnDamage(HurtingEventArgs ev)
+        internal protected override void OnDamage(HurtingEventArgs ev)
         {
             ev.Attacker.Heal(ev.Amount * Multiplayer);
         }

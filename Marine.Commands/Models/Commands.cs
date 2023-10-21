@@ -32,7 +32,6 @@ namespace Marine.Commands.Models
                     Knock,
                     Subclass,
                     Clothes,
-                    Scp372Command,
                     Suicide
                 };
 
@@ -75,8 +74,6 @@ namespace Marine.Commands.Models
         public GiveSubclass Subclass { get; set; } = new();
 
         public Suicide Suicide { get; set; } = new();
-
-        public Scp372Command Scp372Command { get; set; } = new();
 
         public Clothes Clothes { get; set; } = new();
     }

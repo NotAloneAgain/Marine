@@ -30,6 +30,9 @@ namespace Marine.Redux
 
             _harmony.PatchAll(Assembly);
 
+            Player.Died += OnDied;
+            Player.Hurting += OnHurting;
+            Player.Destroying += OnDestroying;
             Player.ChangingRole += OnChangingRole;
             Player.TriggeringTesla += OnTriggeringTesla;
 
@@ -45,6 +48,9 @@ namespace Marine.Redux
         {
             Player.TriggeringTesla -= OnTriggeringTesla;
             Player.ChangingRole -= OnChangingRole;
+            Player.Destroying -= OnDestroying;
+            Player.Hurting -= OnHurting;
+            Player.Died -= OnDied;
 
             foreach (Subclass subclass in Config.Subclasses.All)
             {
@@ -82,6 +88,64 @@ namespace Marine.Redux
             ev.IsInIdleRange = false;
             ev.IsInHurtingRange = false;
             ev.IsTriggerable = false;
+        }
+
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsGodModeEnabled || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !ev.IsAllowed)
+            {
+                return;
+            }
+
+            bool playerHas = Subclass.HasAny(ev.Player);
+            bool attackerHas = Subclass.HasAny(ev.Attacker);
+
+            if (!playerHas && !attackerHas || ev.Player.UserId == ev.Attacker.UserId)
+            {
+                return;
+            }
+
+            if (playerHas)
+            {
+                Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+
+                ev.Amount *= subclass.HurtMultiplayer;
+
+                subclass.OnHurt(ev);
+            }
+
+            if (attackerHas)
+            {
+                Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Attacker));
+
+                ev.Amount *= subclass.DamageMultiplayer;
+
+                subclass.OnDamage(ev);
+            }
+        }
+
+        private void OnDestroying(DestroyingEventArgs ev)
+        {
+            if (ev.Player == null || !Subclass.HasAny(ev.Player))
+            {
+                return;
+            }
+
+            Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+
+            subclass.Revoke(ev.Player, RevokeReason.Leave);
+        }
+
+        private void OnDied(DiedEventArgs ev)
+        {
+            if (ev.Player == null || !Subclass.HasAny(ev.Player))
+            {
+                return;
+            }
+
+            Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
+
+            subclass.Revoke(ev.Player, RevokeReason.Died);
         }
 
         private void OnChangingRole(ChangingRoleEventArgs ev)

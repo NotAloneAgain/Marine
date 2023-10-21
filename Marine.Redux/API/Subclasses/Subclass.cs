@@ -125,19 +125,9 @@ namespace Marine.Redux.API.Subclasses
             return this as TSubclass;
         }
 
-        public virtual void Subscribe()
-        {
-            Exiled.Events.Handlers.Player.Destroying += OnDestroying;
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.Died += OnDied;
-        }
+        public virtual void Subscribe() { }
 
-        public virtual void Unsubscribe()
-        {
-            Exiled.Events.Handlers.Player.Died -= OnDied;
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-            Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
-        }
+        public virtual void Unsubscribe() { }
 
         public virtual void OnEscaping(Player player)
         {
@@ -230,33 +220,13 @@ namespace Marine.Redux.API.Subclasses
             return $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
         }
 
+        internal protected virtual void OnDamage(HurtingEventArgs ev) { }
+
+        internal protected virtual void OnHurt(HurtingEventArgs ev) { }
+
         protected virtual void OnAssigned(Player player) { }
 
         protected virtual void OnRevoked(Player player, in RevokeReason reason) { }
-
-        protected virtual void OnDamage(HurtingEventArgs ev) { }
-
-        protected virtual void OnHurt(HurtingEventArgs ev) { }
-
-        protected virtual void OnDestroying(DestroyingEventArgs ev)
-        {
-            if (!Has(ev.Player))
-            {
-                return;
-            }
-
-            Revoke(ev.Player, RevokeReason.Leave);
-        }
-
-        protected virtual void OnDied(DiedEventArgs ev)
-        {
-            if (!Has(ev.Player))
-            {
-                return;
-            }
-
-            Revoke(ev.Player, RevokeReason.Died);
-        }
 
         protected void CreateInfo(Player ply)
         {
@@ -285,36 +255,6 @@ namespace Marine.Redux.API.Subclasses
             }
 
             return result;
-        }
-
-        private void OnHurting(HurtingEventArgs ev)
-        {
-            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsGodModeEnabled || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !ev.IsAllowed)
-            {
-                return;
-            }
-
-            bool isPlayer = Has(ev.Player);
-            bool isAttacker = Has(ev.Attacker);
-
-            if (!isPlayer && !isAttacker || ev.Player.UserId == ev.Attacker.UserId)
-            {
-                return;
-            }
-
-            if (isPlayer)
-            {
-                ev.Amount *= HurtMultiplayer;
-
-                OnHurt(ev);
-            }
-
-            if (isAttacker)
-            {
-                ev.Amount *= DamageMultiplayer;
-
-                OnDamage(ev);
-            }
         }
     }
 }

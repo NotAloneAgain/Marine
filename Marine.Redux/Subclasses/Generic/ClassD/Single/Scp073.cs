@@ -40,7 +40,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override bool Can(in Player player) => base.Can(player) && !AnyHas<Scp343>() && !AnyHas<Scp181>() && Player.List.Count() >= 5;
 
-        protected override void OnHurt(HurtingEventArgs ev)
+        internal protected override void OnHurt(HurtingEventArgs ev)
         {
             var isScp = ev.Attacker.IsScp;
 

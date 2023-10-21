@@ -46,8 +46,7 @@ namespace Marine.Redux.Models
                     Senior,
                     Sniper,
                     Vampire,
-                    TwoFaced,
-                    Scp372
+                    TwoFaced
                 };
 
                 return list;
@@ -107,7 +106,5 @@ namespace Marine.Redux.Models
         public Vampire Vampire { get; set; } = new();
 
         public TwoFaced TwoFaced { get; set; } = new();
-
-        public Scp372 Scp372 { get; set; } = new();
     }
 }

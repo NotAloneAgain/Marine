@@ -9,6 +9,7 @@ using Marine.Misc.API;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 #pragma warning disable IDE0060
@@ -40,7 +41,7 @@ namespace Marine.Misc.Handlers
 
         public void OnRestartingRound()
         {
-            _ = Timing.KillCoroutines(_coroutines.ToArray());
+            Timing.KillCoroutines(_coroutines.ToArray());
 
             Server.FriendlyFire = false;
         }
@@ -101,32 +102,32 @@ namespace Marine.Misc.Handlers
         {
             List<Pickup> toClear = new(500);
 
-            while (Round.InProgress)
+            while (Round.ElapsedTime.TotalMinutes <= 8)
             {
-                yield return Timing.WaitForSeconds(300);
-
                 foreach (Pickup item in Pickup.List)
                 {
                     if (item == null)
                     {
-                        if (toClear.Contains(item))
-                        {
-                            _ = toClear.Remove(item);
-                        }
+                        continue;
+                    }
+
+                    if (item.Type.IsAmmo())
+                    {
+                        item.Destroy();
 
                         continue;
                     }
 
-                    if (!item.IsSpawned || item.Room == null)
+                    if (!item.IsSpawned || item.Room == null || item.Room.Type == RoomType.Hcz079)
                     {
                         continue;
                     }
 
-                    if (item.InClosedLcz() || item.InDetonatedComplex())
+                    if (item.InDetonatedComplex())
                     {
                         if (toClear.Contains(item))
                         {
-                            _ = toClear.Remove(item);
+                            toClear.Remove(item);
                         }
 
                         item.Destroy();
@@ -134,7 +135,7 @@ namespace Marine.Misc.Handlers
                         continue;
                     }
 
-                    if (item.Position.IsCloseToChambers() || item.Type.GetCategory() is ItemCategory.MicroHID or ItemCategory.SCPItem || item.Type == ItemType.KeycardO5)
+                    if (item.Position.IsCloseToChambers() || item.Type.GetCategory() is ItemCategory.MicroHID or ItemCategory.SCPItem or ItemCategory.Keycard)
                     {
                         continue;
                     }
@@ -146,57 +147,101 @@ namespace Marine.Misc.Handlers
                         continue;
                     }
 
-                    _ = toClear.Remove(item);
+                    toClear.Remove(item);
 
                     item.Destroy();
                 }
+
+                yield return Timing.WaitForSeconds(120);
+            }
+
+            toClear.Clear();
+            toClear = null;
+
+            while (Round.InProgress)
+            {
+                yield return Timing.WaitForSeconds(60);
+
+                foreach (Pickup item in Pickup.List)
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+
+                    if (!item.IsSpawned)
+                    {
+                        continue;
+                    }
+
+                    if (item.InClosedLcz() || item.InDetonatedComplex())
+                    {
+                        item.Destroy();
+
+                        continue;
+                    }
+
+                    if (item.Type.IsScp() || item.Type is ItemType.MicroHID or ItemType.Jailbird || item.Type == ItemType.KeycardO5)
+                    {
+                        continue;
+                    }
+
+                    item.Destroy();
+                }
+            }
+
+            foreach (Pickup item in Pickup.List)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                item.Destroy();
             }
         }
 
         public IEnumerator<float> _CleanupRagdolls()
         {
             HashSet<Ragdoll> toClear = new(100);
-            HashSet<Ragdoll> recalling = new(25);
 
             while (Round.InProgress)
             {
                 yield return Timing.WaitForSeconds(120);
 
-                foreach (Player player in Player.List)
-                {
-                    if (player.Role.Type != RoleTypeId.Scp049)
-                    {
-                        continue;
-                    }
-
-                    Scp049Role role = player.Role.As<Scp049Role>();
-
-                    if (role != null && role.RecallingRagdoll != null)
-                    {
-                        continue;
-                    }
-
-                    _ = recalling.Add(role.RecallingRagdoll);
-                }
-
                 foreach (Ragdoll ragdoll in Ragdoll.List)
                 {
-                    if (recalling.Contains(ragdoll) || !ragdoll.Role.IsHuman())
+                    if (ragdoll == null || Player.List.Any(ply => Vector3.Distance(ragdoll.Position, ply.Position) <= 4) || !ragdoll.Role.IsHuman())
                     {
                         continue;
                     }
 
-                    if (!toClear.Contains(ragdoll) && (ragdoll.IsExpired || ragdoll.IsConsumed) && ragdoll.CanBeCleanedUp && ragdoll.AllowCleanUp)
+                    bool hasDoctor = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp049);
+                    bool hasZombie = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp0492);
+
+                    if (!toClear.Contains(ragdoll) && (hasDoctor && ragdoll.IsExpired || hasZombie && ragdoll.IsConsumed) && ragdoll.CanBeCleanedUp && ragdoll.AllowCleanUp)
                     {
-                        _ = toClear.Add(ragdoll);
+                        toClear.Add(ragdoll);
 
                         continue;
                     }
 
+                    toClear.Remove(ragdoll);
                     ragdoll.Destroy();
                 }
+            }
 
-                recalling.Clear();
+            toClear.Clear();
+            toClear = null;
+
+            foreach (Ragdoll ragdoll in Ragdoll.List)
+            {
+                if (ragdoll == null)
+                {
+                    continue;
+                }
+
+                ragdoll.Destroy();
             }
         }
         #endregion

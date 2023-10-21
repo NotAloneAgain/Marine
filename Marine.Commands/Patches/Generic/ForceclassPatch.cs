@@ -137,9 +137,9 @@ namespace Marine.Commands.Patches.Generic
 
                     if (team == Team.SCPs)
                     {
-                        if (Round.ElapsedTime.TotalMinutes > 5)
+                        if (Round.ElapsedTime.TotalMinutes > 4)
                         {
-                            response = "Уже прошло более пяти минут с начала раунда";
+                            response = "Уже прошло более четырех минут с начала раунда";
                             return false;
                         }
 
@@ -149,7 +149,13 @@ namespace Marine.Commands.Patches.Generic
                             return false;
                         }
 
-                        if (Swap.StartScps[role] >= Swap.Slots[role] || Player.List.Count(ply => ply.Role.Type == role) >= Swap.Slots[role])
+                        if (Swap.StartScps[role] >= Swap.Slots[role])
+                        {
+                            response = "Такой объект уже был в раунде!!";
+                            return false;
+                        }
+
+                        if (Player.List.Count(ply => ply.Role.Type == role) >= Swap.Slots[role])
                         {
                             response = "Все слоты за данный объект заняты!";
                             return false;

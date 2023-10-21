@@ -143,5 +143,43 @@ namespace Marine.MySQL.API.Tables
 
             return sync;
         }
+
+        public Sync SelectByDiscord(string userId)
+        {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return null!;
+            }
+
+            MySqlCommand command = new()
+            {
+                Connection = _connection,
+                CommandText = $"SELECT * FROM {Name} WHERE discord_id={userId.Split('@')[0]};"
+            };
+
+            Sync sync = null!;
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    try
+                    {
+                        sync = new Sync(reader.GetUInt32(0), reader.GetUInt64(1), reader.GetString(2), reader.GetByte(3).AsBool());
+                    }
+                    catch (Exception err)
+                    {
+                        Console.WriteLine("Error occured on Select Sync: {0}", err);
+                    }
+                }
+            }
+
+            return sync;
+        }
     }
 }

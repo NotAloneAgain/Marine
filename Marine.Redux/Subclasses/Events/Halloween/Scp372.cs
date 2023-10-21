@@ -1,4 +1,4 @@
-﻿using CustomPlayerEffects;
+﻿/*using CustomPlayerEffects;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
@@ -13,7 +13,6 @@ using PlayerRoles.PlayableScps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using YamlDotNet.Serialization;
 
 namespace Marine.Redux.Subclasses.Events.Halloween
 {
@@ -51,7 +50,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override int Chance { get; set; } = 10;
 
-        public override bool Can(in Player player) => base.Can(player) && DateTime.Now.Month == 10;
+        public override bool Can(in Player player) => false;
 
         public void Run() => Timing.RunCoroutine(_Damage());
 
@@ -109,4 +108,4 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible);
         }
     }
-}
+}*/

@@ -28,7 +28,7 @@ namespace Marine.Redux.API.Subclasses
 
         public sealed override void Revoke(Player player, in RevokeReason reason)
         {
-            if (player == null || !Has(player) || reason == RevokeReason.Died && player.IsAlive && player.Role == Role || reason == RevokeReason.Admin && player.Role == GameRole)
+            if (player == null || !Has(player) || reason == RevokeReason.Admin && player.Role == GameRole)
             {
                 return;
             }

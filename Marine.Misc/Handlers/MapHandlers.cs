@@ -47,8 +47,8 @@ namespace Marine.Misc.Handlers
                 var scp = ply.Role.Base as Scp079Role;
 
                 if (scp == null
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079TierManager>(out Scp079TierManager tier)
-                    || !scp.SubroutineModule.TryGetSubroutine<Scp079LostSignalHandler>(out Scp079LostSignalHandler lost))
+                    || !scp.SubroutineModule.TryGetSubroutine(out Scp079TierManager tier)
+                    || !scp.SubroutineModule.TryGetSubroutine(out Scp079LostSignalHandler lost))
                 {
                     continue;
                 }
@@ -72,12 +72,21 @@ namespace Marine.Misc.Handlers
             {
                 ev.IsAllowed = false;
 
-                _ = Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
+                Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
 
                 ev.Pickup.Destroy();
             }
 
-            if (ev.Pickup.Type is ItemType.ParticleDisruptor or ItemType.Jailbird)
+            if (ev.Pickup.Type == ItemType.Jailbird && ev.KnobSetting == Scp914.Scp914KnobSetting.OneToOne)
+            {
+                ev.IsAllowed = false;
+
+                Pickup.CreateAndSpawn(ItemType.Jailbird, ev.OutputPosition, ev.Pickup.Rotation, ev.Pickup.PreviousOwner);
+
+                ev.Pickup.Destroy();
+            }
+
+            if (ev.Pickup.Type == ItemType.ParticleDisruptor)
             {
                 ev.IsAllowed = false;
 
@@ -96,7 +105,16 @@ namespace Marine.Misc.Handlers
                 _ = ev.Player.AddItem(ItemType.Jailbird);
             }
 
-            if (ev.Item.Type is ItemType.ParticleDisruptor or ItemType.Jailbird)
+            if (ev.Item.Type == ItemType.Jailbird && ev.KnobSetting == Scp914.Scp914KnobSetting.OneToOne)
+            {
+                ev.IsAllowed = false;
+
+                ev.Item.Destroy();
+
+                ev.Player.AddItem(ItemType.Jailbird);
+            }
+
+            if (ev.Item.Type == ItemType.ParticleDisruptor)
             {
                 ev.IsAllowed = false;
 

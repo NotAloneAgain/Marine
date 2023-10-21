@@ -1,15 +1,8 @@
-﻿using Achievements;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using InventorySystem.Items.Usables;
+﻿/*using Exiled.API.Features;
 using Marine.Commands.API;
 using Marine.Commands.API.Abstract;
 using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
-using Marine.Redux.Subclasses.Events.Halloween;
-using Marine.Redux.Subclasses.Scientists.Group;
-using MEC;
-using PlayerStatsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,4 +61,4 @@ namespace Marine.Commands.Commands
 
         public override bool CheckPermissions(Player player) => base.CheckPermissions(player) || Subclass.Has<Scp372>(player);
     }
-}
+}*/

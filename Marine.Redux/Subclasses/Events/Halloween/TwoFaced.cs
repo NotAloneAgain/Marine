@@ -1,9 +1,7 @@
-﻿using Exiled.API.Features;
-using Marine.Redux.API;
+﻿using Marine.Redux.API;
 using Marine.Redux.API.Inventory;
 using Marine.Redux.API.Subclasses;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
 
 namespace Marine.Redux.Subclasses.Events.Halloween
@@ -16,7 +14,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
-            "Особая роль, доступная только в октябре в честь Хеллоуина.",
+            "Особая роль, созданная в честь Хеллоуина и ставшая доступной на постоянной основе по итогам голосования 2023.",
             "Возможность переодеваться в трупы [.clothes].",
         };
 
@@ -42,7 +40,5 @@ namespace Marine.Redux.Subclasses.Events.Halloween
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
 
         public override int Chance { get; set; } = 15;
-
-        public override bool Can(in Player player) => base.Can(player) && DateTime.Now.Month == 10;
     }
 }

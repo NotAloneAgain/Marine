@@ -129,7 +129,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             ev.Player.ChangeAppearance(_model, Player.List.Where(ply => ply.IsAlive && ply.Role.Type != RoleTypeId.Scp079 && ply.UserId != Player.UserId), true);
         }
 
-        protected override void OnHurt(HurtingEventArgs ev)
+        internal protected override void OnHurt(HurtingEventArgs ev)
         {
             ev.IsAllowed = false;
 
@@ -148,7 +148,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
         }
 
-        protected override void OnDamage(HurtingEventArgs ev)
+        internal protected override void OnDamage(HurtingEventArgs ev)
         {
             ev.IsAllowed = false;
         }
