@@ -102,7 +102,7 @@ namespace Marine.Misc.Handlers
 
                 ev.Item.Destroy();
 
-                _ = ev.Player.AddItem(ItemType.Jailbird);
+                ev.Player.AddItem(ItemType.Jailbird);
             }
 
             if (ev.Item.Type == ItemType.Jailbird && ev.KnobSetting == Scp914.Scp914KnobSetting.OneToOne)

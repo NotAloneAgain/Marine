@@ -12,8 +12,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public class Janitor : GroupSubclass
     {
-        public Janitor() : base() { }
-
         public override string Name { get; set; } = "Уборщик";
 
         public override string Desc { get; set; } = "Ты убирался в комплексе, но теперь похоже не можешь продолжить свое дело";

@@ -3,6 +3,7 @@ using CommandSystem.Commands.RemoteAdmin.Inventory;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using HarmonyLib;
+using Marine.Commands.API;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,17 +57,15 @@ namespace Marine.Commands.Patches.Generic
             {
                 var player = Player.Get(sender);
 
-                if (player.GroupName != "don4" && player.GroupName.Contains("don"))
+                var overrideName = player.Group.GetNameByGroup();
+                var isOverride = false;
+                var isDonator = player.GroupName.IsDonator() || (isOverride = overrideName.IsDonator());
+
+                if (isDonator)
                 {
                     if (targets.Count > 1 || targets.Count == 0 || targets.Any(target => target.characterClassManager.UserId != player.UserId))
                     {
                         response = "Вы можете выдавать предметы только себе";
-                        return false;
-                    }
-
-                    if (items.Count() > 1)
-                    {
-                        response = "Ты можешь выдать только один предмет за раз.";
                         return false;
                     }
 
@@ -84,59 +83,101 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    var max = player.GroupName switch
-                    {
-                        "don3" or "don2" or "don1" => 3,
-                        _ => 5
-                    };
-
                     if (!_usings.ContainsKey(player.UserId))
                     {
                         _usings.Add(player.UserId, 0);
                     }
 
-                    if (_usings[player.UserId] > max)
+                    var max = (isOverride ? overrideName : player.GroupName) switch
                     {
-                        response = "Ты уже максимальное кол-во раз использовал донат!";
-                        return false;
-                    }
+                        "don3" or "don2" or "don1" => 3,
+                        _ => 5
+                    };
 
-                    _usings[player.UserId]++;
-                }
+                    var remaining = max - _usings[player.UserId];
 
-                foreach (ReferenceHub referenceHub in targets)
-                {
-                    try
+                    var hub = targets.First();
+
+                    foreach (ItemType type in items)
                     {
-                        foreach (ItemType item in items)
+                        if (_usings[player.UserId] >= max || remaining < 0)
                         {
-                            if (player.UserId != "76561199011540209@steam" || player.Group.KickPower < 128)
-                            {
-                                var blocked = (player.Group.KickPower >= 128) switch
-                                {
-                                    true => item is ItemType.ParticleDisruptor,
-                                    false => item is ItemType.ParticleDisruptor or ItemType.SCP268 or ItemType.MicroHID or ItemType.Jailbird or ItemType.GunCom45 or ItemType.SCP018
-                                };
+                            response = "Ты уже максимальное кол-во раз использовал донат!";
+                            return false;
+                        }
 
-                                if (blocked)
-                                {
-                                    continue;
-                                }
+                        try
+                        {
+                            var blocked = type is ItemType.ParticleDisruptor or ItemType.SCP268 or ItemType.MicroHID or ItemType.Jailbird or ItemType.GunCom45 or ItemType.SCP018;
+
+                            if (blocked)
+                            {
+                                continue;
                             }
 
-                            __instance.AddItem(referenceHub, sender, item);
+                            __instance.AddItem(hub, sender, item);
+
+                            handled++;
+
+                            _usings[player.UserId]++;
+
+                            remaining--;
+                        }
+                        catch (Exception ex)
+                        {
+                            text = ex.Message;
+
+                            errors++;
                         }
                     }
-                    catch (Exception ex)
+
+                    response = $"Ты выдал себе {handled} предметов и у тебя {(remaining == 0 ? "не осталось больше использований" : $"ещё {remaining} использований")}! {errors switch
                     {
-                        text = ex.Message;
+                        0 => "Ошибок не было!",
+                        1 => $"Была одна ошибка! {text}",
+                        _ => $"Было {errors} ошибок! Последняя: {text}"
+                    }}";
 
-                        errors++;
+                    return false;
+                }
+                else
+                {
+                    foreach (ReferenceHub referenceHub in targets)
+                    {
+                        try
+                        {
+                            foreach (ItemType item in items)
+                            {
+                                if (player.UserId != "76561199011540209@steam" || player.Group.KickPower < 128)
+                                {
+                                    var blocked = (player.Group.KickPower >= 128) switch
+                                    {
+                                        true => item is ItemType.ParticleDisruptor,
+                                        false => item is ItemType.ParticleDisruptor or ItemType.SCP268 or ItemType.MicroHID or ItemType.Jailbird or ItemType.GunCom45 or ItemType.SCP018
+                                    };
 
-                        continue;
+                                    if (blocked)
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                __instance.AddItem(referenceHub, sender, item);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            text = ex.Message;
+
+                            errors++;
+
+                            continue;
+                        }
+                        finally
+                        {
+                            handled++;
+                        }
                     }
-
-                    handled++;
                 }
             }
 

@@ -11,7 +11,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
     {
         public override string Name { get; set; } = "Информатор";
 
-        public override string Desc { get; set; } = "Ты владеешь информацией о том, какие SCP сбежали (нажми на Ё).";
+        public override string Desc { get; set; } = "Ты владеешь информацией о том, какие SCP сбежали благодаря камерам наблюдения";
 
         public override bool ConsoleRemark { get; } = true;
 

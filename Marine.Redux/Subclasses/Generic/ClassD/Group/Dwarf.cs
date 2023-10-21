@@ -11,8 +11,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public class Dwarf : GroupSubclass
     {
-        public Dwarf() : base() { }
-
         public override string Name { get; set; } = "Карлик";
 
         public override string Desc { get; set; } = "Несмотря на твое слабое тело и маленький рост ты смог выжить тут";

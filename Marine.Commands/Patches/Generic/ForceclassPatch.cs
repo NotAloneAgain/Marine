@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using HarmonyLib;
+using Marine.Commands.API;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.Guards.Single;
@@ -65,9 +66,9 @@ namespace Marine.Commands.Patches.Generic
                 return true;
             }
 
-            var overrideName = GetNameByGroup(player.Group);
+            var overrideName = player.Group.GetNameByGroup();
             var isOverride = false;
-            var isDonator = IsDonator(player.GroupName) || (isOverride = IsDonator(overrideName));
+            var isDonator = player.GroupName.IsDonator() || (isOverride = overrideName.IsDonator());
 
             if (isDonator)
             {
@@ -235,34 +236,6 @@ namespace Marine.Commands.Patches.Generic
         public static void Reset()
         {
             _usings.Clear();
-        }
-
-        private static bool IsDonator(string group)
-        {
-            return !string.IsNullOrEmpty(group) && group != "don4" && (group.Contains("don") || group.Contains("cons"));
-        }
-
-        private static string GetNameByGroup(UserGroup group)
-        {
-            PermissionsHandler handler = ServerStatic.GetPermissionsHandler();
-
-            Dictionary<string, UserGroup> groups = handler.GetAllGroups();
-
-            KeyValuePair<string, UserGroup>? pair = null!;
-
-            foreach (KeyValuePair<string, UserGroup> gru in groups)
-            {
-                (var key, UserGroup g) = (gru.Key, gru.Value);
-
-                if (g.Permissions == group.Permissions && g.RequiredKickPower == group.RequiredKickPower && g.KickPower == group.KickPower && g.BadgeText == group.BadgeText && g.BadgeColor == group.BadgeColor)
-                {
-                    pair = gru;
-
-                    break;
-                }
-            }
-
-            return pair is null ? string.Empty : pair.Value.Key;
         }
 
         private static void AddLog(int module, string msg, int type, bool init = false)

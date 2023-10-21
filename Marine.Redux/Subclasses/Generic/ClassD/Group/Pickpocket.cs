@@ -12,8 +12,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Pickpocket : GroupSubclass
     {
-        public Pickpocket() : base() { }
-
         public override string Name { get; set; } = "Карманник";
 
         public override string Desc { get; set; } = "Ты давно увлекаешься воровством и заслуженно являешься любителем";

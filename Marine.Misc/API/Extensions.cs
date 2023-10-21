@@ -37,16 +37,14 @@ namespace Marine.Misc.API
                 return;
             }
 
-            var items = player.Items.ToList();
-
-            foreach (Exiled.API.Features.Items.Item item in items)
+            foreach (Exiled.API.Features.Items.Item item in player.Items.ToHashSet())
             {
                 if (item.IsKeycard)
                 {
                     continue;
                 }
 
-                _ = player.DropItem(item);
+                player.DropItem(item);
             }
         }
 

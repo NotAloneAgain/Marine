@@ -13,11 +13,9 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Killer : GroupSubclass
     {
-        public Killer() : base() { }
-
         public override string Name { get; set; } = "Убийца";
 
-        public override string Desc { get; set; } = "Всегда готов кого-либо убить и знаешь много методов для этого.";
+        public override string Desc { get; set; } = "Всегда готов кого-либо убить и знаешь много методов для этого";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {

@@ -11,17 +11,15 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public sealed class Thief : GroupSubclass
     {
-        public Thief() : base() { }
-
         public override string Name { get; set; } = "Вор";
 
-        public override string Desc { get; set; } = "Ты крайне давно увлекаешься воровством, когда-то ты ограбил банк.";
+        public override string Desc { get; set; } = "Ты крайне давно увлекаешься воровством, когда-то ты ограбил банк";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
             "Украсть случайный предмет командой [.steal].",
             "Подбирание предметов на 10% быстрее.",
-            "Перемещение на 5% быстрее остальных.",
+            "Перемещение на 6% быстрее остальных.",
             "Набор полезных предметов.",
         };
 
@@ -39,6 +37,8 @@ namespace Marine.Redux.Subclasses.ClassD.Group
                 {
                     new Slot(new ItemChances()
                     {
+                        { ItemType.KeycardZoneManager, 15 },
+                        { ItemType.KeycardScientist, 15 },
                         { ItemType.KeycardJanitor, 100 },
                     }, true),
                     new Slot(new ItemChances()
@@ -76,7 +76,7 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 
         protected override void OnAssigned(Player player)
         {
-            player.GetEffect(EffectType.MovementBoost)?.ServerSetState(5, 0, false);
+            player.GetEffect(EffectType.MovementBoost)?.ServerSetState(6, 0, false);
 
             base.OnAssigned(player);
         }

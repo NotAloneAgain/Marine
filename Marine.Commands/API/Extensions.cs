@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -49,9 +50,31 @@ namespace Marine.Commands.API
             return ragdoll;
         }
 
-        public static string GetSecondsString(this double seconds)
+        public static string GetSecondsString(this double seconds) => Mathf.RoundToInt((float)seconds).GetSecondsString();
+
+        public static bool IsDonator(this string group) => !string.IsNullOrEmpty(group) && group != "don4" && (group.Contains("don") || group.Contains("cons"));
+
+        public static string GetNameByGroup(this UserGroup group)
         {
-            return Mathf.RoundToInt((float)seconds).GetSecondsString();
+            PermissionsHandler handler = ServerStatic.GetPermissionsHandler();
+
+            Dictionary<string, UserGroup> groups = handler.GetAllGroups();
+
+            KeyValuePair<string, UserGroup>? pair = null!;
+
+            foreach (KeyValuePair<string, UserGroup> gru in groups)
+            {
+                (var key, UserGroup g) = (gru.Key, gru.Value);
+
+                if (g.Permissions == group.Permissions && g.RequiredKickPower == group.RequiredKickPower && g.KickPower == group.KickPower && g.BadgeText == group.BadgeText && g.BadgeColor == group.BadgeColor)
+                {
+                    pair = gru;
+
+                    break;
+                }
+            }
+
+            return pair is null ? string.Empty : pair.Value.Key;
         }
 
         public static string GetSecondsString(this int seconds)

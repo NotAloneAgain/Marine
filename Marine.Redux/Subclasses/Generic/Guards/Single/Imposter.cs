@@ -15,7 +15,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
     {
         public override string Name { get; set; } = "Предатель";
 
-        public override string Desc { get; set; } = "Агент повстанцев хаоса, носящий форму и оружие под формой Фонда.";
+        public override string Desc { get; set; } = "Агент повстанцев хаоса, носящий снаряжение под формой Фонда";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {

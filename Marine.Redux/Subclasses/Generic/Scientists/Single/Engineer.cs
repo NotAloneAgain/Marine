@@ -11,12 +11,9 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 {
     public class Engineer : SingleSubclass
     {
-        private const string ConsoleMessage = "\n\t+ У тебя есть:" +
-                "\n\t\t- Возможность улучшать дверь, чтобы её было невозможно сломать гранатой или SCP-096 [.upgrade].";
-
         public override string Name { get; set; } = "Инженер";
 
-        public override string Desc { get; set; } = "Ты чинил старую камеру содержания SCP-173 после поломки.";
+        public override string Desc { get; set; } = "Ты чинил старую камеру содержания SCP-173 после поломки";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -63,8 +60,6 @@ namespace Marine.Redux.Subclasses.Scientists.Single
             player.Teleport(DoorType.Scp173Gate);
 
             Door.Get(DoorType.Scp173Gate).Unlock();
-
-            player.SendConsoleMessage(ConsoleMessage, "yellow");
         }
     }
 }

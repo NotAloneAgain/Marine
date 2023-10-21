@@ -13,11 +13,9 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 {
     public class Infected : SingleSubclass
     {
-        public Infected() : base() { }
-
         public override string Name { get; set; } = "Зараженный";
 
-        public override string Desc { get; set; } = "Ты заражен зомби-вирусом.";
+        public override string Desc { get; set; } = "Ты заражен зомби-вирусом";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {

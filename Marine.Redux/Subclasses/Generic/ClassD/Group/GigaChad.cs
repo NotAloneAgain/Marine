@@ -9,8 +9,6 @@ namespace Marine.Redux.Subclasses.ClassD.Group
 {
     public class GigaChad : GroupSubclass
     {
-        public GigaChad() : base() { }
-
         public override string Name { get; set; } = "Гигант";
 
         public override string Desc { get; set; } = "У тебя крепкое тело и большой рост";
