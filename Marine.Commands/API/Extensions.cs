@@ -42,7 +42,7 @@ namespace Marine.Commands.API
 
             if (!hit.transform.TryGetComponent<BasicRagdoll>(out var basic) && (basic = Ragdoll.List.FirstOrDefault(r => r.GameObject == hit.transform.gameObject)?.Base) == null)
             {
-                return Ragdoll.List.OrderBy(r => Vector3.Distance(r.Position, owner.Position)).FirstOrDefault();
+                return Ragdoll.List.Select(r => (Ragdoll: r, Distance: Vector3.Distance(r.Position, owner.Position))).OrderBy(pair => pair.Distance).FirstOrDefault().Ragdoll;
             }
 
             var ragdoll = Ragdoll.Get(basic);

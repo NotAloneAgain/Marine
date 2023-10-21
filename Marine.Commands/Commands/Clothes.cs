@@ -53,7 +53,7 @@ namespace Marine.Commands.Commands
 
             var target = player.GetRagdollFromView(6);
 
-            if (target == null)
+            if (target == null || target.Room != player.CurrentRoom)
             {
                 response = "Цель нераспознана";
                 return CommandResultType.Fail;

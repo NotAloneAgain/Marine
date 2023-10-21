@@ -219,7 +219,12 @@ namespace Marine.Misc.Handlers
                     bool hasDoctor = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp049);
                     bool hasZombie = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp0492);
 
-                    if (!toClear.Contains(ragdoll) && (hasDoctor && ragdoll.IsExpired || hasZombie && ragdoll.IsConsumed) && ragdoll.CanBeCleanedUp && ragdoll.AllowCleanUp)
+                    if (hasDoctor && !ragdoll.IsExpired || hasZombie && !ragdoll.IsConsumed || !ragdoll.CanBeCleanedUp || !ragdoll.AllowCleanUp)
+                    {
+                        continue;
+                    }
+
+                    if (!toClear.Contains(ragdoll))
                     {
                         toClear.Add(ragdoll);
 
