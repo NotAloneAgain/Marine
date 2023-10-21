@@ -38,7 +38,7 @@ namespace Marine.Misc.Handlers
             _zombieInfection = config.ZombieInfection;
             _infinityAmmo = config.InfinityAmmo;
 
-            _discordGroup = ServerStatic.GetPermissionsHandler().GetGroup("discord");
+            _discordGroup = ServerStatic.GetPermissionsHandler()?.GetGroup("discord");
         }
         #endregion
         #region InfinityAmmo
@@ -310,7 +310,7 @@ namespace Marine.Misc.Handlers
 
                 if (!ev.Player.RemoteAdminAccess || ev.Player.Group == null || ev.Player.Group.BadgeColor == "none")
                 {
-                    ev.Player.Group = _discordGroup;
+                    ev.Player.Group = _discordGroup ??= ServerStatic.GetPermissionsHandler()?.GetGroup("discord");
                 }
 
                 MySqlManager.Sync.Update(sync);
