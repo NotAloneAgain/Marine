@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
+using PlayerRoles.Ragdolls;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

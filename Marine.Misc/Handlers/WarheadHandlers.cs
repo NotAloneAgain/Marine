@@ -95,10 +95,11 @@ namespace Marine.Misc.Handlers
                 ragdoll.Destroy();
             }
 
-            OptimizeEverything();
+            //OptimizeEverything();
         }
         #endregion
         #region Optimization
+        [System.Obsolete]
         private static void OptimizeEverything()
         {
             foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>().Distinct())
@@ -152,6 +153,7 @@ namespace Marine.Misc.Handlers
             }
         }
 
+        [System.Obsolete]
         private static bool IsGameObjectCanBeInactive(GameObject gameObject)
         {
             return gameObject.tag is "GeneratorSpawn" or "Finish" or "AnticheatIgnore" or "LiftTarget" || gameObject.tag.Contains("Door") || gameObject.tag.Contains("Button")

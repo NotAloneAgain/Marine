@@ -72,7 +72,6 @@
     <Compile Include="Commands\Item.cs" />
     <Compile Include="Commands\Teleport.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Models\Commands.cs" />
     <Compile Include="Patches\CustomCommand\CustomBanPatch.cs" />
     <Compile Include="Patches\CustomCommand\CustomCommandPatch.cs" />
     <Compile Include="Patches\CustomCommand\CustomMutePatch.cs" />

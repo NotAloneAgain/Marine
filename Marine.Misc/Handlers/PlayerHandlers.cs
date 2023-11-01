@@ -204,6 +204,11 @@ namespace Marine.Misc.Handlers
 
             if (ev.DamageHandler.Type is not DamageType.PocketDimension and not DamageType.Poison and not DamageType.Bleeding && (isHuman || ev.Attacker.IsScp) && ev.Amount > 0)
             {
+                if (ev.Player.Role.Is<Exiled.API.Features.Roles.Scp3114Role>(out var role) && RoleExtensions.GetTeam(role.StolenRole).GetLeadingTeam() == ev.Attacker.LeadingTeam)
+                {
+                    return;
+                }
+
                 if (ev.Player.Health - ev.Amount <= 0)
                 {
                     ev.Attacker.ShowHint($"<line-height=95%><voffset=5em><size=90%><color=#E55807>Убит!</color></size></voffset>", 1);
@@ -324,7 +329,12 @@ namespace Marine.Misc.Handlers
                 return;
             }
 
-            MySQL.API.Models.Sync sync = MySqlManager.Sync.Select(ev.Player.UserId);
+            MySQL.API.Models.Sync sync = ev.Player.AuthenticationType switch
+            {
+                AuthenticationType.Steam => MySqlManager.Sync.Select(ev.Player.UserId),
+                AuthenticationType.Discord => MySqlManager.Sync.SelectByDiscord(ev.Player.UserId),
+                _ => null
+            };
 
             if (sync != null)
             {

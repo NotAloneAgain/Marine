@@ -23,8 +23,13 @@ namespace Marine.Commands.Patches.Generic
     public static class ForceclassPatch
     {
         private static readonly Dictionary<string, int> _usings;
+        private static readonly Dictionary<string, int> _usingsScp;
 
-        static ForceclassPatch() => _usings = new();
+        static ForceclassPatch()
+        {
+            _usings = new();
+            _usingsScp = new();
+        }
 
         private static bool Prefix(ForceRoleCommand __instance, ArraySegment<string> arguments, ICommandSender sender, out string response, ref bool __result)
         {
@@ -93,6 +98,12 @@ namespace Marine.Commands.Patches.Generic
                 if (role == player.Role.Type)
                 {
                     response = "Вы и так играете за эту роль!";
+                    return false;
+                }
+
+                if (role == RoleTypeId.Scp3114 && Round.ElapsedTime.TotalMinutes > 2)
+                {
+                    response = "Скелетом можно стать только в первые 2 минуты игры";
                     return false;
                 }
 
@@ -184,6 +195,12 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
+                if (_usingsScp.TryGetValue(player.UserId, out var scp) && scp == 1)
+                {
+                    response = "Ты уже становился SCP в этом раунде!";
+                    return false;
+                }
+
                 _usings[player.UserId]++;
 
                 remaining--;
@@ -211,6 +228,8 @@ namespace Marine.Commands.Patches.Generic
 
                 if (Swap.AllowedScps.Contains(role))
                 {
+                    _usingsScp.Add(player.UserId, 1);
+
                     Swap.StartScps[role]++;
 
                     foreach (Player informator in Player.List)
@@ -236,6 +255,7 @@ namespace Marine.Commands.Patches.Generic
         public static void Reset()
         {
             _usings.Clear();
+            _usingsScp.Clear();
         }
 
         private static void AddLog(int module, string msg, int type, bool init = false)

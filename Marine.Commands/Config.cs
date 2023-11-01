@@ -10,8 +10,5 @@ namespace Marine.Commands
 
         [Description("Debug enabled or not.")]
         public bool Debug { get; set; } = false;
-
-        [Description("Commands settings.")]
-        public Models.Commands Commands { get; set; } = new();
     }
 }

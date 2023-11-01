@@ -34,7 +34,8 @@ namespace Marine.ScpSwap.Configs
             RoleTypeId.Scp173,
             RoleTypeId.Scp939,
             RoleTypeId.Scp106,
-            RoleTypeId.Scp079
+            RoleTypeId.Scp079,
+            RoleTypeId.Scp3114
         };
 
         [Description("Количество слотов за данного SCP.")]
@@ -46,6 +47,7 @@ namespace Marine.ScpSwap.Configs
             { RoleTypeId.Scp939, 2 },
             { RoleTypeId.Scp106, 1 },
             { RoleTypeId.Scp079, 1 },
+            { RoleTypeId.Scp3114, 1 }
         };
     }
 }

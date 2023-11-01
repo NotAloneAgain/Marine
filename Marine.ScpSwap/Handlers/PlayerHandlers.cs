@@ -26,6 +26,7 @@ namespace Marine.ScpSwap.Handlers
                 { PlayerRoles.RoleTypeId.Scp939, 0 },
                 { PlayerRoles.RoleTypeId.Scp106, 0 },
                 { PlayerRoles.RoleTypeId.Scp079, 0 },
+                { PlayerRoles.RoleTypeId.Scp3114, 0 }
             };
         }
 
@@ -41,7 +42,7 @@ namespace Marine.ScpSwap.Handlers
                 return;
             }
 
-            if (Player.List.Count(ply => ply.Role.Team == PlayerRoles.Team.SCPs) == 6 && ev.NewRole != PlayerRoles.RoleTypeId.Scp939)
+            if (Player.List.Count(ply => ply.Role.Team == PlayerRoles.Team.SCPs) == 6 && ev.NewRole is not PlayerRoles.RoleTypeId.Scp939 and not PlayerRoles.RoleTypeId.Scp3114)
             {
                 ev.NewRole = PlayerRoles.RoleTypeId.Scp939;
             }

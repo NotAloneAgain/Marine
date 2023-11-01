@@ -63,7 +63,7 @@ namespace Marine.Commands.Patches.Generic
 
                 if (isDonator)
                 {
-                    if (targets.Count > 1 || targets.Count == 0 || targets.Any(target => target.characterClassManager.UserId != player.UserId))
+                    if (targets.Count > 1 || targets.Count == 0 || targets.Any(target => target.authManager.UserId != player.UserId))
                     {
                         response = "Вы можете выдавать предметы только себе";
                         return false;
@@ -77,7 +77,7 @@ namespace Marine.Commands.Patches.Generic
                         return false;
                     }
 
-                    if (Round.ElapsedTime.TotalMinutes < 4 && item.IsKeycard() && (int)item > 3)
+                    if (Round.ElapsedTime.TotalMinutes < 4 && (item.IsKeycard() && (int)item > 3 || item.IsScp()))
                     {
                         response = "Атятя, 4 минуты ещё не прошли";
                         return false;
@@ -108,7 +108,7 @@ namespace Marine.Commands.Patches.Generic
 
                         try
                         {
-                            var blocked = type is ItemType.ParticleDisruptor or ItemType.SCP268 or ItemType.MicroHID or ItemType.Jailbird or ItemType.GunCom45 or ItemType.SCP018;
+                            var blocked = type is ItemType.ParticleDisruptor or ItemType.SCP268 or ItemType.MicroHID or ItemType.Jailbird or ItemType.GunCom45 or ItemType.SCP018 or ItemType.Marshmallow or ItemType.Lantern;
 
                             if (blocked)
                             {
@@ -137,6 +137,8 @@ namespace Marine.Commands.Patches.Generic
                         1 => $"Была одна ошибка! {text}",
                         _ => $"Было {errors} ошибок! Последняя: {text}"
                     }}";
+
+                    __result = true;
 
                     return false;
                 }

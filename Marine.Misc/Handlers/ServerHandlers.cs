@@ -3,7 +3,6 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
-using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using Marine.Misc.API;
 using MEC;
@@ -31,8 +30,8 @@ namespace Marine.Misc.Handlers
         {
             _coroutines.Clear();
 
-            _coroutines.Add(Timing.RunCoroutine(_CleanupItems()));
-            _coroutines.Add(Timing.RunCoroutine(_CleanupRagdolls()));
+            //_coroutines.Add(Timing.RunCoroutine(_CleanupItems()));
+            //_coroutines.Add(Timing.RunCoroutine(_CleanupRagdolls()));
             _coroutines.Add(Timing.RunCoroutine(_RandomBlackout()));
             _coroutines.Add(Timing.RunCoroutine(_RandomLockdown()));
 
@@ -98,6 +97,7 @@ namespace Marine.Misc.Handlers
             }
         }
 
+        [System.Obsolete]
         public IEnumerator<float> _CleanupItems()
         {
             List<Pickup> toClear = new(500);
@@ -135,7 +135,7 @@ namespace Marine.Misc.Handlers
                         continue;
                     }
 
-                    if (item.Position.IsCloseToChambers() || item.Type.GetCategory() is ItemCategory.MicroHID or ItemCategory.SCPItem or ItemCategory.Keycard)
+                    if (item.Position.IsCloseToChambers() || item.Type.GetCategory() is ItemCategory.MicroHID or ItemCategory.SCPItem or ItemCategory.Keycard || item.Type is ItemType.Jailbird or ItemType.GunFRMG0 or ItemType.GunA7)
                     {
                         continue;
                     }
@@ -181,7 +181,7 @@ namespace Marine.Misc.Handlers
                         continue;
                     }
 
-                    if (item.Type.IsScp() || item.Type is ItemType.MicroHID or ItemType.Jailbird || item.Type == ItemType.KeycardO5)
+                    if (item.Type.IsScp() || item.Type is ItemType.MicroHID or ItemType.Jailbird or ItemType.KeycardFacilityManager or ItemType.KeycardO5 or ItemType.GunFRMG0 or ItemType.GunA7)
                     {
                         continue;
                     }
@@ -201,6 +201,7 @@ namespace Marine.Misc.Handlers
             }
         }
 
+        [System.Obsolete]
         public IEnumerator<float> _CleanupRagdolls()
         {
             HashSet<Ragdoll> toClear = new(100);
@@ -211,15 +212,18 @@ namespace Marine.Misc.Handlers
 
                 foreach (Ragdoll ragdoll in Ragdoll.List)
                 {
-                    if (ragdoll == null || Player.List.Any(ply => Vector3.Distance(ragdoll.Position, ply.Position) <= 4) || !ragdoll.Role.IsHuman())
+                    var players = Player.List.Where(x => x.IsAlive && !x.IsTutorial);
+
+                    if (ragdoll == null || players.Any(ply => Vector3.Distance(ragdoll.Position, ply.Position) <= 4) || !ragdoll.Role.IsHuman())
                     {
                         continue;
                     }
 
-                    bool hasDoctor = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp049);
-                    bool hasZombie = Player.List.Any(ply => ply.Role.Type == RoleTypeId.Scp0492);
+                    var scps = players.Where(ply => ply.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp0492);
+                    bool hasDoctor = scps.Any(ply => ply.Role.Type == RoleTypeId.Scp049);
+                    bool hasZombie = scps.Any(ply => ply.Role.Type == RoleTypeId.Scp0492);
 
-                    if (hasDoctor && !ragdoll.IsExpired || hasZombie && !ragdoll.IsConsumed || !ragdoll.CanBeCleanedUp || !ragdoll.AllowCleanUp)
+                    if (hasDoctor && (System.DateTime.Now - ragdoll.CreationTime).TotalSeconds > 15 || hasZombie && !ragdoll.IsConsumed && scps.Any(scp => Vector3.Distance(scp.Position, ragdoll.Position) <= 6) || !ragdoll.CanBeCleanedUp)
                     {
                         continue;
                     }

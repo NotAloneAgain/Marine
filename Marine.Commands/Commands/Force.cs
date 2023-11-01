@@ -57,6 +57,7 @@ namespace Marine.Commands.Commands
                 106 => RoleTypeId.Scp106,
                 173 => RoleTypeId.Scp173,
                 939 => RoleTypeId.Scp939,
+                3114 => RoleTypeId.Scp3114,
                 _ => RoleTypeId.None
             };
 

@@ -150,7 +150,7 @@ namespace Marine.Redux
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None)
+            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None || ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
             {
                 return;
             }

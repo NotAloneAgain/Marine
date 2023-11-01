@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using CentralAuth;
+using Exiled.API.Features;
 using MEC;
 using Mirror;
 using SCPSLAudioApi;
@@ -37,7 +38,7 @@ namespace Marine.Misc.API
 
             _ = NetworkServer.AddPlayerForConnection(conn, prefab);
 
-            hub.characterClassManager.InstanceMode = ClientInstanceMode.Unverified;
+            hub.authManager.InstanceMode = ClientInstanceMode.Unverified;
 
             hub.nicknameSync = hub.GetComponent<NicknameSync>() ?? hub.gameObject.AddComponent<NicknameSync>();
 
