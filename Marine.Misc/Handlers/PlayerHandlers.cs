@@ -122,7 +122,18 @@ namespace Marine.Misc.Handlers
 
             if (ev.NewRole == RoleTypeId.Scp079)
             {
-                _ = Timing.RunCoroutine(_ChangeLostValue(ev.Player, _betterRoles.Scp079Ghostlight));
+                Timing.RunCoroutine(_ChangeLostValue(ev.Player, _betterRoles.Scp079Ghostlight));
+
+                return;
+            }
+
+            if (ev.NewRole == RoleTypeId.Scp3114)
+            {
+                Timing.CallDelayed(0.005f, delegate ()
+                {
+                    ev.Player.MaxHealth = 1250;
+                    ev.Player.Health = 1250;
+                });
 
                 return;
             }

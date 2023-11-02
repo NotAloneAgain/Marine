@@ -57,7 +57,6 @@
     <Compile Include="API\Subclasses\SingleSubclass.cs" />
     <Compile Include="API\Subclasses\Subclass.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Models\Subclasses.cs" />
     <Compile Include="Patches\Sounds\DoorSoundPatch.cs" />
     <Compile Include="Patches\Sounds\FootstepSoundProcessPatch.cs" />
     <Compile Include="Patches\Sounds\WeaponSoundPatch.cs" />

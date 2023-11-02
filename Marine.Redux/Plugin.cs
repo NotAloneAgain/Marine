@@ -6,6 +6,7 @@ using HarmonyLib;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Subclasses;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Marine.Redux
@@ -15,6 +16,14 @@ namespace Marine.Redux
         private const string HarmonyId = "NotAloneAgain.Redux";
 
         private Harmony _harmony;
+        private Type _subclassType;
+        private List<Subclass> _subclasses;
+
+        public Plugin()
+        {
+            _subclassType = typeof(Subclass);
+            _subclasses = new List<Subclass>(100);
+        }
 
         public override string Name => "Marine.Redux";
 
@@ -36,9 +45,18 @@ namespace Marine.Redux
             Player.ChangingRole += OnChangingRole;
             Player.TriggeringTesla += OnTriggeringTesla;
 
-            foreach (Subclass subclass in Config.Subclasses.All)
+            foreach (Type type in Assembly.GetTypes())
             {
+                if (!type.IsClass || type.IsAbstract || !type.IsSubclassOf(_subclassType))
+                {
+                    continue;
+                }
+
+                Subclass subclass = Activator.CreateInstance(type) as Subclass;
+
                 subclass.Subscribe();
+
+                _subclasses.Add(subclass);
             }
 
             base.OnEnabled();
@@ -52,10 +70,12 @@ namespace Marine.Redux
             Player.Hurting -= OnHurting;
             Player.Died -= OnDied;
 
-            foreach (Subclass subclass in Config.Subclasses.All)
+            foreach (Subclass subclass in _subclasses)
             {
                 subclass.Unsubscribe();
             }
+
+            _subclasses.Clear();
 
             _harmony.UnpatchAll(HarmonyId);
 
@@ -92,7 +112,7 @@ namespace Marine.Redux
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsGodModeEnabled || ev.Attacker == null || ev.Attacker.IsHost || ev.Attacker.IsNPC || !ev.IsAllowed)
+            if (ev.Player == null || ev.Player.IsHost || ev.Player.IsGodModeEnabled || !ev.IsAllowed)
             {
                 return;
             }

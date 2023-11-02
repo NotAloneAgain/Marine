@@ -4,9 +4,9 @@
     {
         public int Bleeding939 { get; set; } = 6;
 
-        public int BleedingShot { get; set; } = 6;
+        public int BleedingShot { get; set; } = 5;
 
-        public int ZombiePoison { get; set; } = 10;
+        public int ZombiePoison { get; set; } = 8;
 
         public bool AddDuration { get; set; } = true;
     }

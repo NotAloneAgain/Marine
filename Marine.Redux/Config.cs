@@ -10,7 +10,5 @@ namespace Marine.Redux
 
         [Description("Debug enabled or not.")]
         public bool Debug { get; set; } = false;
-
-        public Models.Subclasses Subclasses { get; set; } = new();
     }
 }

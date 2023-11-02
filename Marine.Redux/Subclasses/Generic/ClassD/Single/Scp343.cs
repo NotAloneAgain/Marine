@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp330;
 using Marine.Redux.API;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Inventory;
@@ -23,10 +24,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
-            "Преобразование опасных предметов в аптечки",
+            "Нанесение урона кому-либо, а также помощь SCP-Объектам будут наказуемы блокировкой сроком до 12 месяцев.",
+            "Преобразование опасных предметов в аптечки.",
             "Выдача безопасных предметов [.item].",
             "Открытие любых дверей кроме опасных.",
-            "Смена модельки монеткой",
+            "Смена модельки монеткой.",
             "Телепортация [.tp].",
         };
 
@@ -64,9 +66,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             base.Subscribe();
 
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
+            Exiled.Events.Handlers.Scp330.EatingScp330 += OnEatingScp330;
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
+            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
             Exiled.Events.Handlers.Player.ActivatingGenerator += OnActivatingGenerator;
@@ -83,9 +87,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.ActivatingGenerator -= OnActivatingGenerator;
             Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Scp330.EatingScp330 -= OnEatingScp330;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
 
             base.Unsubscribe();
@@ -116,7 +122,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             _model = _model switch
             {
-                RoleTypeId.Overwatch or RoleTypeId.Filmmaker => RoleTypeId.Scp173,
+                RoleTypeId.Overwatch or RoleTypeId.Filmmaker or RoleTypeId.Scp3114 => RoleTypeId.Scp173,
                 RoleTypeId.Spectator => RoleTypeId.Scp106,
                 RoleTypeId.CustomRole => RoleTypeId.ChaosRifleman,
                 RoleTypeId.Scp079 => RoleTypeId.ChaosConscript,
@@ -209,7 +215,7 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
             ItemType id = ev.Pickup.Info.ItemId;
 
-            if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018)
+            if (id.GetCategory() is ItemCategory.Firearm or ItemCategory.Grenade or ItemCategory.MicroHID or ItemCategory.Ammo || id is ItemType.Jailbird or ItemType.SCP244a or ItemType.SCP244b or ItemType.SCP018 or ItemType.SCP330)
             {
                 ev.Pickup.Destroy();
                 ev.IsAllowed = false;
@@ -266,6 +272,32 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
 
             ev.IsAllowed = false;
+        }
+
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = (int)ev.Effect.Classification == 2;
+        }
+
+        private void OnEatingScp330(EatingScp330EventArgs ev)
+        {
+            if (!Has(ev.Player))
+            {
+                return;
+            }
+
+            ev.IsAllowed = ev.Candy.Kind switch
+            {
+                InventorySystem.Items.Usables.Scp330.CandyKindID.Rainbow => true,
+                InventorySystem.Items.Usables.Scp330.CandyKindID.Yellow => true,
+                InventorySystem.Items.Usables.Scp330.CandyKindID.White => true,
+                _ => false,
+            };
         }
     }
 }

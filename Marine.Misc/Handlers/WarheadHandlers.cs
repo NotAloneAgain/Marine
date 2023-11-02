@@ -4,7 +4,6 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Warhead;
 using Marine.Misc.API;
-using Mirror;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -95,11 +94,10 @@ namespace Marine.Misc.Handlers
                 ragdoll.Destroy();
             }
 
-            //OptimizeEverything();
+            OptimizeEverything();
         }
         #endregion
         #region Optimization
-        [System.Obsolete]
         private static void OptimizeEverything()
         {
             foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>().Distinct())
@@ -118,7 +116,7 @@ namespace Marine.Misc.Handlers
                 {
                     gameObject.SetActive(false);
 
-                    NetworkIdentity identity = gameObject.GetComponent<NetworkIdentity>();
+                    /*NetworkIdentity identity = gameObject.GetComponent<NetworkIdentity>();
 
                     if (identity == null)
                     {
@@ -127,12 +125,12 @@ namespace Marine.Misc.Handlers
 
                     identity.enabled = false;
 
-                    Object.Destroy(identity);
+                    Object.Destroy(identity);*/
 
                     continue;
                 }
 
-                if (gameObject.tag != "Untagged")
+                /*if (gameObject.tag != "Untagged")
                     continue;
 
                 if (_additionalObjects.Contains(gameObject.name))
@@ -149,11 +147,10 @@ namespace Marine.Misc.Handlers
                     identity.enabled = false;
 
                     Object.Destroy(identity);
-                }
+                }*/
             }
         }
 
-        [System.Obsolete]
         private static bool IsGameObjectCanBeInactive(GameObject gameObject)
         {
             return gameObject.tag is "GeneratorSpawn" or "Finish" or "AnticheatIgnore" or "LiftTarget" || gameObject.tag.Contains("Door") || gameObject.tag.Contains("Button")

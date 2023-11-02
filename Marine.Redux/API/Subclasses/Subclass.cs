@@ -208,12 +208,9 @@ namespace Marine.Redux.API.Subclasses
             OnRevoked(player, reason);
         }
 
-        public abstract bool Has(in Player player);
+        public virtual bool Has(in Player player) => player != null;
 
-        public virtual bool Can(in Player player)
-        {
-            return player != null && Random.Range(0, 101) >= 100 - Chance;
-        }
+        public virtual bool Can(in Player player) => player != null && Random.Range(0, 101) >= 100 - Chance;
 
         public sealed override string ToString()
         {
