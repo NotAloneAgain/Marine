@@ -70,7 +70,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickupingUpItem;
-            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
             Exiled.Events.Handlers.Player.ActivatingGenerator += OnActivatingGenerator;
@@ -87,7 +86,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             Exiled.Events.Handlers.Player.ActivatingGenerator -= OnActivatingGenerator;
             Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
-            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupingUpItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
@@ -272,16 +270,6 @@ namespace Marine.Redux.Subclasses.ClassD.Single
             }
 
             ev.IsAllowed = false;
-        }
-
-        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
-        {
-            if (!Has(ev.Player))
-            {
-                return;
-            }
-
-            ev.IsAllowed = (int)ev.Effect.Classification == 2;
         }
 
         private void OnEatingScp330(EatingScp330EventArgs ev)

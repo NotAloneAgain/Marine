@@ -90,7 +90,7 @@ namespace Marine.Commands.Patches.Generic
 
                     var max = (isOverride ? overrideName : player.GroupName) switch
                     {
-                        "don3" or "don2" or "don1" => 3,
+                        "don3" or "don2" or "don1" or "genshin" => 3,
                         _ => 5
                     };
 

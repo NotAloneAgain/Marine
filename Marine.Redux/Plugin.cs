@@ -120,7 +120,7 @@ namespace Marine.Redux
             bool playerHas = Subclass.HasAny(ev.Player);
             bool attackerHas = Subclass.HasAny(ev.Attacker);
 
-            if (!playerHas && !attackerHas || ev.Player.UserId == ev.Attacker.UserId)
+            if (!playerHas && !attackerHas || ev.Player.UserId == (ev.Attacker?.UserId ?? string.Empty))
             {
                 return;
             }
@@ -134,7 +134,7 @@ namespace Marine.Redux
                 subclass.OnHurt(ev);
             }
 
-            if (attackerHas)
+            if (attackerHas && ev.Attacker != null)
             {
                 Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Attacker));
 
@@ -170,7 +170,7 @@ namespace Marine.Redux
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None || ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
+            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None || ev.Player.RoleManager.CurrentRole.RoleTypeId == PlayerRoles.RoleTypeId.Scp3114 || ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
             {
                 return;
             }
@@ -223,7 +223,7 @@ namespace Marine.Redux
             {
                 foreach (Subclass subclass in Subclass.ReadOnlyCollection)
                 {
-                    if (subclass.Role != ev.NewRole)
+                    if (ev.NewRole != subclass.Role)
                     {
                         continue;
                     }

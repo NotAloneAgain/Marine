@@ -53,7 +53,7 @@ namespace Marine.Commands.API
 
         public static string GetSecondsString(this double seconds) => Mathf.RoundToInt((float)seconds).GetSecondsString();
 
-        public static bool IsDonator(this string group) => !string.IsNullOrEmpty(group) && group != "don4" && (group.Contains("don") || group.Contains("cons"));
+        public static bool IsDonator(this string group) => !string.IsNullOrEmpty(group) && group != "don4" && (group.Contains("don") || group.Contains("cons") || group == "genshin");
 
         public static string GetNameByGroup(this UserGroup group)
         {

@@ -30,7 +30,7 @@ namespace Marine.Misc.Handlers
         {
             _coroutines.Clear();
 
-            //_coroutines.Add(Timing.RunCoroutine(_CleanupItems()));
+            _coroutines.Add(Timing.RunCoroutine(_CleanupItems()));
             _coroutines.Add(Timing.RunCoroutine(_CleanupRagdolls()));
             _coroutines.Add(Timing.RunCoroutine(_RandomBlackout()));
             _coroutines.Add(Timing.RunCoroutine(_RandomLockdown()));
@@ -101,8 +101,6 @@ namespace Marine.Misc.Handlers
                 }
             }
         }
-
-        [System.Obsolete]
         public IEnumerator<float> _CleanupItems()
         {
             List<Pickup> toClear = new(500);
