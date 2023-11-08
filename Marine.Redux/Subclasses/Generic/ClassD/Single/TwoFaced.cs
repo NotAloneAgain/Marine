@@ -4,7 +4,7 @@ using Marine.Redux.API.Subclasses;
 using PlayerRoles;
 using System.Collections.Generic;
 
-namespace Marine.Redux.Subclasses.Events.Halloween
+namespace Marine.Redux.Subclasses.ClassD.Single
 {
     public class TwoFaced : SingleSubclass
     {

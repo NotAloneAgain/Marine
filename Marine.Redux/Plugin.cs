@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Handlers;
 using HarmonyLib;
@@ -129,18 +130,18 @@ namespace Marine.Redux
             {
                 Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Player));
 
-                ev.Amount *= subclass.HurtMultiplayer;
-
                 subclass.OnHurt(ev);
+
+                ev.Amount *= subclass.HurtMultiplayer;
             }
 
-            if (attackerHas && ev.Attacker != null)
+            if (ev.Attacker != null && attackerHas)
             {
                 Subclass subclass = Subclass.ReadOnlyCollection.First(sub => sub.Has(ev.Attacker));
 
-                ev.Amount *= subclass.DamageMultiplayer;
-
                 subclass.OnDamage(ev);
+
+                ev.Amount *= subclass.DamageMultiplayer;
             }
         }
 
@@ -170,7 +171,14 @@ namespace Marine.Redux
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None || ev.Player.RoleManager.CurrentRole.RoleTypeId == PlayerRoles.RoleTypeId.Scp3114 || ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
+            if ((int)ev.SpawnFlags != 3 && ev.SpawnFlags != PlayerRoles.RoleSpawnFlags.All || !ev.IsAllowed || ev.Reason == SpawnReason.None)
+            {
+                return;
+            }
+
+            if ((ev.Player.RoleManager?.CurrentRole?.RoleTypeId ?? PlayerRoles.RoleTypeId.None) == PlayerRoles.RoleTypeId.Scp3114
+                || ev.Player.Role.Is<Scp3114Role>(out _)
+                || ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
             {
                 return;
             }

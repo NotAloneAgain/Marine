@@ -101,12 +101,6 @@ namespace Marine.Commands.Patches.Generic
                     return false;
                 }
 
-                if (role == RoleTypeId.Scp3114 && Round.ElapsedTime.TotalMinutes > 2)
-                {
-                    response = "Скелетом можно стать только в первые 2 минуты игры";
-                    return false;
-                }
-
                 Team team = RoleExtensions.GetTeam(role);
                 LeadingTeam leading = team.GetLeadingTeam();
 
@@ -171,6 +165,21 @@ namespace Marine.Commands.Patches.Generic
                         {
                             response = "Все слоты за данный объект заняты!";
                             return false;
+                        }
+
+                        if (role == RoleTypeId.Scp3114)
+                        {
+                            if (Round.ElapsedTime.TotalMinutes > 2)
+                            {
+                                response = "Скелетом можно стать только в первые 2 минуты игры";
+                                return false;
+                            }
+
+                            if (Player.List.Count < 10)
+                            {
+                                response = "На сервере менее 10 игроков.";
+                                return false;
+                            }
                         }
                     }
                 }

@@ -47,6 +47,11 @@ namespace Marine.ScpSwap.Handlers
                 ev.NewRole = PlayerRoles.RoleTypeId.Scp939;
             }
 
+            if (Player.List.Count < 10 && ev.NewRole == PlayerRoles.RoleTypeId.Scp3114)
+            {
+                ev.NewRole = PlayerRoles.RoleTypeId.Scp939;
+            }
+
             ev.Player.ShowHint(string.Format(_text, Swap.SwapDuration), _duration);
 
             Swap.StartScps[ev.NewRole]++;

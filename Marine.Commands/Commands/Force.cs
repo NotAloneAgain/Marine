@@ -113,6 +113,20 @@ namespace Marine.Commands.Commands
                 return CommandResultType.Fail;
             }
 
+            if (Player.List.Count < 10 && role == RoleTypeId.Scp3114)
+            {
+                response = "Вы не можете стать SCP-3114, когда игроков меньше 10!";
+
+                return CommandResultType.Fail;
+            }
+
+            if (Player.List.Count(ply => ply.IsScp) == 1 && role == RoleTypeId.Scp079)
+            {
+                response = "Вы единственный SCP-Объект и не можете стать 079!";
+
+                return CommandResultType.Fail;
+            }
+
             Swap.StartScps[oldRole]--;
             Swap.StartScps[role]++;
 

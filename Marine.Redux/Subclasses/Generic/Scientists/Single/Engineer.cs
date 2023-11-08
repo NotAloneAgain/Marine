@@ -57,9 +57,9 @@ namespace Marine.Redux.Subclasses.Scientists.Single
 
         protected override void OnAssigned(Player player)
         {
-            player.Teleport(DoorType.Scp173Gate);
+            player.Teleport(DoorType.Scp173Connector);
 
-            Door.Get(DoorType.Scp173Gate).Unlock();
+            Door.Get(DoorType.Scp173Connector).IsOpen = true;
         }
     }
 }

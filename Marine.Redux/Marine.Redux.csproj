@@ -64,7 +64,7 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subclasses\Events\Halloween\Scp372.cs" />
-    <Compile Include="Subclasses\Events\Halloween\TwoFaced.cs" />
+    <Compile Include="Subclasses\Generic\ClassD\Single\TwoFaced.cs" />
     <Compile Include="Subclasses\Events\Halloween\Vampire.cs" />
     <Compile Include="Subclasses\Generic\ClassD\Group\Dwarf.cs" />
     <Compile Include="Subclasses\Generic\ClassD\Group\GigaChad.cs" />
@@ -91,6 +91,13 @@
     <Compile Include="Subclasses\Generic\Scientists\Single\Hidden.cs" />
     <Compile Include="Subclasses\Generic\Scientists\Single\Infected.cs" />
     <Compile Include="Subclasses\Generic\Scientists\Single\Manager.cs" />
+    <Compile Include="Subclasses\Generic\Scp939\Zmei.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Group\Poisoned.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Group\Tank.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Group\Runner.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Single\Berserker.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Single\Distorter.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Single\Parasite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Subclasses\Events\Winter\" />

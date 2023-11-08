@@ -32,11 +32,12 @@ namespace Marine.Redux.API
                 { RoleTypeId.ChaosRepressor, "Повстанец Хаоса — Усмиритель" },
                 { RoleTypeId.Overwatch, "Надзиратель" },
                 { RoleTypeId.Filmmaker, "Контентмейкер" },
+                { RoleTypeId.Scp3114, "SCP-3114" },
             };
 
         public static string Translate(this RoleTypeId role)
         {
-            return _rolesTranslation[role];
+            return _rolesTranslation?[role] ?? role.ToString();
         }
     }
 }

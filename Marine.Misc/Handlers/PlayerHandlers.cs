@@ -133,6 +133,15 @@ namespace Marine.Misc.Handlers
                 {
                     ev.Player.MaxHealth = 1250;
                     ev.Player.Health = 1250;
+
+                    var transform = Door.Get(DoorType.Scp173Gate).GameObject.transform;
+
+                    var position = transform.position;
+                    var rotation = transform.rotation;
+
+                    var direction = rotation * Vector3.back;
+
+                    ev.Player.Teleport(position + Vector3.up * 2 + direction * 4);
                 });
 
                 return;
@@ -241,7 +250,12 @@ namespace Marine.Misc.Handlers
             }
             else if (ev.DamageHandler.Type == DamageType.Scp0492)
             {
-                ev.Player.EnableEffect(EffectType.Poisoned, _realisticEffects.ZombiePoison, _realisticEffects.AddDuration);
+                ev.Player.Stamina -= 0.03f;
+
+                if (Random.Range(0, 101) >= 98)
+                {
+                    ev.Player.DropHeldItem();
+                }
 
                 return;
             }
