@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using Marine.Misc.API;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Interfaces;
 using MEC;
@@ -215,9 +214,9 @@ namespace Marine.Redux.API.Subclasses
             return $"{Name} ({Role}) [HP: {SpawnInfo.Health}] [AHP: {SpawnInfo.Shield.Limit}]";
         }
 
-        internal protected virtual void OnDamage(HurtingEventArgs ev) { }
+        protected internal virtual void OnDamage(HurtingEventArgs ev) { }
 
-        internal protected virtual void OnHurt(HurtingEventArgs ev) { }
+        protected internal virtual void OnHurt(HurtingEventArgs ev) { }
 
         protected virtual void OnAssigned(Player player) { }
 

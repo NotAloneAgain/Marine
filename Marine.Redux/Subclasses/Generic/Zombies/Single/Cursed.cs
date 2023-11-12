@@ -1,17 +1,11 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Player;
-using InventorySystem.Items.MicroHID;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using MicroHIDPickup = Exiled.API.Features.Pickups.MicroHIDPickup;
 
 namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 {

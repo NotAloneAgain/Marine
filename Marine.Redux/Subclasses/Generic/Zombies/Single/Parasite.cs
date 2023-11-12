@@ -2,7 +2,6 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Server;
 using Marine.Redux.API;
 using Marine.Redux.API.Enums;
 using Marine.Redux.API.Subclasses;

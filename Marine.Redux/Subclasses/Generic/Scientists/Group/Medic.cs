@@ -1,5 +1,4 @@
-﻿using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
+﻿using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables;
 using Marine.Redux.API;
 using Marine.Redux.API.Inventory;

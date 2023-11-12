@@ -6,7 +6,6 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Scp914;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079;
-using System;
 using System.Linq;
 
 namespace Marine.Misc.Handlers

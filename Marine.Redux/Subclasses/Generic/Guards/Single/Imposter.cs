@@ -46,7 +46,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
             player.GetEffect(EffectType.Asphyxiated).ServerSetState(1, 3600, false);
         }
 
-        internal protected override void OnHurt(HurtingEventArgs ev)
+        protected internal override void OnHurt(HurtingEventArgs ev)
         {
             if (Player != null && ev.Player.Role.Type == RoleTypeId.FacilityGuard && ev.Attacker.LeadingTeam == LeadingTeam.ChaosInsurgency)
             {
@@ -65,7 +65,7 @@ namespace Marine.Redux.Subclasses.Guards.Single
             }
         }
 
-        internal protected override void OnDamage(HurtingEventArgs ev)
+        protected internal override void OnDamage(HurtingEventArgs ev)
         {
             if (Player != null && Player.Role.Type == RoleTypeId.FacilityGuard && ev.Player.LeadingTeam == LeadingTeam.ChaosInsurgency)
             {

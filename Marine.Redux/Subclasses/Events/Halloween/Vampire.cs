@@ -8,7 +8,6 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using YamlDotNet.Serialization;
 
 namespace Marine.Redux.Subclasses.Events.Halloween
 {
@@ -85,7 +84,7 @@ namespace Marine.Redux.Subclasses.Events.Halloween
             player.IsUsingStamina = true;
         }
 
-        internal protected override void OnDamage(HurtingEventArgs ev)
+        protected internal override void OnDamage(HurtingEventArgs ev)
         {
             ev.Attacker.Heal(ev.Amount * Multiplayer);
         }
