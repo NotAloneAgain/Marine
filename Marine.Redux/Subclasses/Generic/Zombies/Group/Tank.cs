@@ -14,7 +14,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
     {
         public override string Name { get; set; } = "Танк";
 
-        public override string Desc { get; set; } = "Ты живучий зомби, способный защитить своего создателя.";
+        public override string Desc { get; set; } = "Ты живучий зомби, способный защитить своего создателя";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -31,7 +31,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp0492;
 
-        public override int Chance { get; set; } = 15;
+        public override int Chance { get; set; } = 16;
 
         public override int Max { get; set; } = 4;
 

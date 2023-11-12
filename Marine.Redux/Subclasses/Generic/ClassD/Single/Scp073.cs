@@ -42,6 +42,11 @@ namespace Marine.Redux.Subclasses.ClassD.Single
 
         internal protected override void OnHurt(HurtingEventArgs ev)
         {
+            if (ev.Attacker == null)
+            {
+                return;
+            }
+
             var isScp = ev.Attacker.IsScp;
 
             var amount = isScp switch

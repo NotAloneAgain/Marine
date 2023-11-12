@@ -96,6 +96,7 @@
     <Compile Include="Subclasses\Generic\Zombies\Group\Tank.cs" />
     <Compile Include="Subclasses\Generic\Zombies\Group\Runner.cs" />
     <Compile Include="Subclasses\Generic\Zombies\Single\Berserker.cs" />
+    <Compile Include="Subclasses\Generic\Zombies\Single\Cursed.cs" />
     <Compile Include="Subclasses\Generic\Zombies\Single\Distorter.cs" />
     <Compile Include="Subclasses\Generic\Zombies\Single\Parasite.cs" />
   </ItemGroup>

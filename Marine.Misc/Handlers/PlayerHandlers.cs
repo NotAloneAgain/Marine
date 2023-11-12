@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp3114;
 using Marine.Misc.API;
 using Marine.Misc.Models;
 using Marine.MySQL.API;
@@ -369,6 +370,12 @@ namespace Marine.Misc.Handlers
             }
         }
 
+        #endregion
+        #region SCP-3114
+        public void OnDisguised(DisguisedEventArgs ev)
+        {
+            ev.Player.Scale = Vector3.one;
+        }
         #endregion
         #region Coroutines
         private IEnumerator<float> _ChangeLostValue(Player player, float value)

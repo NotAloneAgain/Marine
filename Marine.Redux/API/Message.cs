@@ -35,7 +35,7 @@ namespace Marine.Redux.API
 
         public void FormateWithSend(in string text, in Player player)
         {
-            if (!Show || Duration == 0 || string.IsNullOrEmpty(Text))
+            if (!Show || Duration == 0 || string.IsNullOrEmpty(Text) && string.IsNullOrEmpty(text))
             {
                 return;
             }

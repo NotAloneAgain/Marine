@@ -40,12 +40,6 @@ namespace Marine.Redux
 
             _harmony.PatchAll(Assembly);
 
-            Player.Died += OnDied;
-            Player.Hurting += OnHurting;
-            Player.Destroying += OnDestroying;
-            Player.ChangingRole += OnChangingRole;
-            Player.TriggeringTesla += OnTriggeringTesla;
-
             foreach (Type type in Assembly.GetTypes())
             {
                 if (!type.IsClass || type.IsAbstract || !type.IsSubclassOf(_subclassType))
@@ -60,21 +54,27 @@ namespace Marine.Redux
                 _subclasses.Add(subclass);
             }
 
+            Player.Died += OnDied;
+            Player.Hurting += OnHurting;
+            Player.Destroying += OnDestroying;
+            Player.ChangingRole += OnChangingRole;
+            Player.TriggeringTesla += OnTriggeringTesla;
+
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
+            foreach (Subclass subclass in _subclasses)
+            {
+                subclass.Unsubscribe();
+            }
+
             Player.TriggeringTesla -= OnTriggeringTesla;
             Player.ChangingRole -= OnChangingRole;
             Player.Destroying -= OnDestroying;
             Player.Hurting -= OnHurting;
             Player.Died -= OnDied;
-
-            foreach (Subclass subclass in _subclasses)
-            {
-                subclass.Unsubscribe();
-            }
 
             _subclasses.Clear();
 

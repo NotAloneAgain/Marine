@@ -1,37 +1,32 @@
-﻿using CustomPlayerEffects;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
-using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Server;
+using InventorySystem.Items.MicroHID;
 using Marine.Redux.API;
-using Marine.Redux.API.Enums;
 using Marine.Redux.API.Subclasses;
 using MEC;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using MicroHIDPickup = Exiled.API.Features.Pickups.MicroHIDPickup;
 
 namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 {
     public class Distorter : SingleSubclass
     {
-        private Invisible _invisible;
-        private Ghostly _ghostly;
         private int _period = 1;
 
         public override string Name { get; set; } = "Искажатель";
 
-        public override string Desc { get; set; } = "Ты искажаешь электрические приборы, вызываешь галлюцинации и психоз.";
+        public override string Desc { get; set; } = "Ты искажаешь электрические приборы, вызываешь галлюцинации и психоз";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
             "Первый период - невидимость.",
-            "Второй период - призрачность.",
+            "Второй период - призрачность. ",
             "Третий период - проявление.",
         };
 
@@ -47,75 +42,125 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp0492;
 
-        public override int Chance { get; set; } = 10;
+        public override int Chance { get; set; } = 12;
+
+        public int Damage => _period switch
+        {
+            1 => 10,
+            2 => 25,
+            3 => 50,
+            _ => 40
+        };
 
         protected override void OnAssigned(Player player)
         {
             Timing.RunCoroutine(_LightsBlicks());
             Timing.RunCoroutine(_AddEffects());
+        }
 
-            Player.GetEffect(EffectType.MovementBoost)?.ServerSetState(5, 0, false);
+        protected internal override void OnDamage(HurtingEventArgs ev)
+        {
+            ev.Amount = Damage;
         }
 
         private IEnumerator<float> _LightsBlicks()
         {
-            while (Player != null)
+            Log.Info("Awake");
+
+            while (Player?.IsAlive ?? false)
             {
-                Player.CurrentRoom.TurnOffLights(0.86f);
+                yield return Timing.WaitForSeconds(1);
+
+                Log.Info("Start");
+
+                if (Player.CurrentRoom != null && !Player.CurrentRoom.AreLightsOff)
+                {
+                    Log.Info("Lights");
+
+                    Player.CurrentRoom.TurnOffLights(_period == 3 ? 10 : 0.1f);
+                }
+
+                Log.Info("Find pickups");
 
                 foreach (var pickup in Pickup.List)
                 {
-                    if (pickup.Type is not ItemType.MicroHID and not ItemType.Radio || pickup.Room != Player.CurrentRoom)
+                    if (pickup == null || pickup.Type is not ItemType.MicroHID and not ItemType.Radio || pickup.Room == null || pickup.Room != Player.CurrentRoom)
                     {
                         continue;
                     }
 
-                    if (pickup.Is<RadioPickup>(out var radio))
+                    Log.Info("Try radio");
+
+                    if (pickup.Is<RadioPickup>(out var radio) && radio != null)
                     {
                         radio.BatteryLevel -= 2;
                     }
 
-                    if (pickup.Is<MicroHIDPickup>(out var hid))
+                    Log.Info("Try MICRO-HID");
+
+                    if (pickup.Is<MicroHIDPickup>(out var hid) && hid != null)
                     {
                         hid.Energy -= 0.02f;
                     }
                 }
+
+                Log.Info("Find players");
 
                 foreach (var player in Player.List)
                 {
-                    if (player.CurrentRoom != Player.CurrentRoom || !player.HasItem(ItemType.Radio) && player.CurrentItem.Type != ItemType.MicroHID)
+                    Log.Info("Iteration of player");
+
+                    if (player == null || player.IsHost || player.IsNPC || player.IsScp || player.IsTutorial || player.CurrentRoom == null || player.CurrentRoom != Player.CurrentRoom)
                     {
                         continue;
                     }
 
+                    Log.Info("Try stamina");
+
+                    player.Stamina -= 0.01f;
+                    Player.HumeShield += 1;
+
+                    Log.Info("Try radio");
+
                     if (player.HasItem(ItemType.Radio))
                     {
-                        var radio = player.Items.FirstOrDefault(x => x.Type == ItemType.Radio).As<Radio>();
+                        var radio = player.Items.Select(x => x.As<Radio>()).FirstOrDefault(item => item != null);
 
-                        radio.BatteryLevel -= 2;
+                        Log.Info("Try radio action");
+
+                        if (radio != null)
+                        {
+                            radio.BatteryLevel -= 2;
+                        }
                     }
 
-                    if (player.CurrentItem.Type == ItemType.MicroHID)
+                    Log.Info("Try MICRO-HID");
+
+                    if (player.CurrentItem.Is<MicroHid>(out var hid) && hid != null)
                     {
-                        var hid = player.CurrentItem.As<MicroHid>();
+                        Log.Info("Try MICRO-HID action");
 
                         hid.Energy -= 0.02f;
+                        hid.Base.ServerSendStatus(HidStatusMessageType.EnergySync, hid.Base.EnergyToByte);
                     }
                 }
 
-                yield return Timing.WaitForSeconds(1);
+                Log.Info("End of iteration");
             }
         }
 
         private IEnumerator<float> _AddEffects()
         {
-            while (Player != null)
+            while (Player?.IsAlive ?? false)
             {
+                Player.DisableAllEffects();
+
                 switch (_period)
                 {
                     case 1:
                         {
-                            _invisible.ServerSetState(255, 0);
+                            Player.EnableEffect(EffectType.Invisible);
+                            Player.EnableEffect(EffectType.MovementBoost, 15, 0);
 
                             _period = 2;
 
@@ -123,8 +168,8 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
                         }
                     case 2:
                         {
-                            _invisible.ServerSetState(0, 0);
-                            _ghostly.ServerSetState(255, 0);
+                            Player.EnableEffect(EffectType.Ghostly);
+                            Player.EnableEffect(EffectType.MovementBoost, 10, 0);
 
                             _period = 3;
 
@@ -132,8 +177,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
                         }
                     case 3:
                         {
-                            _invisible.ServerSetState(0, 0);
-                            _invisible.ServerSetState(0, 0);
+                            Player.EnableEffect(EffectType.MovementBoost, 20, 0);
 
                             _period = 1;
 

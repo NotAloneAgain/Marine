@@ -158,10 +158,18 @@ namespace Marine.Redux.API.Subclasses
 
                 player.SendConsoleMessage($"\nНазвание: {Name}.\nОписание: {Desc}.\nШанс получения: {Chance}%.{GetAbilitiesText()}", "yellow");
 
+                if (GameRole != RoleTypeId.None)
+                {
+                    player.Role.Set(GameRole, SpawnReason.None, RoleSpawnFlags.None);
+                }
+
                 player.AddAhp(SpawnInfo.Shield.Amount, SpawnInfo.Shield.Limit, SpawnInfo.Shield.Decay, SpawnInfo.Shield.Efficacy, SpawnInfo.Shield.Sustain, SpawnInfo.Shield.Persistent);
 
-                player.MaxHealth = SpawnInfo.Health;
-                player.Health = SpawnInfo.Health;
+                if (SpawnInfo.Health != 0)
+                {
+                    player.MaxHealth = SpawnInfo.Health;
+                    player.Health = SpawnInfo.Health;
+                }
 
                 if (SpawnInfo.ShowInfo)
                 {
@@ -171,11 +179,6 @@ namespace Marine.Redux.API.Subclasses
                 if (SpawnInfo.Size != Vector3.one)
                 {
                     player.Scale = SpawnInfo.Size;
-                }
-
-                if (GameRole != RoleTypeId.None)
-                {
-                    player.Role.Set(GameRole, SpawnReason.None, RoleSpawnFlags.None);
                 }
 
                 if (SpawnInfo.Inventory != null && SpawnInfo.Inventory.Slots.Any())
@@ -196,11 +199,6 @@ namespace Marine.Redux.API.Subclasses
 
         public virtual void Revoke(Player player, in RevokeReason reason)
         {
-            player.AddAhp(0);
-
-            player.MaxHealth = 100;
-            player.Health = 100;
-
             DestroyInfo(player);
 
             player.Scale = Vector3.one;
@@ -227,13 +225,13 @@ namespace Marine.Redux.API.Subclasses
 
         protected void CreateInfo(Player ply)
         {
-            ply.CustomInfo = $"{ply.CustomName}{(string.IsNullOrEmpty(ply.CustomInfo) ? string.Empty : $"\n{ply.CustomInfo}")}\n{Name}";
+            ply.CustomInfo = $"{ply.CustomName}{(string.IsNullOrEmpty(ply.CustomInfo) ? string.Empty : $"\n{ply.CustomInfo}")}\n{GetRoleInfo(ply)}";
             ply.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
         }
 
         protected void DestroyInfo(Player ply)
         {
-            ply.CustomInfo = ply.CustomInfo.Replace(ply.CustomName, string.Empty).Replace("\n", string.Empty).Replace(Name, string.Empty);
+            ply.CustomInfo = ply.CustomInfo.Replace(ply.CustomName, string.Empty).Replace("\n", string.Empty).Replace(GetRoleInfo(ply), string.Empty);
             ply.InfoArea |= PlayerInfoArea.Role | PlayerInfoArea.Nickname;
         }
 
@@ -253,5 +251,7 @@ namespace Marine.Redux.API.Subclasses
 
             return result;
         }
+
+        private protected string GetRoleInfo(Player ply) => ply.IsScp ? $"{ply.Role.Type.Translate()} - {Name}" : Name;
     }
 }

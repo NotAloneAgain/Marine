@@ -40,6 +40,8 @@ namespace Marine.Misc
             Server.RoundStarted += _server.OnRoundStarted;
             Server.RestartingRound += _server.OnRestartingRound;
 
+            Scp3114.Disguised += _player.OnDisguised;
+
             Player.EnteringPocketDimension += _player.OnEnteringPocketDimension;
             Player.UnlockingGenerator += _player.OnUnlockingGenerator;
             Player.InteractingLocker += _player.OnInteractingLocker;
@@ -90,6 +92,8 @@ namespace Marine.Misc
             Player.InteractingLocker -= _player.OnInteractingLocker;
             Player.UnlockingGenerator -= _player.OnUnlockingGenerator;
             Player.EnteringPocketDimension -= _player.OnEnteringPocketDimension;
+
+            Scp3114.Disguised -= _player.OnDisguised;
 
             Server.RestartingRound -= _server.OnRestartingRound;
             Server.RoundStarted -= _server.OnRoundStarted;

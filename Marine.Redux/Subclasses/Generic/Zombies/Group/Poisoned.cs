@@ -14,7 +14,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
     {
         public override string Name { get; set; } = "Ядовитый";
 
-        public override string Desc { get; set; } = "Ты ядовитый зомби, твои атаки отравляют и заставляют гнить цели.";
+        public override string Desc { get; set; } = "Ты ядовитый зомби, твои атаки отравляют и заставляют гнить цели";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -26,11 +26,12 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
             ShowInfo = true,
             Message = new Message(string.Empty, 12, true),
             Size = Vector3.one * 0.96f,
+            Health = 0,
         };
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp0492;
 
-        public override int Chance { get; set; } = 15;
+        public override int Chance { get; set; } = 16;
 
         public override int Max { get; set; } = 4;
 

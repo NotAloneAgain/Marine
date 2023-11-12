@@ -3,6 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
+using Marine.Redux.API.Enums;
 using Marine.Redux.API.Subclasses;
 using MEC;
 using PlayerRoles;
@@ -17,7 +18,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 
         public override string Name { get; set; } = "Берсерк";
 
-        public override string Desc { get; set; } = "Ты яростный зомби, готовый сражаться до конца.";
+        public override string Desc { get; set; } = "Ты яростный зомби, готовый сражаться до конца";
 
         public override List<string> Abilities { get; set; } = new List<string>()
         {
@@ -34,11 +35,12 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
             Message = new Message(string.Empty, 12, true),
             Shield = new Shield(50, 300, -0.88f, 1, 6, false),
             Size = Vector3.one * 1.04f,
+            Health = 0,
         };
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp0492;
 
-        public override int Chance { get; set; } = 8;
+        public override int Chance { get; set; } = 10;
 
         public override float HurtMultiplayer { get; set; } = 0.88f;
 
@@ -70,6 +72,13 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
             _boost = Player.GetEffect(EffectType.MovementBoost) as MovementBoost;
 
             Timing.RunCoroutine(_UpdateValues());
+        }
+
+        protected override void OnRevoked(Player player, in RevokeReason reason)
+        {
+            Health = 350;
+            Damage = 20;
+            Movement = 2;
         }
 
         protected internal override void OnDamage(HurtingEventArgs ev)

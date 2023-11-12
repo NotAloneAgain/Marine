@@ -8,6 +8,7 @@ using Marine.Commands.API.Enums;
 using Marine.Redux.API.Subclasses;
 using Marine.Redux.Subclasses.ClassD.Group;
 using Marine.Redux.Subclasses.ClassD.Single;
+using Marine.Redux.Subclasses.Generic.Zombies.Single;
 using Marine.Redux.Subclasses.Guards.Group;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -80,7 +81,7 @@ namespace Marine.Commands.Commands
 
         public override bool CheckPermissions(Player player)
         {
-            return base.CheckPermissions(player) || player.Role.Team is Team.FoundationForces or Team.ChaosInsurgency && (player.Role.Type != RoleTypeId.FacilityGuard || Subclass.Has<Assault>(player)) || Subclass.Has<Gang>(player) || Subclass.Has<Scp073>(player) || Subclass.Has<GigaChad>(player);
+            return base.CheckPermissions(player) || player.Role.Team is Team.FoundationForces or Team.ChaosInsurgency && (player.Role.Type != RoleTypeId.FacilityGuard || Subclass.Has<Assault>(player)) || Subclass.Has<Gang>(player) || Subclass.Has<Scp073>(player) || Subclass.Has<GigaChad>(player) || Subclass.Has<Tank>(player);
         }
 
         private bool IsBlocked(DoorType door)

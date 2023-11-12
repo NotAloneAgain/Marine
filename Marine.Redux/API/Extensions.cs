@@ -1,13 +1,20 @@
-﻿using PlayerRoles;
+﻿using Exiled.API.Enums;
+using PlayerRoles;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Marine.Redux.API
 {
     public static class Extensions
     {
-        public static readonly IReadOnlyDictionary<RoleTypeId, string> _rolesTranslation;
+        private static readonly IReadOnlyDictionary<RoleTypeId, string> _rolesTranslation;
+        private static readonly IReadOnlyDictionary<EffectType, EffectCategory> _effectToClassification;
 
-        static Extensions() => _rolesTranslation = new Dictionary<RoleTypeId, string>()
+        static Extensions()
+        {
+            _rolesTranslation = new Dictionary<RoleTypeId, string>()
             {
                 { RoleTypeId.None, "Пустая роль" },
                 { RoleTypeId.Scp173, "SCP-173" },
@@ -35,9 +42,47 @@ namespace Marine.Redux.API
                 { RoleTypeId.Scp3114, "SCP-3114" },
             };
 
+            _effectToClassification = new Dictionary<EffectType, EffectCategory>()
+            {
+                { EffectType.Invigorated, EffectCategory.Positive },
+                { EffectType.Invisible, EffectCategory.Positive },
+                { EffectType.RainbowTaste, EffectCategory.Positive },
+                { EffectType.BodyshotReduction, EffectCategory.Positive },
+                { EffectType.DamageReduction, EffectCategory.Positive },
+                { EffectType.Vitality, EffectCategory.Positive },
+                { EffectType.SugarRush, EffectCategory.Positive },
+                { EffectType.Scp1853, EffectCategory.Positive },
+                { EffectType.AntiScp207, EffectCategory.Positive },
+                { EffectType.SpawnProtected, EffectCategory.Positive },
+                { EffectType.Prismatic, EffectCategory.Positive },
+                { EffectType.SugarHigh, EffectCategory.Positive },
+                { EffectType.OrangeCandy, EffectCategory.Positive },
+                { EffectType.Ghostly, EffectCategory.Positive },
+                { EffectType.Scp207, EffectCategory.Harmful },
+                { EffectType.Metal, EffectCategory.Harmful },
+            };
+        }
+
         public static string Translate(this RoleTypeId role)
         {
             return _rolesTranslation?[role] ?? role.ToString();
+        }
+
+        public static EffectCategory GetCategory(this EffectType type)
+        {
+            if (_effectToClassification.TryGetValue(type, out var category))
+            {
+                return category;
+            }
+
+            return EffectCategory.Negative;
+        }
+
+        public static EffectType GetRandomByCategory(this EffectCategory category)
+        {
+            List<EffectType> effects = Enum.GetValues(typeof(EffectType)).ToArray<EffectType>().Where(x => x.GetCategory() == category).ToList();
+
+            return effects[UnityEngine.Random.Range(0, effects.Count)];
         }
     }
 }
