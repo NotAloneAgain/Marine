@@ -49,16 +49,17 @@ namespace Marine.Redux.API
                 { EffectType.BodyshotReduction, EffectCategory.Positive },
                 { EffectType.DamageReduction, EffectCategory.Positive },
                 { EffectType.Vitality, EffectCategory.Positive },
-                { EffectType.SugarRush, EffectCategory.Positive },
+                { EffectType.SilentWalk, EffectCategory.Positive },
+                //{ EffectType.SugarRush, EffectCategory.Positive },
                 { EffectType.Scp1853, EffectCategory.Positive },
                 { EffectType.AntiScp207, EffectCategory.Positive },
                 { EffectType.SpawnProtected, EffectCategory.Positive },
-                { EffectType.Prismatic, EffectCategory.Positive },
-                { EffectType.SugarHigh, EffectCategory.Positive },
-                { EffectType.OrangeCandy, EffectCategory.Positive },
+                //{ EffectType.Prismatic, EffectCategory.Positive },
+                //{ EffectType.SugarHigh, EffectCategory.Positive },
+                //{ EffectType.OrangeCandy, EffectCategory.Positive },
                 { EffectType.Ghostly, EffectCategory.Positive },
                 { EffectType.Scp207, EffectCategory.Harmful },
-                { EffectType.Metal, EffectCategory.Harmful },
+                //{ EffectType.Metal, EffectCategory.Harmful },
             };
         }
 

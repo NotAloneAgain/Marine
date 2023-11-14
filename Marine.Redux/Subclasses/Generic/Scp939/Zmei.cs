@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
@@ -27,7 +28,7 @@ namespace Marine.Redux.Subclasses.Generic.Scp939
         {
             base.OnAssigned(player);
 
-            player.EnableEffect(EffectType.Spicy);
+            player.ReferenceHub.playerEffectsController.EnableEffect<Spicy>();
         }
     }
 }

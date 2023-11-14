@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using Marine.Redux.API;
 using Marine.Redux.API.Subclasses;
@@ -35,7 +36,7 @@ namespace Marine.Redux.Subclasses.Generic.Zombies.Single
 
         protected internal override void OnDamage(HurtingEventArgs ev)
         {
-            ev.Player.EnableEffect(EffectType.TraumatizedByEvil, 0, false);
+            ev.Player.ReferenceHub.playerEffectsController.EnableEffect<TraumatizedByEvil>();
             ev.Player.EnableEffect(EffectType.SinkHole, 4, true);
             ev.Player.EnableEffect(EffectType.Poisoned, 5, true);
             ev.Player.Stamina -= 0.02f;
